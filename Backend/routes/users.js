@@ -59,7 +59,7 @@ router.post('/login', async (req, res)=>{
                 userId: user.id
             },
             secret,
-            {expiresI : '1d'}
+            {expiresIn : '1d'}
         )
     
         res.status(200).send({name: user.name, user: user.email, token: token})
