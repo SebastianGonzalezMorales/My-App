@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { Router } = require('express');
 
 
 router.get(`/`, async (req, res) =>{
@@ -91,5 +92,26 @@ router.post('/register', async (req, res)=>{
     res.send(user);
 })
 
+router.get(`/get/count`, async (req, res) =>{
+    const userCount = await User.countDocuments((count) => count)
+    if(!userCount){
+        res.status(500).json({success: false})
+    }
+    res.send({
+        userCount: userCount
+    });
+})
+
+router.get(`/get/count`, async (req, res) =>{
+    let count;     
+    const userCount = await User.countDocuments({count: count});
+    
+    if(!userCount) {
+        res.status(500).json({success: false})
+    } 
+    res.send({
+        userCount: userCount
+    });
+})
 
 module.exports = router;
