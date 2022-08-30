@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
 router.get(`/`, async (req, res) =>{
     const userList = await User.find().select('-passwordHash');
     
@@ -12,6 +13,7 @@ router.get(`/`, async (req, res) =>{
     }
     res.send(userList);
 })
+
 
 router.get(`/:id`, async (req, res) =>{
     const user = await User.findById(req.params.id.select('-passwordHash'));
@@ -45,6 +47,7 @@ router.post(`/`, async (req, res) =>{
     res.send(user);
 })
 
+
 router.post('/login', async (req, res)=>{
     const user = await User.findOne({email: req.body.email})
     const secret = process.env.secret;
@@ -56,18 +59,18 @@ router.post('/login', async (req, res)=>{
     if(user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
         const token = jwt.sign(
             {
-                userId: user.id
+                userId: user.id,
+                isAdmin: user.isAdmin
             },
             secret,
             {expiresIn : '1d'}
         )
-    
         res.status(200).send({name: user.name, user: user.email, token: token})
-  
     } else {
         res.status(400).send('password is wrong!');
     }
 })
+
 
 router.post('/register', async (req, res)=>{
     let user = new User({
@@ -87,8 +90,6 @@ router.post('/register', async (req, res)=>{
         return res.status(400).send('The user cannot be created !')
     res.send(user);
 })
-
-
 
 
 module.exports = router;

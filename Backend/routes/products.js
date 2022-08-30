@@ -5,12 +5,12 @@ const router = express.Router();
 
 router.get(`/`, async (req, res) => {
     const productList = await Product.find();
-
     if(!productList) {
         res.status(500).json({success: false})
     }
     res.send(productList);
 })
+
 
 // http://localhost:3000/api/v1/products
 router.post(`/`, (req, res) => {
@@ -24,7 +24,7 @@ router.post(`/`, (req, res) => {
     })).catch((err)=>{
         res.status(500).json({
             error: err,
-            sucess: false
+            sucess: true
         })
     })
 })
