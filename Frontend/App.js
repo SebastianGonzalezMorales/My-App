@@ -6,9 +6,6 @@ import { NavigationContainer } from '@react-navigation/native';
 //Navigators
 import Main from './Navigators/Main'
 
-// Screens
-import ProductContainer from './Screens/Products/ProductContainer';
-
 export default function App() {
   return (
     <NavigationContainer>
@@ -16,5 +13,4 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
 
