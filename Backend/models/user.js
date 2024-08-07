@@ -5,23 +5,33 @@ const usersSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    rut: {
+        type: String,
+        required: true,
+     },
     email: {
        type: String,
        required: true,
+       unique: true
     },
     passwordHash: {
         type: String,
         required: true,
     },
-    phone: {
+    birthdate: {
+        type: Date,
+        required: true,
+     },
+     carrera: {
         type: String,
         required: true,
-    },
-    isAdmin: {
+   },
+   isAdmin: {
         type: Boolean,
         default: false,
-    },
-    street: {
+ }, 
+
+/*     street: {
         type: String,
         default: ''
     },
@@ -36,16 +46,9 @@ const usersSchema = new mongoose.Schema({
     city: {
         type: String,
         default: ''
-    } 
+    }  */
 })
 
-usersSchema.virtual('id').get(function () {
-    return this._id.toHexString();
-})
-
-usersSchema.set('toJSON', {
-    virtuals: true,
-});
 
 exports.User = mongoose.model('User', usersSchema);
 exports.usersSchema = usersSchema;

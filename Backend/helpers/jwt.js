@@ -8,7 +8,11 @@ const authJwt = jwt({
                     isRevoked: isRevoked    
                 }).unless({
                     path:[
-                            {url: /\/api\/v1\/products(.*)/ , methods: ['GET', 'OPTIONS'] },
+                            //Con la línea de abajo "solo" permito que los usuarios puedan obtener los tips, 
+                            //logiarse y registrarse
+                            //Por ejemplo: para poder publicar tips tendrían que estar registrados como administrador.
+                           {url: /\/api\/v1\/tips(.*)/ , methods: ['GET', 'OPTIONS'] },
+                          //  {url: /\/api\/v1\/users\/get-random-user(.*)/ , methods: ['GET', 'OPTIONS'] },
                             `${api}/users/login`,
                             `${api}/users/register`,    
                         

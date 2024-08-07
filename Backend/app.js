@@ -20,13 +20,13 @@ app.use(errorHandler);
 
 
 //Routers
-const productsRoutes = require('./routes/products');
+const tipsRoutes = require('./routes/tips');
 const usersRoutes = require('./routes/users');
 //const authJwt = require('./helpers/jwt');
 
 const api = process.env.API_URL;
 
-app.use(`${api}/products`, productsRoutes);
+app.use(`${api}/tips`, tipsRoutes);
 app.use(`${api}/users`, usersRoutes);
 
 
