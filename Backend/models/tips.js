@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const tipsSchema = mongoose.Schema({
-    name: String,
-    description: String
+    mensaje: String,
+    autor: String
 })
 
 exports.Tips = mongoose.model('Tips', tipsSchema);

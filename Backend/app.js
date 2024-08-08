@@ -18,9 +18,9 @@ app.use(morgan('tiny'));
 app.use(authJwt);
 app.use(errorHandler);
 
-
 //Routers
 const tipsRoutes = require('./routes/tips');
+const moodStateRoutes = require('./routes/moodState');
 const usersRoutes = require('./routes/users');
 //const authJwt = require('./helpers/jwt');
 
@@ -28,7 +28,7 @@ const api = process.env.API_URL;
 
 app.use(`${api}/tips`, tipsRoutes);
 app.use(`${api}/users`, usersRoutes);
-
+app.use(`${api}/moodState`, moodStateRoutes);
 
 mongoose.connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,

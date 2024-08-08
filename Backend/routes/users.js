@@ -28,6 +28,21 @@ router.post('/login', async (req, res)=>{
     }
 })
 
+router.post("/userdata", async (req, res) => {
+  const secret = process.env.secret;
+  const { token } = req.body;
+  try {
+    const user = jwt.verify(token, secret);
+    const useremail = user.email;
+
+    User.findOne({ email: useremail }).then((data) => {
+      return res.send({ status: "Ok", data: data });
+    });
+  } catch (error) {
+    return res.send({ error: error });
+  }
+});
+
 
 router.post('/register', async (req, res)=>{
     let user = new User({
@@ -44,6 +59,8 @@ router.post('/register', async (req, res)=>{
         return res.status(400).send('The user cannot be created !')
     res.send(user);
 })
+
+
 
 router.get("/get-random-user", async (req, res) => {
     try {
@@ -91,8 +108,34 @@ router.get("/get-random-user", async (req, res) => {
     }
   });
 
+  //Falta probar
 
+  router.post("/delete-user", async (req, res) => {
+    const {id}=req.body;
+    try {
+     await User.deleteOne({_id:id});
+     res.send({status:"Ok",data:"User Deleted"});
+    } catch (error) {
+     return res.send({ error: error });
+     
+    }
+   })
 
+/*    router.post("/userdata", async (req, res) => {
+    const { token } = req.body;
+    try {
+      const user = jwt.verify(token, JWT_SECRET);
+      const useremail = user.email;
+  
+      User.findOne({ email: useremail }).then((data) => {
+        return res.send({ status: "Ok", data: data });
+      });
+    } catch (error) {
+      return res.send({ error: error });
+    }
+  });
+ */
+   
 /* router.get(`/`, async (req, res) =>{
     const userList = await User.find().select('-passwordHash');
     
@@ -101,7 +144,6 @@ router.get("/get-random-user", async (req, res) => {
     }
     res.send(userList);
 })
-
 
 router.get(`/:id`, async (req, res) =>{
     const user = await User.findById(req.params.id.select('-passwordHash'));
