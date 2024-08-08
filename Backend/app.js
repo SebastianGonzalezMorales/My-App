@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 require('dotenv/config');
-const authJwt = require('./helpers/jwt');
+const authJwt = require('./middlewares/jwt');
 const errorHandler = require('./helpers/error-handler')
 
 app.use(cors());
