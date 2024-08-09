@@ -1,5 +1,8 @@
 const { MoodState } = require('../models/moodState');
 
+
+//const { authJwt }
+
 // Controlador para obtener todos los estados de ánimo
 const getMoodStates = async (req, res) => {
     try {
@@ -15,14 +18,17 @@ const getMoodStates = async (req, res) => {
 
 // Controlador para crear un nuevo estado de ánimo
 const postMoodState = async (req, res) => {
-    const moodState = new MoodState({
-        user_id: req.body.user_id,
-        date: req.body.date,
-        mood_state: req.body.mood_state,   // example: "feliz", "triste", "ansioso", "estresado"
-        intensidad: req.body.intensidad,   // escala de 1 a 10
-        comentarios: req.body.comentarios  // opcional
-    });
     try {
+        // El user_id ya está disponible en req.auth._id gracias a express-jwt
+        console.log(req.auth);
+        const moodState = new MoodState({
+            user_id: req.auth.userId,  // Se toma automáticamente del usuario autenticado
+            date: req.body.date,
+            mood_state: req.body.mood_state,
+            intensidad: req.body.intensidad,
+            comentarios: req.body.comentarios
+        });
+
         const createdMoodState = await moodState.save();
         res.status(201).json(createdMoodState);
     } catch (err) {

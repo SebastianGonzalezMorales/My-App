@@ -20,7 +20,7 @@ const loginUser = async (req, res) => {
             },
             secret,
 
-            // El token expira en 24 horas, si quisiera colocarlo en 10segundos, debería ser así '10s'
+            // El token expira en 24 horas, si quisiera colocarlo en 10segundos, debería ser así: '10s'
             { expiresIn: '1d' }
         );
         res.status(200).send({ name: user.name, user: user.email, token: token });
