@@ -15,6 +15,7 @@ const loginUser = async (req, res) => {
         const token = jwt.sign(
             {
                 userId: user.id,
+                email: user.email, 
                 isAdmin: user.isAdmin
             },
             secret,
@@ -32,6 +33,7 @@ const getUserData = async (req, res) => {
     const { token } = req.body;
     try {
         const user = jwt.verify(token, secret);
+        console.log(user)
         const useremail = user.email;
 
         User.findOne({ email: useremail }).then((data) => {
