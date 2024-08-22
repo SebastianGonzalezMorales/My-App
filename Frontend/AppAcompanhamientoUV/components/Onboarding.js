@@ -4,10 +4,10 @@ import { Animated, FlatList, View, StyleSheet } from 'react-native';
 import React, { useRef, useState } from 'react';
 import OnboardingItem from './OnboardingItem';
 import Paginator from './Paginator';
-
+import NextButton from './NextButton';
 import slides from '../slides';
 
-const Onboarding = ({ navigation }) => {
+const Onboarding = ({ }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
   const slideRef = useRef(null);
@@ -16,7 +16,7 @@ const Onboarding = ({ navigation }) => {
     setCurrentIndex(viewableItems[0].index);
   }).current;
 
-  // next slide needs to be at least 50% on screen before it will change
+  // La siguiente diapositiva debe estar al menos en un 50 % en la pantalla antes de que pueda cambiar.
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
   return (
@@ -44,6 +44,7 @@ const Onboarding = ({ navigation }) => {
       </View>
 
       <Paginator data={slides} scrollX={scrollX} />
+      <NextButton/>
     </View>
   );
 };

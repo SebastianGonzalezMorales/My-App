@@ -8,7 +8,7 @@ import {
 import React from 'react';
 
 const OnboardingItem = ({ item }) => {
-  // get width of the screen
+  // Obtiene el ancho de la pantalla
   const { width } = useWindowDimensions();
 
   return (
