@@ -1,50 +1,60 @@
-import { useRef, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Animated } from 'react-native';
+// react imports
+import { Animated, FlatList, View, StyleSheet } from 'react-native';
+
+import React, { useRef, useState } from 'react';
 import OnboardingItem from './OnboardingItem';
+import Paginator from './Paginator';
 
-import slides from '../slides'
+import slides from '../slides';
 
+const Onboarding = ({ navigation }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const slideRef = useRef(null);
 
-export default Onboarding = () => {
+  const viewableItemsChanged = useRef(({ viewableItems }) => {
+    setCurrentIndex(viewableItems[0].index);
+  }).current;
 
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const scrollx = useRef(new Animated.Value(0)).current;
-    const slidesRef = useRef(null);
-
-    const viewableItemsChanged = useRef(({ viewableItems }) => {
-        setCurrentIndex(viewableItems[0].index);
-    }).current;
-
-    const viewConfig = useRef({viewAreaCoveragePercentThreshold: 50}).current;
+  // next slide needs to be at least 50% on screen before it will change
+  const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
   return (
     <View style={styles.container}>
-        <View style={{flex:3}}>
-
-      <FlatList data={slides} renderItem={({item}) => <OnboardingItem item={item}/>} 
-      horizontal
-      showsHorizontalScrollIndicator
-      pagingEnabled
-      bounces={false}
-      keyExtractor={(item) => item.id}
-      onScroll={Animated.event([{nativeEvent:{contentOffset:{x:scrollx}}}],{
-            useNativeDriver: false,
-        })}
-        scrollEventThrottle={32}
-        onViewableItemsChanged={viewableItemsChanged}
-        viewabilityConfig={viewConfig}
-        ref={slidesRef}
-      />
+      <View style={{ flex: 3 }}>
+        <FlatList
+          data={slides}
+          renderItem={({ item }) => <OnboardingItem item={item} />}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled
+          bounces={false}
+          keyExtractor={(item) => item.id}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+            {
+              useNativeDriver: false,
+            }
+          )}
+          scrollEventThrottle={32}
+          onViewableItemsChanged={viewableItemsChanged}
+          viewabilityConfig={viewConfig}
+          ref={slideRef}
+        />
       </View>
+
+      <Paginator data={slides} scrollX={scrollX} />
     </View>
   );
-}
+};
+
+export default Onboarding;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
   },
 });
+
