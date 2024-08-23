@@ -6,6 +6,7 @@ import OnboardingItem from './OnboardingItem';
 import Paginator from './Paginator';
 import NextButton from './NextButton';
 import slides from '../slides';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Onboarding = ({ }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -18,6 +19,20 @@ const Onboarding = ({ }) => {
 
   // La siguiente diapositiva debe estar al menos en un 50 % en la pantalla antes de que pueda cambiar.
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
+
+  const scrollTo = async() => {
+    if (currentIndex < slides.length - 1) {
+      slideRef.current.scrollToIndex({ index: currentIndex + 1 });
+  } else{
+
+    try {
+      await AsyncStorage.setItem('@viewedOnboarding', 'true');
+    } catch (err){
+        console.log('Error @setItem:', err);
+      }
+    /* console.log('Last item.'); */
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -44,7 +59,7 @@ const Onboarding = ({ }) => {
       </View>
 
       <Paginator data={slides} scrollX={scrollX} />
-      <NextButton/>
+      <NextButton scrollTo={scrollTo} />
     </View>
   );
 };
