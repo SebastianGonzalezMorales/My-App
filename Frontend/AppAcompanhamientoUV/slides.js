@@ -1,7 +1,7 @@
 export default [
     {
       id: '1',
-      title: 'Lore Ipsum',
+      title: 'Lore sum',
       description:
         'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
       image: require('./assets/adaptive-icon.png'),
@@ -11,7 +11,7 @@ export default [
       id: '2',
       title: 'Lorem Ipsum',
       description:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
+        'Lorem Ipsum is simply dummy tet of the printing and typesetting industry. Lorem Ipsum has been the industry',
         image: require('./assets/icon.png'),
     },
     {

@@ -8,7 +8,7 @@ import NextButton from './NextButton';
 import slides from '../slides';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Onboarding = ({ }) => {
+const Onboarding = ({ onComplete }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
   const slideRef = useRef(null);
@@ -27,6 +27,7 @@ const Onboarding = ({ }) => {
 
     try {
       await AsyncStorage.setItem('@viewedOnboarding', 'true');
+        onComplete(); 
     } catch (err){
         console.log('Error @setItem:', err);
       }

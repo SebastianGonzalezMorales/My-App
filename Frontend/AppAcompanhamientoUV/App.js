@@ -37,9 +37,13 @@ export default function App() {
     checkOnboarding();
   }, [])
 
+  const handleOnboardingCompletion = () => {
+    setViewedOnboarding(true);
+  }
+
   return (
     <View style={styles.container}>
-      {loading ? <Loading/> : viewedOnboarding ? <HomeScreen/> : <Onboarding /> }
+      {loading ? <Loading /> : viewedOnboarding ? <HomeScreen /> : <Onboarding onComplete={handleOnboardingCompletion} />}
       <StatusBar style="auto" />
     </View>
   );
