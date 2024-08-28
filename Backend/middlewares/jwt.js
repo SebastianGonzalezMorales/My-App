@@ -5,7 +5,7 @@ const api = process.env.API_URL
 const authJwt = jwt({
                     secret: secret,
                     algorithms: ["HS256"],
-                    isRevoked: isRevoked    
+                    isRevoked: async (req, token) => undefined
                 }).unless({
                     path:[
                             //{url: /\/api\/v1\/moodState(.*)/ , methods: ['POST', 'OPTIONS'] },
