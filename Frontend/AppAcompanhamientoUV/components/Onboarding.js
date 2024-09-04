@@ -27,7 +27,9 @@ const Onboarding = ({ onComplete }) => {
 
     try {
       await AsyncStorage.setItem('@viewedOnboarding', 'true');
+        console.log('completed');
         onComplete(); 
+
     } catch (err){
         console.log('Error @setItem:', err);
       }

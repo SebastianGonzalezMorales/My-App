@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    backgroundColor: '#5da5a9',
+    backgroundColor: '#000C7B',
     borderRadius: 100,
     padding: 20,
   },

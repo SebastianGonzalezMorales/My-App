@@ -1,39 +1,46 @@
 export default [
     {
       id: '1',
-      title: 'Lore sum',
+      title: '¡ Bienvenido !',
       description:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
-      image: require('./assets/adaptive-icon.png'),
+        'Está es la aplicación de acompañamiento de Salud Mental de estudantes de primer año de la Universidad de Valparaiso.',
+      image: require('./assets/icon - copia.png'),
      
     },
     {
       id: '2',
-      title: 'Lorem Ipsum',
+      title: 'Test de Bienestar Emocional',
       description:
-        'Lorem Ipsum is simply dummy tet of the printing and typesetting industry. Lorem Ipsum has been the industry',
-        image: require('./assets/icon.png'),
+        'Completa diferentes test para identificar síntomas de depresión, ansiedad y otros aspectos de tu salud mental."',
+        image: require('./assets/test.png'),
     },
     {
       id: '3',
-      title: 'Lorem Ipsum',
+      title: 'Estados de ánimo',
       description:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
-        image: require('./assets/adaptive-icon.png'),
+        'Registre su estado de ánimo diariamente, y conozca como evoluciona a lo largo del tiempo.',
+        image: require('./assets/tracking_mood.jpg'),
     },
     {
       id: '4',
-      title: 'Lorem Ipsum',
+      title: 'Información UV',
       description:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
-        image: require('./assets/adaptive-icon.png'),
+        'Descubre los recursos y servicios que ofrece la Universidad para apoyar tu bienestar emocional y psicológico.',
+        image: require('./assets/Salud-mental-UV.jpg'),
     },
     {
       id: '5',
-      title: 'Lorem Ipsum',
+      title: 'Novedades UV',
       description:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
-        image: require('./assets/adaptive-icon.png'),
+        'Mantente al tanto de todas las actividades y eventos deportivos y recreativos.',
+        image: require('./assets/area-deporte-uv.jpg'),
+    },
+    {
+      id: '6',
+      title: '¡ Casi terminamos !',
+      description:
+        'Regístrese e inicie sesión, para acceder a las increíbles funcionalidades de la aplicación.',
+        image: require('./assets/Register.png'),
     },
 
   ];
