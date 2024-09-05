@@ -14,7 +14,7 @@ export default App = () => {
     }
   return (
     <View style={styles.container}>
-        <Text> Home Screen </Text>
+        <Text> Home Scren </Text>
         <Text>  </Text>
         <TouchableOpacity onPress={clearOnboarding}>
             <Text> clearOnboarding</Text>

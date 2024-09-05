@@ -1,8 +1,8 @@
 import React, {useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import Onboarding from './src/components/Onboarding';
-import HomeScreen from './src/components/HomeScreen';
+import Onboarding from './src/screens/onboarding/Onboarding';
+import HomeScreen from './src/components/buttons/HomeScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Loading = () => {
