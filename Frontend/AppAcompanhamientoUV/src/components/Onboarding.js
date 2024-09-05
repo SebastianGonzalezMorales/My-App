@@ -5,7 +5,7 @@ import React, { useRef, useState } from 'react';
 import OnboardingItem from './OnboardingItem';
 import Paginator from './Paginator';
 import NextButton from './NextButton';
-import slides from '../slides';
+import slides from '../screens/utils/slides';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Onboarding = ({ onComplete }) => {
