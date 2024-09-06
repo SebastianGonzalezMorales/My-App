@@ -118,8 +118,8 @@ const Register = ({ navigation }) => {
           <SafeAreaView style={AuthStyle.logo}>
             {/* <Text style={AuthStyle.logoText}>Logo</Text> */}
             <Image
-              style={{ width: 80, height: 80 }}
-              source={require('./../../../assets/adaptive-icon.png')}
+              style={{ width: 100, height: 100 }}
+              source={require('./../../../assets/salud-mental.png')}
                                 
             />
           </SafeAreaView>

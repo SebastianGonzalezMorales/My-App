@@ -17,12 +17,20 @@ import HomeScreen from './src/components/buttons/HomeScreen';
 
 import Login from './src/screens/authentication/Login';
 import Register from './src/screens/authentication/Register';
+import Mood from './src/screens/mood/Mood';
+
+import Questionnaire from './src/screens/questionnaire/Questionnaire';
+
+import Settings from './src/screens/settings/Settings';
+
 import { onAuthStateChanged } from './src/screens/utils/auth';
 
 // Customisation
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import M2 from './src/screens/M2/M2';
+import M1 from './src/screens/M1/M1';
 
 const Tab = createBottomTabNavigator(); // create tab navigator method
 const Stack = createNativeStackNavigator(); // create stack navigator method
@@ -40,19 +48,19 @@ function Home() {
           let iconName;
           if (route.name === 'Mood') {
             iconName = focused ? 'home-variant' : 'home-variant-outline';
-            size = 23;
+            size = 30;
             color = focused ? '#5da5a9' : '#999';
-          } else if (route.name === 'Medication') {
-            iconName = focused ? 'calendar' : 'calendar-outline';
-            size = 22;
+          } else if (route.name === 'Medication1') {
+            iconName = focused ? 'brain' : 'brain';
+            size = 30;
             color = focused ? '#5da5a9' : '#999';
-          } else if (route.name === 'Questionnaire') {
+          } else if (route.name === 'Medication2') {
             iconName = focused ? 'file-document' : 'file-document-outline';
-            size = 22;
+            size = 30;
             color = focused ? '#5da5a9' : '#999';
           } else if (route.name === 'Settings') {
-            iconName = focused ? 'cog' : 'cog-outline';
-            size = 22;
+            iconName = focused ? 'account' : 'account';
+            size = 30;
             color = focused ? '#5da5a9' : '#999';
           } else {
           }
@@ -69,14 +77,21 @@ function Home() {
       />
       <Tab.Screen
         options={{ headerShown: false, gestureEnabled: false }}
-        name={'Medication'}
-        component={Medication}
+        name={'M1'}
+        component={M1}
       />
+
+        <Tab.Screen
+        options={{ headerShown: false, gestureEnabled: false }}
+        name={'M2'}
+        component={M2}
+      />
+{/* 
       <Tab.Screen
         options={{ headerShown: false, gestureEnabled: false }}
         name={'Questionnaire'}
         component={Questionnaire}
-      />
+      /> */}
       <Tab.Screen
         options={{ headerShown: false, gestureEnabled: false }}
         name={'Settings'}
@@ -166,8 +181,8 @@ export default function App() {
         />
         <Stack.Screen name="Register" component={Register} />
         {/* mood tracker */}
-{/*         <Stack.Screen name="TrackMood" component={TrackMood} />
-        <Stack.Screen name="UpdateMood" component={UpdateMood} />
+       {/*  <Stack.Screen name="TrackMood" component={TrackMood} /> */}
+ {/*        <Stack.Screen name="UpdateMood" component={UpdateMood} />
         <Stack.Screen name="MoodStats" component={MoodStats} />
         <Stack.Screen
           name="MoodHistory"

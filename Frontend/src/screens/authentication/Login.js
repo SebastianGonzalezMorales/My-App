@@ -98,8 +98,8 @@ const Login = ({ navigation }) => {
               style={{ marginTop: 20 }}
             >
               <Image
-                style={{ width: 80, height: 80 }}
-                source={require('./../../../assets/adaptive-icon.png')}
+                style={{ width: 100, height: 100 }}
+                source={require('./../../../assets/salud-mental.png')}
               />
             </TouchableOpacity>
           </SafeAreaView>

@@ -19,7 +19,8 @@
     "react": "18.2.0",
     "react-native": "0.74.5",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
-    "react-native-svg": "15.2.0"
+    "react-native-svg": "15.2.0",
+    "react-native-swipe-gestures": "^1.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0"
