@@ -112,7 +112,7 @@ const Login = ({ navigation }) => {
 
         {/* inputs */}
         <View style={AuthStyle.rowTwo}>
-          <Text style={AuthStyle.title}>Sign in</Text>
+          <Text style={AuthStyle.title}>Iniciar sesión</Text>
           <View style={AuthStyle.inputContainer}>
             <MaterialCommunityIcons
               name="email-outline"
@@ -147,16 +147,16 @@ const Login = ({ navigation }) => {
 
           {/* buttons */}
           <AuthButton
-            text="Sign in"
+            text="Ingresar"
             onPress={() => handleLogin(email, password)}
           />
 
           <View style={AuthStyle.changeScreenContainer}>
             <Text style={AuthStyle.changeScreenText}>
-              Don't have an account?
+            ¿Aún tienes una cuenta?
             </Text>
             <SmallAuthButton
-              text="Sign up"
+              text="Regístrate"
               onPress={() => navigation.replace('Register')}
             />
           </View>

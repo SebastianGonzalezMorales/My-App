@@ -126,7 +126,7 @@ const Register = ({ navigation }) => {
         </View>
         {/* section two */}
         <View style={AuthStyle.rowTwo}>
-          <Text style={AuthStyle.title}>Create an account</Text>
+          <Text style={AuthStyle.title}>Crea una cuenta</Text>
           <View style={AuthStyle.inputContainer}>
             <MaterialCommunityIcons
               name="account-outline"
@@ -189,7 +189,7 @@ const Register = ({ navigation }) => {
           </View>
 
           <AuthButton
-            text="Sign up"
+            text="Finalizar"
             onPress={() => handleSignUp(fullName, email, password)}
           />
 

@@ -13,7 +13,7 @@ export default function AuthButton(props) {
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    backgroundColor: '#5da5a9',
+    backgroundColor: '#000C7B',
     borderRadius: 10,
     height: 60,
     justifyContent: 'center',

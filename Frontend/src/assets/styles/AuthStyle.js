@@ -35,7 +35,7 @@ export default StyleSheet.create({
   // title
   title: {
     alignSelf: 'flex-start',
-    color: '#5da5a9',
+    color: '#000C7B',
     fontFamily: 'DoppioOne',
     fontSize: 24,
     marginTop: 30,
