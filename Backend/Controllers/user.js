@@ -46,22 +46,51 @@ const getUserData = async (req, res) => {
     }
 };
 
+
 // Controlador para registrar un nuevo usuario
 const registerUser = async (req, res) => {
-    let user = new User({
-        name: req.body.name,
-        rut: req.body.rut,
-        email: req.body.email,
-        passwordHash: bcrypt.hashSync(req.body.password, 10),
-        birthdate: req.body.birthdate,
-        carrera: req.body.carrera,
-        isAdmin: req.body.isAdmin
-    });
-    
-    user = await user.save();
-    if (!user) return res.status(400).send('The user cannot be created!');
-    res.send(user);
+    try {
+        // Extraer los campos del cuerpo de la solicitud
+        const { name, email, password, confirmPassword } = req.body;
+
+        // Validación básica de datos
+        if (!name || !email || !password || !confirmPassword) {
+            return res.status(400).send('Name, email, password, and password confirmation are required.');
+        }
+
+        // Verificar si la contraseña y la confirmación coinciden
+        if (password !== confirmPassword) {
+            return res.status(400).send('Passwords do not match.');
+        }
+
+        // Verificar si el correo electrónico ya está en uso
+        const existingUser = await User.findOne({ email: email });
+        if (existingUser) {
+            return res.status(400).send('Email already in use.');
+        }
+
+        // Crear nuevo usuario
+        const user = new User({
+            name,
+            email,
+            passwordHash: bcrypt.hashSync(password, 8),
+            // Puedes agregar otros campos aquí si los estás usando
+        });
+
+        // Guardar el usuario
+        const savedUser = await user.save();
+        if (!savedUser) return res.status(400).send('The user cannot be created!');
+        
+        // Enviar respuesta
+        res.status(201).send(savedUser);
+    } catch (error) {
+        console.error('Error registering user:', error);
+        res.status(500).send('Internal server error');
+    }
 };
+
+module.exports = registerUser;
+
 
 // Controlador para obtener un usuario aleatorio
 const getRandomUser = async (req, res) => {

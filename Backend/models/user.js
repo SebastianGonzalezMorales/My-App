@@ -5,10 +5,10 @@ const usersSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    rut: {
+/*     rut: {
         type: String,
         required: true,
-     },
+     }, */
     email: {
        type: String,
        required: true,
@@ -18,14 +18,14 @@ const usersSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    birthdate: {
-        type: Date,
+   /* birthdate: {
+         type: Date,
         required: true,
      },
      carrera: {
         type: String,
         required: true,
-   },
+   }, */
    isAdmin: {
         type: Boolean,
         default: false,

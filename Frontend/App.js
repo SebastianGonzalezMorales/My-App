@@ -17,8 +17,7 @@ import HomeScreen from './src/components/buttons/HomeScreen';
 
 import Login from './src/screens/authentication/Login';
 import Register from './src/screens/authentication/Register';
-
-
+import { onAuthStateChanged } from './src/screens/utils/auth';
 
 // Customisation
 import { useFonts } from 'expo-font';
@@ -87,7 +86,6 @@ function Home() {
   );
 }
 
-
 export default function App() {
   //const [loading, setLoading] = useState(true);
   const [viewedOnboarding, setViewedOnboarding] = useState(false);
@@ -117,7 +115,7 @@ export default function App() {
   } */
 
      const [initialising, setInitialising] = useState(true);
-  const [user, setUser] = useState();
+    const [user, setUser] = useState();
 
   // pre-loading fonts
   const [fontsLoaded] = useFonts({
@@ -131,20 +129,11 @@ export default function App() {
     }
     prepare();
   }, []);
-/* 
-  // Handle user state changesn'pkdsjsdf
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initialising) setInitialising(false);
-  }
 
-  // Remember user
   useEffect(() => {
-    /* const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged); 
-    const subscriber = console.log("hola");
-    return subscriber;
-  }, []); 
-  */
+    onAuthStateChanged(setUser, setInitialising);
+  }, []);
+
 
   if (!fontsLoaded) {
     return undefined;
@@ -152,7 +141,9 @@ export default function App() {
     SplashScreen.hideAsync();
   }
 
- /*  if (initialising) return null; */
+  if (initialising) {
+    return <ActivityIndicator size="large" color="#0000ff" />; // Indicador de carga
+  }
   
  return (
     <NavigationContainer>
@@ -173,7 +164,7 @@ export default function App() {
           component={Login}
           options={{ gestureEnabled: false }}
         />
-     {/*    <Stack.Screen name="Register" component={Register} /> */}
+        <Stack.Screen name="Register" component={Register} />
         {/* mood tracker */}
 {/*         <Stack.Screen name="TrackMood" component={TrackMood} />
         <Stack.Screen name="UpdateMood" component={UpdateMood} />
