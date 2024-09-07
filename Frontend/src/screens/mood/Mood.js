@@ -114,7 +114,7 @@ const Mood = ({ navigation }) => {
     try {
       const response = await axios.get('http://192.168.1.3:3000/api/v1/tips/get-random-tips', {
         headers: {
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmI2MzU1MTg2ODU1Y2YwOTBkNThmN2MiLCJlbWFpbCI6IlF1aW5jZUBnbWFpbC5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE3MjU0ODA1MzksImV4cCI6MTcyNTU2NjkzOX0.5bNu6m18JYzMbgm-fk4lcs3AvNO6vEjURBlll0YURFE`  // Reemplaza YOUR_ACCESS_TOKEN con el token real
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmI2MzU1MTg2ODU1Y2YwOTBkNThmN2MiLCJlbWFpbCI6IlF1aW5jZUBnbWFpbC5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE3MjU2NjQwMzMsImV4cCI6MTcyNTc1MDQzM30.KgZN4nt1hmG7zsicevTAJLJZBSQuEW4iF9Cj5yt3WQc`  // Reemplaza YOUR_ACCESS_TOKEN con el token real
         }
 
         });

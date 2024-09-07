@@ -50,11 +50,11 @@ function Home() {
             iconName = focused ? 'home-variant' : 'home-variant-outline';
             size = 30;
             color = focused ? '#5da5a9' : '#999';
-          } else if (route.name === 'Medication1') {
+          } else if (route.name === 'M1') {
             iconName = focused ? 'brain' : 'brain';
             size = 30;
             color = focused ? '#5da5a9' : '#999';
-          } else if (route.name === 'Medication2') {
+          } else if (route.name === 'M2') {
             iconName = focused ? 'file-document' : 'file-document-outline';
             size = 30;
             color = focused ? '#5da5a9' : '#999';
