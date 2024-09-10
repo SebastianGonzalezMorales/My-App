@@ -45,6 +45,9 @@ export default StyleSheet.create({
   inputContainer: {
     backgroundColor: '#f1f1fe',
     borderRadius: 10,
+    alignItems: 'center',
+    paddingVertical: 5, // Asegura espacio dentro del contenedor
+    marginBottom: 20, // Espacio debajo del contenedor
     flexDirection: 'row',
     height: 60,
     marginTop: 20,

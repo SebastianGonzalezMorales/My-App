@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Svg, { Circle } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import axios from 'axios';
 
 // components
 import AuthButton from '../../components/buttons/AuthButton';
@@ -20,6 +20,7 @@ const Login = ({ navigation }) => {
   // states
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); 
 
     /*
    * *******************
@@ -40,9 +41,18 @@ const Login = ({ navigation }) => {
   const handleLogin = async (email, password) => {
     try {
     //  await firebase.auth().signInWithEmailAndPassword(email, password);
+      const response = await axios.post('http://192.168.1.3:3000/api/v1/users/login', { email, password });
+       // Guarda el token en AsyncStorage
+       await AsyncStorage.setItem('token', response.data.token);
+
+       // Puedes usar también otros datos como el nombre o el email si lo necesitas
+       console.log(response.data.name);  // Nombre del usuario logueado
+       console.log(response.data.user);  // Email del usuario logueado
+
       navigation.replace('Home');
     } catch (error) {
-      alert(error.message);
+      alert('Error al iniciar sesión. Por favor, verifica tus credenciales.');
+      console.log('Error @handleLogin:', error);
     }
   };
 
@@ -135,14 +145,25 @@ const Login = ({ navigation }) => {
               size={24}
               style={AuthStyle.icon}
             />
-            <TextInput
+                <TextInput
               onChangeText={(text) => setPassword(text)}
               placeholder="Password"
               placeholderTextColor="#92959f"
-              secureTextEntry
+              secureTextEntry={!showPassword} // Cambia entre mostrar/ocultar la contraseña
               selectionColor="#5da5a9"
               style={AuthStyle.input}
             />
+            {/* Botón para mostrar/ocultar contraseña */}
+            <TouchableOpacity
+              onPress={() => setShowPassword(!showPassword)}
+              style={AuthStyle.showPasswordButton}
+            >
+              <MaterialCommunityIcons
+                name={showPassword ? "eye-off-outline" : "eye-outline"} // Cambia el ícono
+                size={24}
+                color="#92959f"
+              />
+            </TouchableOpacity>
           </View>
 
           {/* buttons */}

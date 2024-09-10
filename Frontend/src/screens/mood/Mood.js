@@ -114,7 +114,7 @@ const Mood = ({ navigation }) => {
     try {
       const response = await axios.get('http://192.168.1.3:3000/api/v1/tips/get-random-tips', {
         headers: {
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmI2MzU1MTg2ODU1Y2YwOTBkNThmN2MiLCJlbWFpbCI6IlF1aW5jZUBnbWFpbC5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE3MjU2NjQwMzMsImV4cCI6MTcyNTc1MDQzM30.KgZN4nt1hmG7zsicevTAJLJZBSQuEW4iF9Cj5yt3WQc`  // Reemplaza YOUR_ACCESS_TOKEN con el token real
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmRiOWIzMjQ0MWFhYzVkNTliZmRjOTciLCJlbWFpbCI6ImNhcmxhQGdtYWlsLmNvbSIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE3MjU5OTQ3NDMsImV4cCI6MTcyNjA4MTE0M30.xmnalOxXvih1tFfV7z0NseVYIrpQuqNVO60djXww5Gw`  // Reemplaza YOUR_ACCESS_TOKEN con el token real
         }
 
         });
@@ -130,7 +130,7 @@ const Mood = ({ navigation }) => {
   // Llama a la función en un useEffect para que se ejecute cuando el componente se monte
   useEffect(() => {
     fetchMotivationalQuote();
-  }, []);
+  }, []); 
   
 
   useEffect(() => {
@@ -140,13 +140,13 @@ const Mood = ({ navigation }) => {
         console.log("g¿hila")
         const response = await axios.post('http://192.168.1.3:3000/api/v1/users/userdata',
           {
-            // Token en el cuerpo de la solicitud
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmI2MzU1MTg2ODU1Y2YwOTBkNThmN2MiLCJlbWFpbCI6IlF1aW5jZUBnbWFpbC5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE3MjU0ODA1MzksImV4cCI6MTcyNTU2NjkzOX0.5bNu6m18JYzMbgm-fk4lcs3AvNO6vEjURBlll0YURFE'
+            // Token en el cuero de la solicitud
+            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmRiOWIzMjQ0MWFhYzVkNTliZmRjOTciLCJlbWFpbCI6ImNhcmxhQGdtYWlsLmNvbSIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE3MjU5OTQ3NDMsImV4cCI6MTcyNjA4MTE0M30.xmnalOxXvih1tFfV7z0NseVYIrpQuqNVO60djXww5Gw'
           },
           {
             // Token de autorización en el header
             headers: {
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmI2MzU1MTg2ODU1Y2YwOTBkNThmN2MiLCJlbWFpbCI6IlF1aW5jZUBnbWFpbC5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE3MjU0ODA1MzksImV4cCI6MTcyNTU2NjkzOX0.5bNu6m18JYzMbgm-fk4lcs3AvNO6vEjURBlll0YURFE`
+              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmRiOWIzMjQ0MWFhYzVkNTliZmRjOTciLCJlbWFpbCI6ImNhcmxhQGdtYWlsLmNvbSIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE3MjU5OTQ3NDMsImV4cCI6MTcyNjA4MTE0M30.xmnalOxXvih1tFfV7z0NseVYIrpQuqNVO60djXww5Gw`
             }
           }
         );
@@ -252,7 +252,7 @@ const Mood = ({ navigation }) => {
        * *********************
        */}
       <View style={{ height: 301 }}>
-        <Text style={GlobalStyle.welcomeText}>Hi, {name}!</Text>
+        <Text style={GlobalStyle.welcomeText}>Hola, {name} 😀 !</Text >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={GlobalStyle.subtitle}>Ho do you feel right now?</Text>
           <MaterialCommunityIcons
