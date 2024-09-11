@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-/* import axios from 'axios'; */
+import axios from 'axios';
 
 // Guardar el token JWT en AsyncStorage
  export const saveToken = async (token) => {

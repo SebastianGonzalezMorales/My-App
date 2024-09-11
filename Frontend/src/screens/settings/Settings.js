@@ -9,6 +9,8 @@ import {
     View,
   } from 'react-native';
   import React, { useEffect, useState } from 'react';
+
+  import AsyncStorage from '@react-native-async-storage/async-storage';
   
   // firebase
  
@@ -46,18 +48,31 @@ import {
           setName(fullName);
           setEmail(email);
         });
-      }; */
-      fetchName();
+      }; 
+      fetchName();*/
     }, []);
   
     // sign out function
-    const handleSignOut = () => {
-/*       firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          navigation.replace('Login');
-        }); */
+    const handleSignOut = async () => {
+      try {
+        // Aquí puedes enviar una solicitud de logout a tu backend si es necesario
+    /*     await fetch('http://tu-backend.com/api/logout', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+ */
+        // Eliminar el token del almacenamiento local
+        await AsyncStorage.removeItem('token');
+        
+        // Redirigir al usuario a la pantalla de login
+        navigation.replace('Login');
+    } catch (error) {
+        console.error("Error al cerrar sesión:", error);
+    }
+
     };
   
     // go to settings
