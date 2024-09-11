@@ -64,7 +64,7 @@ const Login = ({ navigation }) => {
    */
 
   return (
-    <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
+    <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={AuthStyle.container}>
         {/*
          * *********************

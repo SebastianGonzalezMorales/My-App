@@ -1,5 +1,5 @@
 // react imports
-import { Image, Text, TextInput, View } from 'react-native';
+import { Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import Svg, { Circle } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,6 +21,7 @@ const Register = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
  const [confirmPassword, setConfirmPassword] = useState('');
+ const [showPassword, setShowPassword] = useState(false); 
 
   /*
    * *******************
@@ -81,7 +82,7 @@ const Register = ({ navigation }) => {
    */
 
   return (
-    <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
+    <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={AuthStyle.container}>
         {/* section one */}
         <View style={AuthStyle.rowOne}>
@@ -167,10 +168,21 @@ const Register = ({ navigation }) => {
               onChangeText={(text) => setPassword(text)}
               placeholder="Password"
               placeholderTextColor="#92959f"
-              secureTextEntry
+              secureTextEntry={!showPassword}
               selectionColor="#5da5a9"
               style={AuthStyle.input}
             />
+            {/* Botón para mostrar/ocultar contraseña */}
+            <TouchableOpacity
+              onPress={() => setShowPassword(!showPassword)}
+              style={AuthStyle.showPasswordButton}
+            >
+              <MaterialCommunityIcons
+                name={showPassword ? "eye-off-outline" : "eye-outline"} // Cambia el ícono
+                size={24}
+                color="#92959f"
+              />
+            </TouchableOpacity>
           </View>
           <View style={AuthStyle.inputContainer}>
             <MaterialCommunityIcons
@@ -182,10 +194,22 @@ const Register = ({ navigation }) => {
               onChangeText={(text) => setConfirmPassword(text)}
               placeholder="Confirm password"
               placeholderTextColor="#92959f"
-              secureTextEntry
+              secureTextEntry={!showPassword}
               selectionColor="#5da5a9"
               style={AuthStyle.input}
             />
+                        {/* Botón para mostrar/ocultar contraseña */}
+            <TouchableOpacity
+              onPress={() => setShowPassword(!showPassword)}
+              style={AuthStyle.showPasswordButton}
+            >
+              <MaterialCommunityIcons
+                name={showPassword ? "eye-off-outline" : "eye-outline"} // Cambia el ícono
+                size={24}
+                color="#92959f"
+              />
+            </TouchableOpacity>
+
           </View>
 
           <AuthButton

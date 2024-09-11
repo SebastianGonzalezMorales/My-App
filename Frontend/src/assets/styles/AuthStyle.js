@@ -47,7 +47,7 @@ export default StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     paddingVertical: 5, // Asegura espacio dentro del contenedor
-    marginBottom: 20, // Espacio debajo del contenedor
+    marginBottom: 1, // Espacio debajo del contenedor
     flexDirection: 'row',
     height: 60,
     marginTop: 20,
@@ -77,5 +77,6 @@ export default StyleSheet.create({
     fontFamily: 'Actor',
     fontSize: 12,
     right: 5,
+    paddingBottom: 20
   },
 });
