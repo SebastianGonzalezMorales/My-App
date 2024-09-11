@@ -18,6 +18,7 @@ import ModalStyle from '../../assets/styles/ModalStyle';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Mood = ({ navigation }) => {
   // references
@@ -112,16 +113,23 @@ const Mood = ({ navigation }) => {
 
   const fetchMotivationalQuote = async () => {
     try {
-      const response = await axios.get('http://192.168.1.3:3000/api/v1/tips/get-random-tips', {
-        headers: {
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmRiOWIzMjQ0MWFhYzVkNTliZmRjOTciLCJlbWFpbCI6ImNhcmxhQGdtYWlsLmNvbSIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE3MjU5OTQ3NDMsImV4cCI6MTcyNjA4MTE0M30.xmnalOxXvih1tFfV7z0NseVYIrpQuqNVO60djXww5Gw`  // Reemplaza YOUR_ACCESS_TOKEN con el token real
-        }
+       // Recupera el token almacenado en AsyncStorage
+      const token = await AsyncStorage.getItem('token');
 
+      if (token) {
+        const response = await axios.get('http://192.168.1.3:3000/api/v1/tips/get-random-tips', {
+          headers: {
+            'Authorization': `Bearer ${token}`  // Usa el token recuperado
+          }
         });
+        console.log(`token: ${token}`);
         const { mensaje, autor } = response.data;
         console.log(`Mensaje: ${mensaje}`);
         console.log(`Autor: ${autor}`);
-      setMotivationalQuote(`${mensaje} - ${autor}`); // Ajusta según la estructura de tu respuesta
+        setMotivationalQuote(`${mensaje} - ${autor}`);
+      } else {
+        console.log('No se encontró el token. Por favor, inicia sesión.');
+      }
     } catch (error) {
       console.error('Error fetching quote:', error);
     }
@@ -134,19 +142,19 @@ const Mood = ({ navigation }) => {
   
 
   useEffect(() => {
-   
     const fetchUserData = async () => {
       try {
-        console.log("g¿hila")
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
         const response = await axios.post('http://192.168.1.3:3000/api/v1/users/userdata',
           {
             // Token en el cuero de la solicitud
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmRiOWIzMjQ0MWFhYzVkNTliZmRjOTciLCJlbWFpbCI6ImNhcmxhQGdtYWlsLmNvbSIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE3MjU5OTQ3NDMsImV4cCI6MTcyNjA4MTE0M30.xmnalOxXvih1tFfV7z0NseVYIrpQuqNVO60djXww5Gw'
+            token: `${token}`
           },
           {
-            // Token de autorización en el header
+            // Token de autoización en el header
             headers: {
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmRiOWIzMjQ0MWFhYzVkNTliZmRjOTciLCJlbWFpbCI6ImNhcmxhQGdtYWlsLmNvbSIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE3MjU5OTQ3NDMsImV4cCI6MTcyNjA4MTE0M30.xmnalOxXvih1tFfV7z0NseVYIrpQuqNVO60djXww5Gw`
+              Authorization: `Bearer ${token}`
             }
           }
         );
@@ -154,9 +162,12 @@ const Mood = ({ navigation }) => {
 
         // Actualiza el estado con el nombre
         setName(userName);
-  
         // Para verificar en la consola
         console.log('User name:', userName);
+       
+      } else {
+        console.log('No se encontró el token. Por favor, inicia sesión.');
+      }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
