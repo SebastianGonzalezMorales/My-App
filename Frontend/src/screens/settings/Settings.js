@@ -9,7 +9,7 @@ import {
     View,
   } from 'react-native';
   import React, { useEffect, useState } from 'react';
-
+  import Icon from 'react-native-vector-icons/FontAwesome';
   import AsyncStorage from '@react-native-async-storage/async-storage';
   
   // firebase
@@ -98,15 +98,10 @@ import {
          * ***** Section 1 *****
          * *********************
          */}
-        <View style={{ height: 225 }}>
-          <Text style={GlobalStyle.welcomeText}>{name}</Text>
-          <Text style={GlobalStyle.subtitle}>{email}</Text>
-          <View style={GlobalStyle.buttonContainer}>
-            <SmallFormButton
-              onPress={() => navigation.navigate('EditProfile')}
-              text="Edit profile"
-            />
-          </View>
+        <View style={{ height: 225, alignItems: 'center' }}>
+          <Text style={[GlobalStyle.welcomeText]}>Mi Perfil</Text>
+          <Text style={[GlobalStyle.subtitle]}> </Text>
+          <Icon name="user-circle" size={100} color="#000" />
         </View>
   
         {/*
@@ -116,18 +111,24 @@ import {
          */}
         <View style={GlobalStyle.rowTwo}>
           <View style={GlobalStyle.statsContainer}>
-            <Text style={GlobalStyle.statsTitle}>Settings</Text>
+            <Text style={GlobalStyle.statsTitle}>Nombre: </Text>  
+            <Text style={GlobalStyle.statsTitle}>Rut: </Text>    
+            <Text style={GlobalStyle.statsTitle}>Carrera: </Text>
+            <Text style={GlobalStyle.statsTitle}>Fecha de nacimiento: </Text>    
+            
           </View>
           <ScrollView>
-            <View style={{ marginTop: 10 }}>
+            <View style={{ marginTop: 80 }}>
              {/*  <SettingsButton
                 text="WeBt"
                 onPress={() => navigation.navigate('Counselling')}
               /> */}
-              <SettingsButton
-                text="Counselling information"
-              /*   onPress={() => navigation.navigate('Counselling')} */
-              />
+
+              {/* <SettingsButton
+                text="Counselling information" 
+                onPress={() => navigation.navigate('Counselling')} 
+              />*/}
+
               {/* <SettingsButton text="Notifications" onPress={() => navigation.navigate('Counselling')} /> */}
              {/*  <SettingsButton
                 text="Privacy policy"
@@ -141,7 +142,7 @@ import {
                   color: '#d85a77',
                 }}
                 onPress={() => handleSignOut()}
-                title="Sign out"
+                title="Cerrar sesión"
               />
             </View>
           </ScrollView>
