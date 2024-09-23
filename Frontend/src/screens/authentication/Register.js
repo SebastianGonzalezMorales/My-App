@@ -3,8 +3,6 @@ import { Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import Svg, { Circle } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-
 import axios from 'axios';
 
 // components
@@ -17,6 +15,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AuthStyle from '../../assets/styles/AuthStyle';
 
 const Register = ({ navigation }) => {
+
   // states
   const [fullName, setFullName] = useState('');
   const [rut, setRut] = useState('');
@@ -26,7 +25,7 @@ const Register = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false); 
   const [birthdate, setBirthdate] = useState(''); 
   const [carrera, setCarrera] = useState(''); 
-
+  const [passwordError, setPasswordError] = useState('');
 
   /*
    * *******************
@@ -35,26 +34,27 @@ const Register = ({ navigation }) => {
    */
 
   const validateRut = (rut) => {
+    
     // Remover puntos y guiones
     rut = rut.replace(/[^0-9kK]/g, '');
-  
     if (rut.length < 2) {
       return false;
     }
+    
     // Separar número y dígito verificador
     const rutBody = rut.slice(0, -1);
     let dv = rut.slice(-1).toUpperCase();
-  
+    
     // Calcular el dígito verificador
     let sum = 0;
     let multiplier = 2;
-  
     for (let i = rutBody.length - 1; i >= 0; i--) {
       sum += parseInt(rutBody.charAt(i)) * multiplier;
       multiplier = multiplier === 7 ? 2 : multiplier + 1;
     }
-    const calculatedDv = 11 - (sum % 11);
 
+    const calculatedDv = 11 - (sum % 11);
+   
     // Convertir el dígito verificador calculado
     if (calculatedDv === 11) dv = '0';
     else if (calculatedDv === 10) dv = 'K';
@@ -97,10 +97,40 @@ const Register = ({ navigation }) => {
 
     
   const validateEmail = (email) => {
-    const uvEmailPattern = /^[a-zA-Z]+\.[a-zA-Z]+@alumnos\.uv\.cl$/;
-                         
+    const uvEmailPattern = /^[a-zA-Z]+\.[a-zA-Z]+@alumnos\.uv\.cl$/;                    
     return uvEmailPattern.test(email);
   };
+
+
+  const isStrongPassword = (password) => {
+    // Verificar longitud mínima
+    if (password.length < 8) return false;
+  
+    // Verificar si contiene al menos una letra mayúscula
+    if (!/[A-Z]/.test(password)) return false;
+  
+    // Verificar si contiene al menos una letra minúscula
+    if (!/[a-z]/.test(password)) return false;
+  
+    // Verificar si contiene al menos un número
+    if (!/[0-9]/.test(password)) return false;
+  
+    // Verificar si contiene al menos un símbolo
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return false;
+  
+    return true;
+  };
+
+  const handlePasswordChange = (text) => {
+    setPassword(text);
+    if (!validatePassword(text)) {
+      setPasswordError('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un símbolo.');
+    } else {
+      setPasswordError('');
+    }
+  };
+
+
 
   // sign up function
   const handleSignUp = async (fullName, rut, email, password, confirmPassword, birthdate, carrera) => {
@@ -128,6 +158,11 @@ const Register = ({ navigation }) => {
        // Validar el email
     if (!validateEmail(email)) {
       alert('Correo electrónico inválido. Debe seguir el formato nombre.apellido@alumnos.uv.cl.');
+      return;
+    }
+   
+    if (!isStrongPassword(password)) {
+      alert('La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un símbolo.');
       return;
     }
 
@@ -173,12 +208,12 @@ const Register = ({ navigation }) => {
 };
  
     
-
   /*
    * ****************
    * **** Screen ****
    * ****************
    */
+
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -320,18 +355,21 @@ const Register = ({ navigation }) => {
               selectionColor="#5da5a9"
               style={AuthStyle.input}
             />
-            {/*  Botón para mostrar/ocultar contraseña  */}
             <TouchableOpacity
               onPress={() => setShowPassword(!showPassword)}
               style={AuthStyle.showPasswordButton}
             >
               <MaterialCommunityIcons
-                name={showPassword ? "eye-off-outline" : "eye-outline"} // Cambia el ícono
+                name={showPassword ? "eye-off-outline" : "eye-outline"}
                 size={24}
                 color="#92959f"
               />
             </TouchableOpacity>
           </View>
+          {passwordError ? (
+            <Text style={AuthStyle.errorText}>{passwordError}</Text>
+          ) : null}
+
           <View style={AuthStyle.inputContainer}>
             <MaterialCommunityIcons
               name="lock-outline"
