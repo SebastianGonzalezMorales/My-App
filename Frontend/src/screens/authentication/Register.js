@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Svg, { Circle } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+
 import axios from 'axios';
 
 // components
@@ -18,10 +19,14 @@ import AuthStyle from '../../assets/styles/AuthStyle';
 const Register = ({ navigation }) => {
   // states
   const [fullName, setFullName] = useState('');
+  const [rut, setRut] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
- const [confirmPassword, setConfirmPassword] = useState('');
- const [showPassword, setShowPassword] = useState(false); 
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); 
+  const [birthdate, setBirthdate] = useState(''); 
+  const [carrera, setCarrera] = useState(''); 
+
 
   /*
    * *******************
@@ -29,9 +34,103 @@ const Register = ({ navigation }) => {
    * *******************
    */
 
+  const validateRut = (rut) => {
+    // Remover puntos y guiones
+    rut = rut.replace(/[^0-9kK]/g, '');
+  
+    if (rut.length < 2) {
+      return false;
+    }
+    // Separar número y dígito verificador
+    const rutBody = rut.slice(0, -1);
+    let dv = rut.slice(-1).toUpperCase();
+  
+    // Calcular el dígito verificador
+    let sum = 0;
+    let multiplier = 2;
+  
+    for (let i = rutBody.length - 1; i >= 0; i--) {
+      sum += parseInt(rutBody.charAt(i)) * multiplier;
+      multiplier = multiplier === 7 ? 2 : multiplier + 1;
+    }
+    const calculatedDv = 11 - (sum % 11);
+
+    // Convertir el dígito verificador calculado
+    if (calculatedDv === 11) dv = '0';
+    else if (calculatedDv === 10) dv = 'K';
+    else dv = calculatedDv.toString();
+  
+    return dv === rut.slice(-1).toUpperCase();
+  };
+
+
+  const formatRut = (rut) => {
+    // Elimina cualquier carácter que no sea un número, punto o guion
+    let cleanRut = rut.replace(/[^0-9kK.-]/g, '');
+  
+    // Añade puntos y guion si no están presentes
+    if (cleanRut.length > 1) {
+      if (cleanRut.length > 2 && cleanRut[2] !== '.') {
+        cleanRut = cleanRut.slice(0, 2) + '.' + cleanRut.slice(2);
+      }
+      if (cleanRut.length > 6 && cleanRut[6] !== '.') {
+        cleanRut = cleanRut.slice(0, 6) + '.' + cleanRut.slice(6);
+      }
+      if (cleanRut.length > 10 && cleanRut[10] !== '-') {
+        cleanRut = cleanRut.slice(0, 10) + '-' + cleanRut.slice(10);
+      }
+    }
+  
+    return cleanRut.toUpperCase(); // Devuelve el RUT formateado
+  };
+
+
+  const handleRutChange = (text) => {
+    // Aplica formateo solo si el usuario está ingresando caracteres, no borrando
+    if (text.length >= rut.length) {
+      setRut(formatRut(text));
+    } else {
+      // Si el usuario está borrando, simplemente actualiza el estado sin formatear
+      setRut(text);
+    }
+  };
+
+    
+  const validateEmail = (email) => {
+    const uvEmailPattern = /^[a-zA-Z]+\.[a-zA-Z]+@alumnos\.uv\.cl$/;
+                         
+    return uvEmailPattern.test(email);
+  };
+
   // sign up function
-  const handleSignUp = async (fullName, email, password) => {
+  const handleSignUp = async (fullName, rut, email, password, confirmPassword, birthdate, carrera) => {
     try {
+        console.log(fullName)
+        console.log(rut)
+        console.log(email)
+        console.log(password)
+        console.log(confirmPassword)
+        console.log(birthdate)
+        console.log(carrera)
+
+        // Verificar que todos los campos estén completos
+   /*  if (!fullName || !rut || !email || !password || !confirmPassword || !birthdate || !carrera) {
+      alert('Por favor, completa todos los campos.');
+      return;
+    } */
+
+      // Validar el RUT
+      if (!validateRut(rut)) {
+        alert('RUT inválido. Por favor, verifica el RUT ingresado.');
+        return;
+      }
+
+       // Validar el email
+    if (!validateEmail(email)) {
+      alert('Correo electrónico inválido. Debe seguir el formato nombre.apellido@alumnos.uv.cl.');
+      return;
+    }
+
       if (password !== confirmPassword) {
         alert("Passwords don't match.");
         return;
@@ -40,9 +139,12 @@ const Register = ({ navigation }) => {
     // Datos a enviar al backend
       const userData = {
         name: fullName,
+        rut: rut,
         email: email,
         password: password,
-        confirmPassword: confirmPassword
+        confirmPassword: confirmPassword,
+        birthdate: birthdate,
+        carrera: carrera
       };
 
        // Realizar la solicitud POST al backend
@@ -71,9 +173,6 @@ const Register = ({ navigation }) => {
 };
  
     
-
-   
-
 
   /*
    * ****************
@@ -136,12 +235,30 @@ const Register = ({ navigation }) => {
             />
             <TextInput
               onChangeText={(text) => setFullName(text)} // every time the text changes, we can set the email to that text (callback function)
-              placeholder="Full name"
+              placeholder="Nombre"
               placeholderTextColor="#92959f"
               selectionColor="#5da5a9"
               style={AuthStyle.input}
             />
           </View>
+          <View style={AuthStyle.inputContainer}>
+            <MaterialCommunityIcons
+              name="information-outline"
+              size={24}
+              style={AuthStyle.icon}
+            />
+            <TextInput
+              value={rut} // El valor es el RUT formateado
+              onChangeText={handleRutChange} // Se maneja el cambio de texto con el formateador
+              placeholder="Rut"
+              placeholderTextColor="#92959f"
+              selectionColor="#5da5a9"
+              style={AuthStyle.input}
+              keyboardType="numeric" // Cambia el teclado a numérico
+              maxLength={12} // Máxima longitud del RUT formateado
+            />
+          </View>
+          
           <View style={AuthStyle.inputContainer}>
             <MaterialCommunityIcons
               name="email-outline"
@@ -150,14 +267,45 @@ const Register = ({ navigation }) => {
             />
             <TextInput
               autoCapitalize="none"
-              keyboardType="email-address"
+              keyboardType="Email address"
               onChangeText={(text) => setEmail(text)} // every time the text changes, we can set the email to that text (callback function)
-              placeholder="Email address"
+              placeholder="Correo institucional"
               placeholderTextColor="#92959f"
               selectionColor="#5da5a9"
               style={AuthStyle.input}
             />
           </View>
+ 
+          <View style={AuthStyle.inputContainer}>
+            <MaterialCommunityIcons
+              name="school-outline"
+              size={24}
+              style={AuthStyle.icon}
+            />
+            <TextInput
+              onChangeText={(text) => setCarrera(text)} // every time the text changes, we can set the email to that text (callback function)
+              placeholder="Carrera"
+              placeholderTextColor="#92959f"
+              selectionColor="#5da5a9"
+              style={AuthStyle.input}
+            />
+          </View>
+
+          <View style={AuthStyle.inputContainer}>
+            <MaterialCommunityIcons
+              name="calendar-outline"
+              size={24}
+              style={AuthStyle.icon}
+            />
+            <TextInput
+              onChangeText={(text) => setBirthdate(text)} // every time the text changes, we can set the email to that text (callback function)
+              placeholder="Fecha de nacimiento"
+              placeholderTextColor="#92959f"
+              selectionColor="#5da5a9"
+              style={AuthStyle.input}
+            />
+          </View>
+
           <View style={AuthStyle.inputContainer}>
             <MaterialCommunityIcons
               name="lock-open-outline"
@@ -166,13 +314,13 @@ const Register = ({ navigation }) => {
             />
             <TextInput
               onChangeText={(text) => setPassword(text)}
-              placeholder="Password"
+              placeholder="Contraseña"
               placeholderTextColor="#92959f"
               secureTextEntry={!showPassword}
               selectionColor="#5da5a9"
               style={AuthStyle.input}
             />
-            {/* Botón para mostrar/ocultar contraseña */}
+            {/*  Botón para mostrar/ocultar contraseña  */}
             <TouchableOpacity
               onPress={() => setShowPassword(!showPassword)}
               style={AuthStyle.showPasswordButton}
@@ -192,13 +340,13 @@ const Register = ({ navigation }) => {
             />
             <TextInput
               onChangeText={(text) => setConfirmPassword(text)}
-              placeholder="Confirm password"
+              placeholder="Confirmar contraseña"
               placeholderTextColor="#92959f"
               secureTextEntry={!showPassword}
               selectionColor="#5da5a9"
               style={AuthStyle.input}
             />
-                        {/* Botón para mostrar/ocultar contraseña */}
+                       {/*  Botón para mostrar/ocultar contraseña  */}
             <TouchableOpacity
               onPress={() => setShowPassword(!showPassword)}
               style={AuthStyle.showPasswordButton}
@@ -214,15 +362,15 @@ const Register = ({ navigation }) => {
 
           <AuthButton
             text="Finalizar"
-            onPress={() => handleSignUp(fullName, email, password)}
+            onPress={() => handleSignUp(fullName, rut, email, password, confirmPassword, birthdate, carrera)}
           />
 
           <View style={AuthStyle.changeScreenContainer}>
             <Text style={AuthStyle.changeScreenText}>
-              Already have an account?
+              ¿Ya tienes una cuenta?
             </Text>
             <SmallAuthButton
-              text="Sign in"
+              text="Iniciar sesión"
               onPress={() => navigation.replace('Login')}
             />
           </View>

@@ -133,7 +133,7 @@ const Login = ({ navigation }) => {
               autoCapitalize="none"
               keyboardType="email-address"
               onChangeText={(text) => setEmail(text)} // every time the text changes, we can set the email to that text (callback function)
-              placeholder="Email address"
+              placeholder="Correo institucional"
               placeholderTextColor="#92959f"
               selectionColor="#5da5a9"
               style={AuthStyle.input}
@@ -147,7 +147,7 @@ const Login = ({ navigation }) => {
             />
                 <TextInput
               onChangeText={(text) => setPassword(text)}
-              placeholder="Password"
+              placeholder="Contraseña"
               placeholderTextColor="#92959f"
               secureTextEntry={!showPassword} // Cambia entre mostrar/ocultar la contraseña
               selectionColor="#5da5a9"
