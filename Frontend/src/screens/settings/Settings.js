@@ -10,6 +10,9 @@ import {
   } from 'react-native';
   import React, { useEffect, useState } from 'react';
   import Icon from 'react-native-vector-icons/FontAwesome';
+  import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+  import axios from 'axios';
   import AsyncStorage from '@react-native-async-storage/async-storage';
   
   // firebase
@@ -24,16 +27,14 @@ import {
   import GlobalStyle from '../../assets/styles/GlobalStyle';
   
   function Settings({ navigation }) {
-    // references
-  /*  const userRef = firebase
-       .firestore()
-      .collection('users')
-      .doc(firebase.auth().currentUser.uid); */
-  
+
     // states
     const [name, setName] = useState('');
+    const [rut, setRut] = useState('');
     const [email, setEmail] = useState('');
-  
+    const [birthdate, setBirthdate] = useState('');
+    const [carrera, setCarrera] = useState('');
+ 
     /*
      * *******************
      * **** Functions ****
@@ -42,14 +43,14 @@ import {
   
     // hook to fetch user's data
     useEffect(() => {
- /*      const fetchName = async () => {
-        userRef.onSnapshot((snapshot) => {
+    const fetchName = async () => {
+       /*   userRef.onSnapshot((snapshot) => {
           const { fullName, email } = snapshot.data();
           setName(fullName);
           setEmail(email);
-        });
-      }; 
-      fetchName();*/
+        });*/
+      };  
+      fetchName();
     }, []);
   
     // sign out function
@@ -69,6 +70,7 @@ import {
         
         // Redirigir al usuario a la pantalla de login
         navigation.replace('Login');
+        console.log("Cierre de sesión exitoso");
     } catch (error) {
         console.error("Error al cerrar sesión:", error);
     }
@@ -90,6 +92,55 @@ import {
      * **** Screen ****
      * ****************
      */
+
+    useEffect(() => {
+      const fetchUserData = async () => {
+        try {
+          const token = await AsyncStorage.getItem('token');
+          if (token) {
+          const response = await axios.post('http://192.168.1.2:3000/api/v1/users/userdata',
+            {
+              // Token en el cuero de la solicitud
+              token: `${token}`
+            },
+            {
+              // Token de autoización en el header
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          );
+          const userName = response.data.data.name;
+          const userRut = response.data.data.rut;
+          const userEmail = response.data.data.email;
+          const userBirthdate = response.data.data.birthdate.split('T')[0];
+          const userCarrera = response.data.data.carrera;
+
+          // Actualiza el estado con el nombre
+          setName(userName);
+          setRut(userRut);
+          setEmail(userEmail);
+          setBirthdate(userBirthdate);
+          setCarrera(userCarrera);
+          
+          // Para verificar en la consola
+          console.log('User Name:', userName);
+          console.log('User Rut:', userRut);
+          console.log('User Email:', userEmail);
+          console.log('User Birthdate:', userBirthdate);
+          console.log('User Carrera:', userCarrera);
+         
+        } else {
+          console.log('No se encontró el token. Por favor, inicia sesión.');
+        }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+    
+      };
+      fetchUserData();
+    }, []);
+  
   
     return (
       <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
@@ -111,14 +162,15 @@ import {
          */}
         <View style={GlobalStyle.rowTwo}>
           <View style={GlobalStyle.statsContainer}>
-            <Text style={GlobalStyle.statsTitle}>Nombre: </Text>  
-            <Text style={GlobalStyle.statsTitle}>Rut: </Text>    
-            <Text style={GlobalStyle.statsTitle}>Carrera: </Text>
-            <Text style={GlobalStyle.statsTitle}>Fecha de nacimiento: </Text>    
+            <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17}}>Nombre:</Text>  {name}</Text>  
+            <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17}}>Rut:</Text>  {rut} </Text>    
+            <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17}}>Email:</Text>   {email} </Text>    
+            <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17}}>Carrera:</Text>   {carrera} </Text>
+            <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17}}>Fecha de nacimiento:</Text>   {birthdate}</Text>    
             
           </View>
           <ScrollView>
-            <View style={{ marginTop: 80 }}>
+            <View style={{ marginTop: 60 }}>
              {/*  <SettingsButton
                 text="WeBt"
                 onPress={() => navigation.navigate('Counselling')}
@@ -134,15 +186,19 @@ import {
                 text="Privacy policy"
                  onPress={() => navigation.navigate('Notification')}
               /> */}
+              
               <CustomButton
                 buttonStyle={{
                   backgroundColor: '#f7d8e3',
                 }}
+                
                 textStyle={{
                   color: '#d85a77',
                 }}
+              
                 onPress={() => handleSignOut()}
                 title="Cerrar sesión"
+                icon="logout"
               />
             </View>
           </ScrollView>

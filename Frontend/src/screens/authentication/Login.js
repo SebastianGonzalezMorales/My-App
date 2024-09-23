@@ -41,7 +41,7 @@ const Login = ({ navigation }) => {
   const handleLogin = async (email, password) => {
     try {
     //  await firebase.auth().signInWithEmailAndPassword(email, password);
-      const response = await axios.post('http://192.168.1.3:3000/api/v1/users/login', { email, password });
+      const response = await axios.post('http://192.168.1.2:3000/api/v1/users/login', { email, password });
        // Guarda el token en AsyncStorage
        await AsyncStorage.setItem('token', response.data.token);
 
@@ -168,8 +168,10 @@ const Login = ({ navigation }) => {
 
           {/* buttons */}
           <AuthButton
-            text="Ingresar"
             onPress={() => handleLogin(email, password)}
+            text="Ingresar"
+            iconName="log-in"
+           
           />
 
           <View style={AuthStyle.changeScreenContainer}>

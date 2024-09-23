@@ -23,7 +23,7 @@ import {
      
          */}
         <View style={{ height: 210 }}>
-          <Text style={GlobalStyle.welcomeText}>En página en contrucción </Text>
+          <Text style={GlobalStyle.welcomeText}>Página en contrucción </Text>
   
         
         
