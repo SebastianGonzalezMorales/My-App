@@ -51,11 +51,11 @@ const getUserData = async (req, res) => {
 const registerUser = async (req, res) => {
     try {
         // Extraer los campos del cuerpo de la solicitud
-        const { name, email, password, confirmPassword } = req.body;
+        const { name, email, rut, birthdate, carrera, password, confirmPassword } = req.body;
 
         // Validación básica de datos
-        if (!name || !email || !password || !confirmPassword) {
-            return res.status(400).send('Name, email, password, and password confirmation are required.');
+        if (!name || !email || !rut || !birthdate || !carrera|| !password || !confirmPassword) {
+            return res.status(400).send('Name, email, rut, birthdate, carrera, password, and password confirmation are required.');
         }
 
         // Verificar si la contraseña y la confirmación coinciden
@@ -69,10 +69,19 @@ const registerUser = async (req, res) => {
             return res.status(400).send('Email already in use.');
         }
 
+         // Verificar si el RUT ya está en uso
+         const existingRut = await User.findOne({ rut: rut });
+         if (existingRut) {
+             return res.status(400).send('RUT already in use.');
+         }
+
         // Crear nuevo usuario
         const user = new User({
             name,
             email,
+            rut,
+            birthdate,
+            carrera,
             passwordHash: bcrypt.hashSync(password, 8),
             // Puedes agregar otros campos aquí si los estás usando
         });
@@ -150,6 +159,17 @@ const deleteUser = async (req, res) => {
     } catch (error) {
         return res.send({ error: error });
     }
+};
+
+
+const revokedTokens = []; // Esta es una lista en memoria, pero en producción podrías usar una base de datos
+
+// Controlador para el logout
+const logoutUser = (req, res) => {
+    const token = req.headers['authorization'].split(' ')[1]; // Obtener el token del header
+    revokedTokens.push(token); // Añadir el token a la lista de tokens revocados
+
+    res.status(200).send({ message: "User logged out successfully" });
 };
 
 /*    router.post("/userdata", async (req, res) => {
@@ -241,5 +261,6 @@ module.exports = {
     getRandomUser,
     getAllUsers,
     updateUser,
-    deleteUser
+    deleteUser,
+    logoutUser
 };

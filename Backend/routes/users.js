@@ -7,7 +7,8 @@ const {
     getRandomUser,
     getAllUsers,
     updateUser,
-    deleteUser
+    deleteUser,
+    logoutUser
 } = require('../controllers/user');
 
 // Rutas asociadas a cada controlador
@@ -18,5 +19,6 @@ router.get('/get-random-user', getRandomUser);
 router.get('/get-all-user', getAllUsers);
 router.post('/update-user', updateUser);
 router.post('/delete-user', deleteUser);
+router.post('/logout-user', logoutUser);
 
 module.exports = router;

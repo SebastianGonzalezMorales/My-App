@@ -5,10 +5,11 @@ const usersSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-/*     rut: {
+    rut: {
         type: String,
         required: true,
-     }, */
+        unique: true
+     }, 
     email: {
        type: String,
        required: true,
@@ -18,18 +19,23 @@ const usersSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-   /* birthdate: {
+    birthdate: {
          type: Date,
         required: true,
      },
-     carrera: {
+    carrera: {
         type: String,
         required: true,
-   }, */
+   }, 
    isAdmin: {
         type: Boolean,
         default: false,
  }, 
+
+
+ 
+});
+
 
 /*     street: {
         type: String,
@@ -47,7 +53,6 @@ const usersSchema = new mongoose.Schema({
         type: String,
         default: ''
     }  */
-})
 
 
 exports.User = mongoose.model('User', usersSchema);
