@@ -289,12 +289,14 @@ const Mood = ({ navigation }) => {
                     {/* Motivational Quote Section */}
   
   </View>
-  <View style={{ marginTop: 5, alignItems: 'left', paddingHorizontal: 20 }}>
+  <View style={{ marginTop: -10, alignItems: 'left', paddingHorizontal: 20 }}>
   <Text style={GlobalStyle.subtitle}>Frase del día: </Text>
   <Text style={[GlobalStyle.quoteText, { textAlign: 'left', marginTop: 10 }]}>
     {motivationalQuote}
   </Text>
-</View>
+  </View>
+  
+
       </View>
 
       {/*
