@@ -149,9 +149,11 @@ import {
          * ***** Section 1 *****
          * *********************
          */}
+    
+
         <View style={{ height: 225, alignItems: 'center' }}>
           <Text style={[GlobalStyle.welcomeText]}>Mi Perfil</Text>
-          <Text style={[GlobalStyle.subtitle]}> </Text>
+          <Text style={[GlobalStyle.subtitle]}></Text>
           <Icon name="user-circle" size={100} color="#000" />
         </View>
   
@@ -162,15 +164,15 @@ import {
          */}
         <View style={GlobalStyle.rowTwo}>
           <View style={GlobalStyle.statsContainer}>
-            <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17}}>Nombre:</Text>  {name}</Text>  
-            <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17}}>Rut:</Text>  {rut} </Text>    
-            <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17}}>Email:</Text>   {email} </Text>    
-            <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17}}>Carrera:</Text>   {carrera} </Text>
-            <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17}}>Fecha de nacimiento:</Text>   {birthdate}</Text>    
+            <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17}}>Nombre:</Text>  {name}</Text>
+            <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17}}>Rut:</Text>  {rut}</Text>
+            <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17}}>Email:</Text> {email}</Text>
+            <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17}}>Carrera:</Text> {carrera} </Text>
+            <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17}}>Fecha de nacimiento:</Text>  {birthdate}</Text>    
             
           </View>
-          <ScrollView>
-            <View style={{ marginTop: 60 }}>
+      
+          <View style={{ marginTop: 20, paddingBottom: 50}}>
              {/*  <SettingsButton
                 text="WeBt"
                 onPress={() => navigation.navigate('Counselling')}
@@ -201,8 +203,8 @@ import {
                 icon="logout"
               />
             </View>
-          </ScrollView>
-        </View>
+           </View> 
+      
       </SafeAreaView>
     );
   }

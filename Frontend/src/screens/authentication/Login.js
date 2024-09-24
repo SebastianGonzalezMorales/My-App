@@ -188,10 +188,19 @@ const handleLogin = async (email, password) => {
 
           <View style={AuthStyle.changeScreenContainer}>
             <Text style={AuthStyle.changeScreenText}>
-            ¿Aún tienes una cuenta?
+            ¿Aún no tienes una cuenta?
             </Text>
             <SmallAuthButton
               text="Regístrate"
+              onPress={() => navigation.replace('Register')}
+            />
+          </View>
+
+          <View style={AuthStyle.changeScreenContainer}>
+            <Text style={AuthStyle.changeScreenText}>
+            </Text>
+            <SmallAuthButton
+              text="Olvidaste tu contraseña"
               onPress={() => navigation.replace('Register')}
             />
           </View>
