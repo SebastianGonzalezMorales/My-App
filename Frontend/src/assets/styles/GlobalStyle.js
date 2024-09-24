@@ -25,7 +25,7 @@ export default StyleSheet.create({
     color: '#f2f2fc',
     fontFamily: 'DoppioOne',
     fontSize: 20,
-  
+    paddingLeft: 30,
     paddingTop: 20,
   },
   subtitle: {

@@ -151,8 +151,8 @@ import {
          */}
     
 
-        <View style={{ height: 225, alignItems: 'center' }}>
-          <Text style={[GlobalStyle.welcomeText]}>Mi Perfil</Text>
+        <View style={{ height: 225, alignItems: 'center'}}>
+          <Text style={[GlobalStyle.welcomeText,{ marginRight: 30}]}>Mi Perfil</Text>
           <Text style={[GlobalStyle.subtitle]}></Text>
           <Icon name="user-circle" size={100} color="#000" />
         </View>
