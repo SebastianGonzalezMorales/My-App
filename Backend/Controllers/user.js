@@ -10,7 +10,7 @@ const loginUser = async (req, res) => {
     // Busca en la colección temporal primero
     const tempUser = await TempUser.findOne({ email });
     if (tempUser) {
-        return res.status(403).send('Please verify your email before logging in.');
+        return res.status(403).send('Por favor verifique su correo electrónico antes de iniciar sesión.');
     }
 
     // Busca en la colección de usuarios
@@ -20,7 +20,7 @@ const loginUser = async (req, res) => {
     }
 
     if (!user.verified) {
-        return res.status(403).send('Please verify your email before logging in.');
+        return res.status(403).send('Por favor verifique su correo electrónico antes de iniciar sesión.');
     }
 
     if (bcrypt.compareSync(password, user.passwordHash)) {

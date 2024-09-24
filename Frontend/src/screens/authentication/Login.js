@@ -37,24 +37,34 @@ const Login = ({ navigation }) => {
     }
   };
 
-  // Login function
-  const handleLogin = async (email, password) => {
-    try {
-    //  await firebase.auth().signInWithEmailAndPassword(email, password);
-      const response = await axios.post('http://192.168.1.2:3000/api/v1/users/login', { email, password });
-       // Guarda el token en AsyncStorage
-       await AsyncStorage.setItem('token', response.data.token);
+// Login function
+const handleLogin = async (email, password) => {
+  try {
+    const response = await axios.post('http://192.168.1.2:3000/api/v1/users/login', { email, password });
+    
+    // Guarda el token en AsyncStorage
+    await AsyncStorage.setItem('token', response.data.token);
 
-       // Puedes usar también otros datos como el nombre o el email si lo necesitas
-       console.log(response.data.name);  // Nombre del usuario logueado
-       console.log(response.data.user);  // Email del usuario logueado
+    // Puedes usar también otros datos como el nombre o el email si lo necesitas
+    console.log(response.data.name);  // Nombre del usuario logueado
+    console.log(response.data.user);  // Email del usuario logueado
 
-      navigation.replace('Home');
-    } catch (error) {
-      alert('Error al iniciar sesión. Por favor, verifica tus credenciales.');
-      console.log('Error @handleLogin:', error);
+    navigation.replace('Home');
+  } catch (error) {
+    // Verifica si el error tiene respuesta y un código de estado
+    if (error.response) {
+      if (error.response.status === 403) {
+        alert(error.response.data); // Muestra el mensaje de verificación
+      } else {
+        alert('Error al iniciar sesión. Por favor, verifica tus credenciales.');
+      }
+    } else {
+      alert('Error al iniciar sesión. Intenta nuevamente más tarde.');
     }
-  };
+    console.log('Error @handleLogin:', error);
+  }
+};
+
 
   
   /*
