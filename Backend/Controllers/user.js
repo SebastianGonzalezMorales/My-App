@@ -4,37 +4,41 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer'); // Para enviar correos
 
-// Controlador para el login
 const loginUser = async (req, res) => {
-    const user = await User.findOne({ email: req.body.email });
-    const secret = process.env.secret;
+    const { email, password } = req.body;
 
-    if (!user) {
-        return res.status(400).send('The user not found');
-    }
-    if (!user.verified) {
-        console.log('');
-        console.log('Please verify your email before logging in.');
+    // Busca en la colección temporal primero
+    const tempUser = await TempUser.findOne({ email });
+    if (tempUser) {
         return res.status(403).send('Please verify your email before logging in.');
     }
 
-    if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
+    // Busca en la colección de usuarios
+    const user = await User.findOne({ email });
+    if (!user) {
+        return res.status(400).send('The user not found');
+    }
+
+    if (!user.verified) {
+        return res.status(403).send('Please verify your email before logging in.');
+    }
+
+    if (bcrypt.compareSync(password, user.passwordHash)) {
         const token = jwt.sign(
             {
                 userId: user.id,
-                email: user.email, 
+                email: user.email,
                 isAdmin: user.isAdmin
             },
-            secret,
-
-            // El token expira en 24 horas, si quisiera colocarlo en 10segundos, debería ser así: '10s'
+            process.env.secret,
             { expiresIn: '1d' }
         );
-        res.status(200).send({ name: user.name, user: user.email, token: token });
+        return res.status(200).send({ name: user.name, user: user.email, token });
     } else {
-        res.status(400).send('password is wrong!');
+        return res.status(400).send('Password is wrong!');
     }
 };
+
 
 // Controlador para obtener datos de usuario
 const getUserData = async (req, res) => {
@@ -102,8 +106,8 @@ const registerUser = async (req, res) => {
 
         await transporter.sendMail({
             to: email,
-            subject: 'Verify your email',
-            text: `Please verify your account by clicking the following link: ${verificationLink}`,
+            subject: '[Verifique su correo electrónico]',
+            text: `Por favor verifique su cuenta haciendo clic en el siguiente enlace: ${verificationLink}`,
         });
 
         res.status(201).send({
