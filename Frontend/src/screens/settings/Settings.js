@@ -98,7 +98,7 @@ import {
         try {
           const token = await AsyncStorage.getItem('token');
           if (token) {
-          const response = await axios.post('http://192.168.1.2:3000/api/v1/users/userdata',
+          const response = await axios.post('http://192.168.1.3:3000/api/v1/users/userdata',
             {
               // Token en el cuero de la solicitud
               token: `${token}`

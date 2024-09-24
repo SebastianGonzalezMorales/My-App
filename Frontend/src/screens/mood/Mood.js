@@ -106,7 +106,7 @@ const Mood = ({ navigation }) => {
       const token = await AsyncStorage.getItem('token');
 
       if (token) {
-        const response = await axios.get('http://192.168.1.2:3000/api/v1/tips/get-random-tips', {
+        const response = await axios.get('http://192.168.1.3:3000/api/v1/tips/get-random-tips', {
           headers: {
             'Authorization': `Bearer ${token}`  // Usa el token recuperado
           }
@@ -135,7 +135,7 @@ const Mood = ({ navigation }) => {
       try {
         const token = await AsyncStorage.getItem('token');
         if (token) {
-        const response = await axios.post('http://192.168.1.2:3000/api/v1/users/userdata',
+        const response = await axios.post('http://192.168.1.3:3000/api/v1/users/userdata',
           {
             // Token en el cuero de la solicitud
             token: `${token}`
@@ -251,10 +251,12 @@ const Mood = ({ navigation }) => {
        * ***** Section 1 *****
        * *********************
        */}
+       {/* Espacio hasta la frase del día  */}
       <View style={{ height: 301 }}>
-        <Text style={GlobalStyle.welcomeText}>Hola, {name} 😀 !</Text >
+        <Text style={GlobalStyle.welcomeText}>Hola, {name} 😀 ! </Text >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={GlobalStyle.subtitle}>Ho do you feel right now?</Text>
+          <Text style={[GlobalStyle.subtitle, { textAlign: 'left' }]}> Cómo te sientes ahora mismo ?</Text>
+
           <MaterialCommunityIcons
             name="information"
             color="#f2f2f2"
@@ -287,8 +289,8 @@ const Mood = ({ navigation }) => {
                     {/* Motivational Quote Section */}
   
   </View>
-  <View style={{ marginTop: 5, alignItems: 'center', paddingHorizontal: 20 }}>
-  <Text style={GlobalStyle.subtitle}>Motivational Quote:</Text>
+  <View style={{ marginTop: 5, alignItems: 'left', paddingHorizontal: 20 }}>
+  <Text style={GlobalStyle.subtitle}>Frase del día: </Text>
   <Text style={[GlobalStyle.quoteText, { textAlign: 'left', marginTop: 10 }]}>
     {motivationalQuote}
   </Text>

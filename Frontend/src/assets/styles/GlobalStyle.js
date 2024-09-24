@@ -118,6 +118,6 @@ export default StyleSheet.create({
   quoteText: {
     fontSize: 16,
     fontStyle: 'italic',
-    color: '#4f4f4f',
+    color: '#f2f2fc',
   }
 });
