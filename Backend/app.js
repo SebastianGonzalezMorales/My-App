@@ -5,6 +5,9 @@ const morgan = require('morgan')
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+const path = require('path');
+const favicon = require('serve-favicon');
+
 require('dotenv/config');
 const authJwt = require('./middlewares/jwt');
 const errorHandler = require('./helpers/error-handler')
@@ -13,6 +16,7 @@ app.use(cors());
 app.options('*', cors());
 
 //middleware
+app.use(favicon(path.join(__dirname, 'public', 'icon.png')));
 app.use(boddyParser.json());
 app.use(morgan('tiny'));
 app.use(authJwt);

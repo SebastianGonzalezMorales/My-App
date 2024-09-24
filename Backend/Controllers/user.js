@@ -1,6 +1,8 @@
 const { User } = require('../models/user');
+const { TempUser } = require('../models/tempUser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer'); // Para enviar correos
 
 // Controlador para el login
 const loginUser = async (req, res) => {
@@ -9,6 +11,11 @@ const loginUser = async (req, res) => {
 
     if (!user) {
         return res.status(400).send('The user not found');
+    }
+    if (!user.verified) {
+        console.log('');
+        console.log('Please verify your email before logging in.');
+        return res.status(403).send('Please verify your email before logging in.');
     }
 
     if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
@@ -46,57 +53,123 @@ const getUserData = async (req, res) => {
     }
 };
 
-
-// Controlador para registrar un nuevo usuario
 const registerUser = async (req, res) => {
     try {
-        // Extraer los campos del cuerpo de la solicitud
         const { name, email, rut, birthdate, carrera, password, confirmPassword } = req.body;
 
-        // Validación básica de datos
-        if (!name || !email || !rut || !birthdate || !carrera|| !password || !confirmPassword) {
-            return res.status(400).send('Name, email, rut, birthdate, carrera, password, and password confirmation are required.');
+        if (!name || !email || !rut || !birthdate || !carrera || !password || !confirmPassword) {
+            return res.status(400).send('All fields are required.');
         }
 
-        // Verificar si la contraseña y la confirmación coinciden
         if (password !== confirmPassword) {
             return res.status(400).send('Passwords do not match.');
         }
 
-        // Verificar si el correo electrónico ya está en uso
         const existingUser = await User.findOne({ email: email });
         if (existingUser) {
             return res.status(400).send('Email already in use.');
         }
 
-         // Verificar si el RUT ya está en uso
-         const existingRut = await User.findOne({ rut: rut });
-         if (existingRut) {
-             return res.status(400).send('RUT already in use.');
-         }
+        const existingRut = await User.findOne({ rut: rut });
+        if (existingRut) {
+            return res.status(400).send('RUT already in use.');
+        }
 
-        // Crear nuevo usuario
-        const user = new User({
+        const verificationToken = jwt.sign({ email }, process.env.secret, { expiresIn: '1h' });
+
+        const tempUser = new TempUser({
             name,
             email,
             rut,
             birthdate,
             carrera,
             passwordHash: bcrypt.hashSync(password, 8),
-            // Puedes agregar otros campos aquí si los estás usando
+            verificationToken
         });
 
-        // Guardar el usuario
-        const savedUser = await user.save();
-        if (!savedUser) return res.status(400).send('The user cannot be created!');
-        
-        // Enviar respuesta
-        res.status(201).send(savedUser);
+        const savedTempUser = await tempUser.save();
+        if (!savedTempUser) return res.status(400).send('User could not be created.');
+
+        const verificationLink = `http://localhost:3000/api/v1/users/verificar?token=${verificationToken}`;
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'sgonzalezm9045@gmail.com',
+                pass: 'anbv thom ijss ybxq'
+            }
+        });
+
+        await transporter.sendMail({
+            to: email,
+            subject: 'Verify your email',
+            text: `Please verify your account by clicking the following link: ${verificationLink}`,
+        });
+
+        res.status(201).send({
+            message: 'Registration successful. Please check your email to verify your account.',
+        });
     } catch (error) {
         console.error('Error registering user:', error);
         res.status(500).send('Internal server error');
     }
 };
+
+const verifyEmail = async (req, res) => {
+    const { token } = req.query;
+
+    console.log('Verifying email with token:', token);
+
+    try {
+        const decoded = jwt.verify(token, process.env.secret);
+        const email = decoded.email;
+
+        const tempUser = await TempUser.findOne({ verificationToken: token });
+        if (!tempUser) {
+            console.log('No temporary user found or token expired.');
+            return res.status(400).send(`
+                <html>
+                    <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
+                        <h1 style="font-size: 32px; color: #000C7B;">Invalid or expired verification token.</h1>
+                    </body>
+                </html>
+            `);
+        }
+
+        const user = new User({
+            name: tempUser.name,
+            email: tempUser.email,
+            rut: tempUser.rut,
+            birthdate: tempUser.birthdate,
+            carrera: tempUser.carrera,
+            passwordHash: tempUser.passwordHash,
+            verified: true
+        });
+
+        await user.save();
+        console.log('New user saved:', user);
+
+        await TempUser.deleteOne({ verificationToken: token });
+
+        return res.send(`
+            <html>
+                <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
+                    <h1 style="font-size: 32px; color: #000C7B;">Email verified successfully. Your account is now active.</h1>
+                </body>
+            </html>
+        `);
+    } catch (error) {
+        console.error('Error during email verification:', error.message);
+        return res.status(400).send(`
+            <html>
+                <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
+                    <h1 style="font-size: 32px; color: #000C7B;">Invalid or expired verification link.</h1>
+                </body>
+            </html>
+        `);
+    }
+};
+
 
 module.exports = registerUser;
 
@@ -262,5 +335,6 @@ module.exports = {
     getAllUsers,
     updateUser,
     deleteUser,
-    logoutUser
+    logoutUser,
+    verifyEmail
 };

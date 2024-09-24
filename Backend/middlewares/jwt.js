@@ -14,6 +14,7 @@ const authJwt = jwt({
                             //Por ejemplo: para poder publicar tips tendrían que estar registrados como administrador.
                             //{url: /\/api\/v1\/tips(.*)/ , methods: ['GET', 'OPTIONS'] },
                           //  {url: /\/api\/v1\/users\/get-random-user(.*)/ , methods: ['GET', 'OPTIONS'] },
+                            `${api}/users/verificar`,
                             `${api}/tips`,
                             `${api}/users/login`,
                             `${api}/users/register`,    
