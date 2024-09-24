@@ -187,10 +187,10 @@ const Register = ({ navigation }) => {
    
     // Verificar la respuesta del servidor
     if (response.status === 201) {
-      alert('Registration successful!');
+      alert('Registro existoso, verifica tu cuenta ingresando a tu correo electrónico!');
       navigation.navigate('Login');
     } else {
-      alert(`Registration failed: ${response.data}`);
+      alert(`Registro fallido: ${response.data}`);
     }
   } catch (error) {
     // Manejo de errores
