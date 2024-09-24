@@ -7,14 +7,17 @@ const nodemailer = require('nodemailer'); // Para enviar correos
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
+    // Convertir el email a minúsculas antes de buscar en la base de datos
+    const normalizedEmail = email.toLowerCase();
+
     // Busca en la colección temporal primero
-    const tempUser = await TempUser.findOne({ email });
+    const tempUser = await TempUser.findOne({ email: normalizedEmail });
     if (tempUser) {
         return res.status(403).send('Por favor verifique su correo electrónico antes de iniciar sesión.');
     }
 
     // Busca en la colección de usuarios
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
         return res.status(400).send('The user not found');
     }
@@ -60,8 +63,10 @@ const getUserData = async (req, res) => {
 const registerUser = async (req, res) => {
     try {
         const { name, email, rut, birthdate, carrera, password, confirmPassword } = req.body;
+        // Convertir el email a minúsculas antes de guardarlo
+        const normalizedEmail = email.toLowerCase();
 
-        if (!name || !email || !rut || !birthdate || !carrera || !password || !confirmPassword) {
+        if (!name || !normalizedEmail || !rut || !birthdate || !carrera || !password || !confirmPassword) {
             return res.status(400).send('All fields are required.');
         }
 
@@ -69,7 +74,7 @@ const registerUser = async (req, res) => {
             return res.status(400).send('Passwords do not match.');
         }
 
-        const existingUser = await User.findOne({ email: email });
+        const existingUser = await User.findOne({ email: normalizedEmail });
         if (existingUser) {
             return res.status(400).send('Email already in use.');
         }
@@ -79,11 +84,11 @@ const registerUser = async (req, res) => {
             return res.status(400).send('RUT already in use.');
         }
 
-        const verificationToken = jwt.sign({ email }, process.env.secret, { expiresIn: '1h' });
+        const verificationToken = jwt.sign({ email: normalizedEmail }, process.env.secret, { expiresIn: '1h' });
 
         const tempUser = new TempUser({
             name,
-            email,
+            email: normalizedEmail,
             rut,
             birthdate,
             carrera,
@@ -105,7 +110,7 @@ const registerUser = async (req, res) => {
         });
 
         await transporter.sendMail({
-            to: email,
+            to: normalizedEmail,
             subject: '[Verifique su correo electrónico]',
             text: `Por favor verifique su cuenta haciendo clic en el siguiente enlace: ${verificationLink}`,
         });
