@@ -22,9 +22,10 @@ export default StyleSheet.create({
     fontFamily: 'DoppioOne',
     fontSize: 20,
     left: 120,
-    position: 'absolute',
+    position: 'relative',
     right: 120,
     textAlign: 'center',
+    marginTop: 20, 
   },
 
   // activities
@@ -73,7 +74,7 @@ export default StyleSheet.create({
   text: {
     color: '#f2f2f2',
     fontFamily: 'DoppioOne',
-    fontSize: 16,
+    fontSize: 13,
     marginTop: 20,
   },
 

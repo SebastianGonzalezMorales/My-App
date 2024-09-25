@@ -30,7 +30,7 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import M2 from './src/screens/M2/M2';
-import M1 from './src/screens/M1/M1';
+import SaludMental from './src/screens/SaludMental/SaludMental';
 
 const Tab = createBottomTabNavigator(); // create tab navigator method
 const Stack = createNativeStackNavigator(); // create stack navigator method
@@ -49,19 +49,19 @@ function Home() {
           if (route.name === 'Mood') {
             iconName = focused ? 'home-variant' : 'home-variant-outline';
             size = 30;
-            color = focused ? '#5da5a9' : '#999';
-          } else if (route.name === 'M1') {
+            color = focused ? '#000C7B' : '#999';
+          } else if (route.name === 'SaludMental') {
             iconName = focused ? 'brain' : 'brain';
             size = 30;
-            color = focused ? '#5da5a9' : '#999';
+            color = focused ? '#000C7B' : '#999';
           } else if (route.name === 'M2') {
             iconName = focused ? 'file-document' : 'file-document-outline';
             size = 30;
-            color = focused ? '#5da5a9' : '#999';
+            color = focused ? '#000C7B' : '#999';
           } else if (route.name === 'Settings') {
             iconName = focused ? 'account' : 'account';
             size = 30;
-            color = focused ? '#5da5a9' : '#999';
+            color = focused ? '#000C7B' : '#999';
           } else {
           }
           return (
@@ -77,8 +77,8 @@ function Home() {
       />
       <Tab.Screen
         options={{ headerShown: false, gestureEnabled: false }}
-        name={'M1'}
-        component={M1}
+        name={'SaludMental'}
+        component={SaludMental}
       />
 
         <Tab.Screen
