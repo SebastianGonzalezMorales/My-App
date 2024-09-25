@@ -12,6 +12,7 @@ import {
 
 
   //Components
+  import BackButton from '../../components/buttons/BackButton';
   import CustomButton from '../../components/buttons/CustomButton';
   import SettingsButton from '../../components/buttons/SettingsButton';
 
@@ -19,6 +20,7 @@ import {
   function SaludMental({ navigation }) {
     return (
       <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
+          <BackButton onPress={() => navigation.goBack()} />
       
               {/*
        * *********************
@@ -53,11 +55,11 @@ import {
         <ScrollView>
           <View style={{ marginTop: 10 }}>
             <SettingsButton
-              text="Test"
-              onPress={() => navigation.navigate('Tests')}
+              text="Depresión"
+              onPress={() => navigation.navigate('Test')}
             /> 
             <SettingsButton
-              text="Consejos"
+              text="Ansiedad"
               onPress={() => navigation.navigate('Counselling')}
             />
             {/* <SettingsButton text="Notifications" onPress={() => navigation.navigate('Counselling')} /> */}

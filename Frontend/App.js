@@ -31,6 +31,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import M2 from './src/screens/M2/M2';
 import SaludMental from './src/screens/SaludMental/SaludMental';
+import Tests from './src/screens/SaludMental/Tests';
+import Test from './src/screens/SaludMental/Test';
 
 const Tab = createBottomTabNavigator(); // create tab navigator method
 const Stack = createNativeStackNavigator(); // create stack navigator method
@@ -80,12 +82,14 @@ function Home() {
         name={'SaludMental'}
         component={SaludMental}
       />
-
         <Tab.Screen
         options={{ headerShown: false, gestureEnabled: false }}
         name={'M2'}
         component={M2}
       />
+      
+
+      
 {/* 
       <Tab.Screen
         options={{ headerShown: false, gestureEnabled: false }}
@@ -197,12 +201,13 @@ export default function App() {
 
         
         {/* questionnaire */}
-{/*         <Stack.Screen name="Test" component={Test} />
-        <Stack.Screen
+         <Stack.Screen name="Tests" component={Tests} />
+         <Stack.Screen name="Test" component={Test} />
+ {/*        <Stack.Screen
           name="QuestionnaireStats"
           component={QuestionnaireStats}
-        />
-        <Stack.Screen name="ResultView" component={ResultView} />
+        /> */}
+       {/* <Stack.Screen name="ResultView" component={ResultView} />
         <Stack.Screen
           name="QuestionnaireHistory"
           component={QuestionnaireHistory}
