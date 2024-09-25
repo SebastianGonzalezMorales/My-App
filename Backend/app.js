@@ -27,6 +27,7 @@ const tipsRoutes = require('./routes/tips');
 const moodStateRoutes = require('./routes/moodState');
 const usersRoutes = require('./routes/users');
 const questionRoutes = require('./routes/questions');
+const resultsTestsRoutes = require('./routes/resultsTests');
 //const authJwt = require('./helpers/jwt');
 
 const api = process.env.API_URL;
@@ -35,6 +36,7 @@ app.use(`${api}/tips`, tipsRoutes);
 app.use(`${api}/users`, usersRoutes);
 app.use(`${api}/moodState`, moodStateRoutes);
 app.use(`${api}/questions`, questionRoutes);
+app.use(`${api}/resultsTests`, resultsTestsRoutes);
 
 mongoose.connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,

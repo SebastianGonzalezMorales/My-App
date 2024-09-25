@@ -81,53 +81,66 @@ const Test = ({ navigation }) => {
       [index]: option, // set selected option on the current index
     });
   };
-/* 
-  // submit for results and set data to database
-  const handleSubmit = async () => {
-    let total = 0;
-    questions.forEach((question, index) => {
-      if (selectedOptions[index] === question.selectedoption1) {
-        total = total + 0;
-      } else if (selectedOptions[index] === question.selectedoption2) {
-        total = total + 1;
-      } else if (selectedOptions[index] === question.selectedoption3) {
-        total = total + 2;
-      } else if (selectedOptions[index] === question.selectedoption4) {
-        total = total + 3;
-      }
-    });
-
-    let severity = '';
-    if (total >= 0 && total < 4) {
-      severity = 'None';
-    } else if (total > 4 && total < 10) {
-      severity = 'Mild';
-    } else if (total >= 10 && total < 15) {
-      severity = 'Moderate';
-    } else if (total >= 15 && total < 20) {
-      severity = 'Moderately Severe';
-    } else {
-      severity = 'Severe';
+// submit for results and set data to database
+const handleSubmit = async () => {
+  let total = 0;
+  questions.forEach((question, index) => {
+    if (selectedOptions[index] === question.selectedoption1) {
+      total = total + 0;
+    } else if (selectedOptions[index] === question.selectedoption2) {
+      total = total + 1;
+    } else if (selectedOptions[index] === question.selectedoption3) {
+      total = total + 2;
+    } else if (selectedOptions[index] === question.selectedoption4) {
+      total = total + 3;
     }
+  });
 
-    setSeverity(severity);
-    setScore(total);
-    setShowResults(true);
+  let severity = '';
+  if (total >= 0 && total < 4) {
+    severity = 'None';
+  } else if (total > 4 && total < 10) {
+    severity = 'Mild';
+  } else if (total >= 10 && total < 15) {
+    severity = 'Moderate';
+  } else if (total >= 15 && total < 20) {
+    severity = 'Moderately Severe';
+  } else {
+    severity = 'Severe';
+  }
 
-    // get date
-    const date = new Date().toDateString().slice(4, 15);
-    setDate(date);
-  };
-    // push data to firebase
-/*     const data = userRef.collection('questionnaire').doc();
-    await data.set({
+  setSeverity(severity);
+  setScore(total);
+  setShowResults(true);
+
+  // get date
+  const date = new Date().toDateString().slice(4, 15);
+  setDate(date);
+
+  // Enviar los resultados a la API
+  try {
+    const token = await AsyncStorage.getItem('token');
+
+    const response = await axios.post('http://192.168.1.3:3000/api/v1/resultsTests/post-resultsTest', {
       total,
       severity,
       date,
-      created: firebase.firestore.Timestamp.now(),
+      created: new Date() // O usa el formato que necesites
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}` // Usar el token recuperado
+      }
     });
-  };
- */
+
+    
+    console.log('Datos enviados correctamente:', response.data);
+  } catch (error) {
+    console.error('Error al enviar datos:', error);
+    Alert.alert('Error', 'No se pudo enviar los resultados. Por favor, inténtalo de nuevo.');
+  }
+};
+
+
   /*
    * ****************
    * **** Screen ****
@@ -198,7 +211,7 @@ const Test = ({ navigation }) => {
 
         <View style={[FormStyle.buttonContainer, FormStyle.buttonPosition]}>
           <FormButton
-            onPress={() => navigation.navigate('Questionnaire')}
+            onPress={() => navigation.navigate('Tests')}
             text="Return home"
             buttonStyle={{
               backgroundColor: '#f2f2f2',
@@ -213,7 +226,7 @@ const Test = ({ navigation }) => {
   return (
     <SafeAreaView style={[FormStyle.container, GlobalStyle.androidSafeArea]}>
       <View style={FormStyle.flexContainer}>
-      {/*  // <BackButton onPress={() => navigation.goBack()} /> */}
+       <BackButton onPress={() => navigation.goBack()} />
 
         <Text style={FormStyle.title}>PHQ-9</Text>
       </View>
@@ -273,7 +286,7 @@ const Test = ({ navigation }) => {
               />
             </View>
             {/* buttons */}
-            {index === 8 && (
+            {index === 0 && (
               <View style={FormStyle.smallButtonContainer}>
                 <SmallFormButton onPress={handleSubmit} text={'Submit'} />
               </View>
