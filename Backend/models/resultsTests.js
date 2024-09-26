@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 
 
 const resultsTestsSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',  
+    required: true,
+},
     total: {
       type: Number,
       required: true,

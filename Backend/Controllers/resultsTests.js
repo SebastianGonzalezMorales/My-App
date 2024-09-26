@@ -1,15 +1,29 @@
 const { ResultsTests } = require('../models/resultsTests'); // Asegúrate de ajustar la ruta según tu estructura de carpetas
+const mongoose = require('mongoose');
+const { User } = require('../models/user');
 
 // Crear un nuevo resultado de test
 const createResultTest = async (req, res) => {
   try {
-    const { total, severity, date } = req.body; // Asegúrate de que el cuerpo de la solicitud tenga estos campos
+    const { total, severity, date, userId } = req.body;
+
+    // Validación del userId
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: 'El userId es requerido y debe ser un ID válido.' });
+    }
+
+    // Verificar si el usuario existe en la base de datos
+    const userExists = await User.findById(userId);
+    if (!userExists) {
+      return res.status(404).json({ message: 'El usuario no existe.' });
+    }
 
     const newResult = new ResultsTests({
       total,
       severity,
       date,
-      created: new Date(), 
+      created: new Date(),
+      userId: userExists._id, // Usa el _id del usuario existente
     });
 
     const savedResult = await newResult.save();
