@@ -30,10 +30,13 @@ import {
         {/*
      
          */}
-        <View style={{ height: 210 }}>
+      <View style={{ height: 210 }}>
           <Text style={GlobalStyle.welcomeText}>Salud Mental </Text>
+          <Text style={GlobalStyle.subtitle}>Tests psicológicos</Text>
+        <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>
+          A continuación podrás realizar diferentes test psicologicos para medir tu bienestar emocional
+        </Text>
   
-        
         
         </View>
 
@@ -56,7 +59,7 @@ import {
           <View style={{ marginTop: 10 }}>
             <SettingsButton
               text="Depresión"
-              onPress={() => navigation.navigate('Test')}
+              onPress={() => navigation.navigate('Questionnaire')}
             /> 
             <SettingsButton
               text="Ansiedad"

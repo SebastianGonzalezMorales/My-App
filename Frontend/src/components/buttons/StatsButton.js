@@ -8,7 +8,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 export default function StatsButton(props) {
   return (
     <TouchableOpacity onPress={props.onPress} style={styles.button}>
-      <Text style={styles.text}>My statistics</Text>
+      <Text style={styles.text}>Mis estadísticas</Text>
       <MaterialCommunityIcons
         style={styles.icon}
         name="chevron-right"

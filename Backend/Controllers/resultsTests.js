@@ -9,7 +9,7 @@ const createResultTest = async (req, res) => {
       total,
       severity,
       date,
-      created: new Date(), // O usa firebase.firestore.Timestamp.now() si estás usando Firebase
+      created: new Date(), 
     });
 
     const savedResult = await newResult.save();

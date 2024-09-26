@@ -183,7 +183,7 @@ const Register = ({ navigation }) => {
       };
 
        // Realizar la solicitud POST al backend
-    const response = await axios.post('http://192.168.1.3:3000/api/v1/users/register', userData);
+    const response = await axios.post('http://192.168.1.8:3000/api/v1/users/register', userData);
    
     // Verificar la respuesta del servidor
     if (response.status === 201) {

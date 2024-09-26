@@ -106,7 +106,7 @@ const Mood = ({ navigation }) => {
       const token = await AsyncStorage.getItem('token');
 
       if (token) {
-        const response = await axios.get('http://192.168.1.3:3000/api/v1/tips/get-random-tips', {
+        const response = await axios.get('http://192.168.1.8:3000/api/v1/tips/get-random-tips', {
           headers: {
             'Authorization': `Bearer ${token}`  // Usa el token recuperado
           }
@@ -135,7 +135,7 @@ const Mood = ({ navigation }) => {
       try {
         const token = await AsyncStorage.getItem('token');
         if (token) {
-        const response = await axios.post('http://192.168.1.3:3000/api/v1/users/userdata',
+        const response = await axios.post('http://192.168.1.8:3000/api/v1/users/userdata',
           {
             // Token en el cuero de la solicitud
             token: `${token}`

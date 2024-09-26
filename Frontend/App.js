@@ -19,7 +19,7 @@ import Login from './src/screens/authentication/Login';
 import Register from './src/screens/authentication/Register';
 import Mood from './src/screens/mood/Mood';
 
-import Questionnaire from './src/screens/questionnaire/Questionnaire';
+import Questionnaire from './src/screens/SaludMental/Questionnaire';
 
 import Settings from './src/screens/settings/Settings';
 
@@ -82,6 +82,7 @@ function Home() {
         name={'SaludMental'}
         component={SaludMental}
       />
+
         <Tab.Screen
         options={{ headerShown: false, gestureEnabled: false }}
         name={'M2'}
@@ -202,6 +203,7 @@ export default function App() {
         
         {/* questionnaire */}
          <Stack.Screen name="Tests" component={Tests} />
+         <Stack.Screen name="Questionnaire" component={Questionnaire} />
          <Stack.Screen name="Test" component={Test} />
  {/*        <Stack.Screen
           name="QuestionnaireStats"

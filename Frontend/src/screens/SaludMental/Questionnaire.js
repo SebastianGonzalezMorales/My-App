@@ -8,6 +8,7 @@ import FormButton from '../../components/buttons/FormButton';
 import HistoryButton from '../../components/buttons/HistoryButton';
 import StatsButton from '../../components/buttons/StatsButton';
 import CircularButton from '../../components/buttons/CircularButton';
+import BackButton from '../../components/buttons/BackButton';
 
 // customisation
 import GestureRecognizer from 'react-native-swipe-gestures';
@@ -65,9 +66,9 @@ function Questionnaire({ navigation }) {
             setLastTest(results[0].dateData)
         });; 
           }
-    };*/
+    };
 
-    fetchData(); // Call the async function to fetch data
+    fetchData();*/ // Call the async function to fetch data
   }, []);
 
   // delete document function
@@ -89,6 +90,7 @@ function Questionnaire({ navigation }) {
 
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
+         <BackButton onPress={() => navigation.goBack()} />
       {/*
        * ******************
        * ***** Modals *****
@@ -180,16 +182,16 @@ function Questionnaire({ navigation }) {
        * *********************
        */}
       <View style={{ height: 290 }}>
-        <Text style={GlobalStyle.welcomeText}>PHQ-9 Questionnaire</Text>
-        <Text style={GlobalStyle.subtitle}>Depression test</Text>
+        <Text style={GlobalStyle.welcomeText}>Test PHQ-9 </Text>
+        <Text style={GlobalStyle.subtitle}>Test de depresión</Text>
         <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>
-          The PHQ-9 questionnaire is a tool used to measure depression severity
-          through nine questions. It helps identify individuals who may require
-          further evaluation or treatment for depression.
+        El cuestionario PHQ-9 es una herramienta que se utiliza para medir la gravedad de la depresión a 
+        través de nueve preguntas. Ayuda a identificar a las personas que pueden requerir una evaluación 
+        o tratamiento adicional para la depresión.
         </Text>
         <View style={GlobalStyle.line} />
         <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>
-          Last test taken: {lastTest}
+        Última prueba realizada: {lastTest}
         </Text>
       </View>
 
@@ -200,7 +202,7 @@ function Questionnaire({ navigation }) {
        */}
       <View style={GlobalStyle.rowTwo}>
         <View style={GlobalStyle.statsContainer}>
-          <Text style={GlobalStyle.statsTitle}>Statistics</Text>
+          <Text style={GlobalStyle.statsTitle}>Estadística</Text>
           <StatsButton
             onPress={() => navigation.navigate('QuestionnaireStats')}
           />
@@ -209,8 +211,8 @@ function Questionnaire({ navigation }) {
         <HistoryButton
           // onPress={() => setSeeAllModalVisible(true)}
           onPress={() => navigation.navigate('QuestionnaireHistory')}
-          textLeft="Results"
-          textRight="See all"
+          textLeft="Resultados"
+          textRight="Ver todos"
         />
         <FlatList
           data={results.slice(0, 5)}

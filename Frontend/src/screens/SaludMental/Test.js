@@ -53,7 +53,7 @@ const Test = ({ navigation }) => {
 
         if (token) {
         
-        const response = await axios.get('http://192.168.1.3:3000/api/v1/questions/get-questions', { // obtén las preguntas desde tu API
+        const response = await axios.get('http://192.168.1.8:3000/api/v1/questions/get-questions', { // obtén las preguntas desde tu API
         headers: {
           'Authorization': `Bearer ${token}`  // Usa el token recuperado
         }
@@ -121,7 +121,7 @@ const handleSubmit = async () => {
   try {
     const token = await AsyncStorage.getItem('token');
 
-    const response = await axios.post('http://192.168.1.3:3000/api/v1/resultsTests/post-resultsTest', {
+    const response = await axios.post('http://192.168.1.8:3000/api/v1/resultsTests/post-resultsTest', {
       total,
       severity,
       date,
@@ -211,7 +211,7 @@ const handleSubmit = async () => {
 
         <View style={[FormStyle.buttonContainer, FormStyle.buttonPosition]}>
           <FormButton
-            onPress={() => navigation.navigate('Tests')}
+            onPress={() => navigation.navigate('Questionnaire')}
             text="Return home"
             buttonStyle={{
               backgroundColor: '#f2f2f2',
@@ -286,7 +286,7 @@ const handleSubmit = async () => {
               />
             </View>
             {/* buttons */}
-            {index === 0 && (
+            {index === 8 && (
               <View style={FormStyle.smallButtonContainer}>
                 <SmallFormButton onPress={handleSubmit} text={'Submit'} />
               </View>

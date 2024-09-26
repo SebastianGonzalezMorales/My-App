@@ -42,7 +42,7 @@ const handleLogin = async (email, password) => {
   try {
     // Convertir el correo electrónico a minúsculas
     const lowercaseEmail = email.toLowerCase();
-    const response = await axios.post('http://192.168.1.3:3000/api/v1/users/login', { email: lowercaseEmail, password });
+    const response = await axios.post('http://192.168.1.8:3000/api/v1/users/login', { email: lowercaseEmail, password });
     
     // Guarda el token en AsyncStorage
     await AsyncStorage.setItem('token', response.data.token);

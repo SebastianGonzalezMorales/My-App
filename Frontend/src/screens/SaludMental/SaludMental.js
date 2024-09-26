@@ -30,6 +30,10 @@ import {
          */}
         <View style={{ height: 210 }}>
           <Text style={GlobalStyle.welcomeText}>Salud Mental </Text>
+          <Text style={GlobalStyle.subtitle}></Text>
+        <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>
+
+        </Text>
   
         
         
@@ -52,14 +56,15 @@ import {
         </View>
         <ScrollView>
           <View style={{ marginTop: 10 }}>
+             <SettingsButton
+              text="Información"
+              onPress={() => navigation.navigate('Counselling')}
+            />
             <SettingsButton
               text="Test"
               onPress={() => navigation.navigate('Tests')}
             /> 
-            <SettingsButton
-              text="Consejos"
-              onPress={() => navigation.navigate('Counselling')}
-            />
+           
             {/* <SettingsButton text="Notifications" onPress={() => navigation.navigate('Counselling')} /> */}
            {/*  <SettingsButton
               text="Privacy policy"
