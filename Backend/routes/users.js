@@ -3,6 +3,7 @@ const router = express.Router();
 const {
     loginUser,
     getUserData,
+    getUserId,
     registerUser,
     getRandomUser,
     getAllUsers,
@@ -15,6 +16,7 @@ const {
 // Rutas asociadas a cada controlador
 router.post('/login', loginUser);
 router.post('/userdata', getUserData);
+router.post('/userid', getUserId);
 router.post('/register', registerUser);
 router.get('/get-random-user', getRandomUser);
 router.get('/get-all-user', getAllUsers);

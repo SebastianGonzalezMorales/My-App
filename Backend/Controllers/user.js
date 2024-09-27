@@ -60,6 +60,20 @@ const getUserData = async (req, res) => {
     }
 };
 
+const getUserId = async (req, res) => {
+    const secret = process.env.secret; // Se obtiene la clave secreta del entorno
+    const { token } = req.body; // Se extrae el token del cuerpo de la solicitud
+    try {
+        const user = jwt.verify(token, secret); // Se verifica y decodifica el token usando la clave secreta
+        const userId = user.userId; // Asumiendo que el userId está guardado como 'id' en el payload del token
+       // console.log(user);
+        // Devuelve el userId en la respuesta
+        return res.send({ status: "Ok", userId: userId });
+    } catch (error) {
+        return res.status(400).send({ error: error.message }); // Manejo de errores
+    }
+};
+
 const registerUser = async (req, res) => {
     try {
         const { name, email, rut, birthdate, carrera, password, confirmPassword } = req.body;
@@ -339,6 +353,7 @@ router.get(`/get/count`, async (req, res) =>{
 module.exports = {
     loginUser,
     getUserData,
+    getUserId,
     registerUser,
     getRandomUser,
     getAllUsers,
