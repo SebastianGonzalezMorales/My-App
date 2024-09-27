@@ -45,29 +45,57 @@ function Questionnaire({ navigation }) {
    * *******************
    */
 
-// Hook para obtener todos los documentos de MongoDB
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+  
+        if (!token) {
+          console.error('No se encontró el token');
+          return;
+        }
 
-      if (token) {
-        const response = await axios.get('http://192.168.1.8:3000/api/v1/resultsTests/get-resultsTest', {
+        console.log(token)
+  
+        // Llamada para obtener el userId basado en el token
+        const userResponse = await axios.post('http://192.168.1.8:3000/api/v1/users/userid', {
+          token: `${token}`
+        }, {
           headers: {
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           }
         });
-
+       
+        const userId = userResponse.data.userId;
+        console.log(userId)
+        if (!userId) {
+          console.error('No se encontró userId en la respuesta');
+          return;
+        }
+  
+        // Llamada para obtener los resultados del test por userId
+        const response = await axios.post(`http://192.168.1.8:3000/api/v1/resultsTests/get-resultsTestUser/${userId}`, {
+          token: `${token}`
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        console.log(response)
         // Asumiendo que la respuesta tiene la estructura adecuada
         const responseData = response.data; // Obtén los datos de la respuesta
+        console.log(responseData)
+  
+        // Mapeo de los resultados del test
         const results = responseData.map((doc) => {
           const { severity, date, total } = doc;
-          const dateData = doc.date; // Convertir el string de la fecha en formato adecuado
-          const totalScore = total + '/27';
-          console.log(severity)
-          console.log(dateData)
-          console.log(totalScore)
-
+          const dateData = date// Formatea la fecha si es necesario
+          const totalScore = `${total}/27`;
+  
+          console.log('Gravedad:', severity);
+          console.log('Fecha:', dateData);
+          console.log('Puntuación total:', totalScore);
+  
           return {
             id: doc._id, // Suponiendo que _id es el identificador del documento
             severity,
@@ -75,22 +103,22 @@ useEffect(() => {
             totalScore,
           };
         });
-
+  
+        // Guardar los resultados en el estado
         setResults(results);
-
+  
+        // Guardar la fecha del último test si existen resultados
         if (results.length > 0) {
           setLastTest(results[0].dateData); // Guardar la fecha del último test
         }
+      } catch (error) {
+        console.error('Error al obtener los resultados:', error.response ? error.response.data : error.message);
       }
-
-    } catch (error) {
-      console.error('Error al obtener los resultados:', error);
-    }
-  };
-
-  fetchData(); // Llamar la función para obtener los datos
-}, []); // Se ejecuta solo al montar el componente
-
+    };
+  
+    fetchData(); // Llamar la función para obtener los datos
+  }, []); // Se ejecuta solo al montar el componente
+  
 
   // delete document function
   const deleteItem = () => {

@@ -33,6 +33,30 @@ const createResultTest = async (req, res) => {
   }
 };
 
+// Obtener resultados de tests por userId
+const getResultsTestsByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Validación del userId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: 'El userId es inválido.' });
+    }
+
+    // Buscar resultados de tests por userId
+    const results = await ResultsTests.find({ userId });
+
+    if (!results.length) {
+      return res.status(404).json({ message: 'No se encontraron resultados para este usuario.' });
+    }
+
+    res.status(200).json(results);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener los resultados del test', error: error.message });
+  }
+};
+
+
 // Obtener todos los resultados de tests
 const getAllResultsTests = async (req, res) => {
   try {
@@ -62,6 +86,7 @@ const getResultTestById = async (req, res) => {
 // Exportar los controladores
 module.exports = {
   createResultTest,
+  getResultsTestsByUserId,
   getAllResultsTests,
   getResultTestById,
 };

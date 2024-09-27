@@ -1,6 +1,8 @@
 function errorHandler(err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
         //Jwt authentication error
+        //Esto aparece ya que el usuario tiene que
+        // enviar el token para poder realizar las peticiones
         res.status(401).json({message: "The user is not authorized"})
     }
     
