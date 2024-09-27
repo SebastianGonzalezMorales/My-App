@@ -1,6 +1,8 @@
 // react imports
 import { FlatList, Modal, SafeAreaView, Text, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // components
 import CustomButton from '../../components/buttons/CustomButton';
@@ -43,50 +45,69 @@ function Questionnaire({ navigation }) {
    * *******************
    */
 
-  // hook to fetch all documents
-  useEffect(() => {
-   /*  const fetchData = async () => {
-      questionnaireRef
-        .orderBy('created', 'desc')
-        .onSnapshot((querySnapshot) => {
-          const results = [];
-          querySnapshot.forEach((doc) => {
-            const { severity, date, total } = doc.data();
-            const dateData = date.toString().slice(0, 6);
-            const totalScore = total + '/27';
-            results.push({
-              id: doc.id,
-              severity,
-              dateData,
-              totalScore,
-            });
-          });
-          setResults(results);
-          if (results.length > 0) {
-            setLastTest(results[0].dateData)
-        });; 
-          }
-    };
+// Hook para obtener todos los documentos de MongoDB
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
 
-    fetchData();*/ // Call the async function to fetch data
-  }, []);
+      if (token) {
+        const response = await axios.get('http://192.168.1.8:3000/api/v1/resultsTests/get-resultsTest', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        // Asumiendo que la respuesta tiene la estructura adecuada
+        const responseData = response.data; // Obtén los datos de la respuesta
+        const results = responseData.map((doc) => {
+          const { severity, date, total } = doc;
+          const dateData = doc.date; // Convertir el string de la fecha en formato adecuado
+          const totalScore = total + '/27';
+          console.log(severity)
+          console.log(dateData)
+          console.log(totalScore)
+
+          return {
+            id: doc._id, // Suponiendo que _id es el identificador del documento
+            severity,
+            dateData,
+            totalScore,
+          };
+        });
+
+        setResults(results);
+
+        if (results.length > 0) {
+          setLastTest(results[0].dateData); // Guardar la fecha del último test
+        }
+      }
+
+    } catch (error) {
+      console.error('Error al obtener los resultados:', error);
+    }
+  };
+
+  fetchData(); // Llamar la función para obtener los datos
+}, []); // Se ejecuta solo al montar el componente
+
 
   // delete document function
   const deleteItem = () => {
-   /*  if (selectedId) {
+    if (selectedId) {
       userRef.collection('questionnaire').doc(selectedId).delete();
       console.log('Document', selectedId, 'has been deleted');
       setModalVisible(false);
     } else {
       console.log('Document not found');
-    } */
+    } 
   };
 
   /*
    * ****************
    * **** Screen ****
    * ****************
-   */
+   */ 
 
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
@@ -215,7 +236,7 @@ function Questionnaire({ navigation }) {
           textRight="Ver todos"
         />
         <FlatList
-          data={results.slice(0, 5)}
+          data={results.slice(0, 20)}
           numColumns={1}
           renderItem={({ item }) => (
             <CustomButton
