@@ -97,7 +97,7 @@ const handleSubmit = async () => {
   });
 
   let severity = '';
-  if (total >= 0 && total < 4) {
+  if (total >= 0 && total <= 4) {
     severity = 'None';
   } else if (total > 4 && total < 10) {
     severity = 'Mild';
@@ -119,25 +119,40 @@ const handleSubmit = async () => {
 
   // Enviar los resultados a la API
   try {
+    // Recupera el token del almacenamiento
     const token = await AsyncStorage.getItem('token');
 
-    const response = await axios.post('http://192.168.1.8:3000/api/v1/resultsTests/post-resultsTest', {
-      total,
-      severity,
-      date,
-      created: new Date() // O usa el formato que necesites
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token}` // Usar el token recuperado
-      }
-    });
+    if (token) {
+        // Llama al backend para obtener el userId usando el token
+        const userResponse = await axios.post('http://192.168.1.8:3000/api/v1/users/userid', {
+            token: `${token}`
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
 
-    
-    console.log('Datos enviados correctamente:', response.data);
-  } catch (error) {
+        const userId = userResponse.data.userId; // Extrae el userId de la respuesta
+
+        // Ahora envía los resultados de la prueba
+        const response = await axios.post('http://192.168.1.8:3000/api/v1/resultsTests/post-resultsTest', {
+            userId,    // Usa el userId obtenido
+            total,
+            severity,
+            date,
+            created: new Date() // O usa el formato que necesites
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}` // Usar el token recuperado
+            }
+        });
+
+        console.log('Datos enviados correctamente:', response.data);
+    }
+} catch (error) {
     console.error('Error al enviar datos:', error);
     Alert.alert('Error', 'No se pudo enviar los resultados. Por favor, inténtalo de nuevo.');
-  }
+}
 };
 
 
