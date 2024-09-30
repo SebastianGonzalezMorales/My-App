@@ -98,15 +98,15 @@ const handleSubmit = async () => {
 
   let severity = '';
   if (total >= 0 && total <= 4) {
-    severity = 'None';
+    severity = 'Normal';
   } else if (total > 4 && total < 10) {
-    severity = 'Mild';
+    severity = 'leve';
   } else if (total >= 10 && total < 15) {
-    severity = 'Moderate';
+    severity = 'Moderado';
   } else if (total >= 15 && total < 20) {
-    severity = 'Moderately Severe';
+    severity = 'Moderadamente grave';
   } else {
-    severity = 'Severe';
+    severity = 'Grave';
   }
 
   setSeverity(severity);
@@ -166,10 +166,10 @@ const handleSubmit = async () => {
   if (questions.length === 0) {
     return (
       <View>
-        <Text>Loading...</Text>
-        <Text>Loading...</Text>
-        <Text>Loading...</Text>
-        <Text>Loading...</Text>
+        <Text> </Text>
+        <Text> </Text>
+        <Text> </Text>
+        <Text>Cargando...</Text>
       </View>
     );
   }
@@ -179,7 +179,7 @@ const handleSubmit = async () => {
     return (
       <SafeAreaView style={[FormStyle.container, GlobalStyle.androidSafeArea]}>
         <View style={FormStyle.resultContainer}>
-          <Text style={FormStyle.resultTextOne}>Your result</Text>
+          <Text style={FormStyle.resultTextOne}>Tu resultado</Text>
           <Text style={FormStyle.resultTextTwo}>
             {score} / {questions.length * 3}
           </Text>
@@ -188,37 +188,37 @@ const handleSubmit = async () => {
 
         <View style={FormStyle.tableContainer}>
           <View style={FormStyle.tableHeader}>
-            <Text style={FormStyle.tableHeaderTitle}>Date taken</Text>
+            <Text style={FormStyle.tableHeaderTitle}>Fecha del test realizado: </Text>
           </View>
           <View style={[FormStyle.tableRowOdd, FormStyle.tableRowEnd]}>
-            <Text style={FormStyle.tableText}>Date</Text>
+            <Text style={FormStyle.tableText}>Fecha</Text>
             <Text style={FormStyle.tableText}>{date}</Text>
           </View>
 
           <View style={FormStyle.tableSubContainer}>
             <View style={FormStyle.tableHeader}>
               <Text style={FormStyle.tableHeaderTitle}>
-                Depression severity
+              Gravedad de la depresión
               </Text>
             </View>
             <View style={FormStyle.tableRowOdd}>
-              <Text style={FormStyle.tableText}>None</Text>
+              <Text style={FormStyle.tableText}>Normal</Text>
               <Text style={FormStyle.tableText}>0 - 4</Text>
             </View>
             <View style={FormStyle.tableRowEven}>
-              <Text style={FormStyle.tableText}>Mild</Text>
+              <Text style={FormStyle.tableText}>Leve</Text>
               <Text style={FormStyle.tableText}>5 - 9</Text>
             </View>
             <View style={FormStyle.tableRowOdd}>
-              <Text style={FormStyle.tableText}>Moderate</Text>
+              <Text style={FormStyle.tableText}>Moderado</Text>
               <Text style={FormStyle.tableText}>10 - 14</Text>
             </View>
             <View style={FormStyle.tableRowEven}>
-              <Text style={FormStyle.tableText}>Moderately severe</Text>
+              <Text style={FormStyle.tableText}>Moderadamente grave</Text>
               <Text style={FormStyle.tableText}>15 - 19</Text>
             </View>
             <View style={[FormStyle.tableRowOdd, FormStyle.tableRowEnd]}>
-              <Text style={FormStyle.tableText}>Severe</Text>
+              <Text style={FormStyle.tableText}>Grave</Text>
               <Text style={FormStyle.tableText}>20 - 27</Text>
             </View>
           </View>
@@ -227,7 +227,7 @@ const handleSubmit = async () => {
         <View style={[FormStyle.buttonContainer, FormStyle.buttonPosition]}>
           <FormButton
             onPress={() => navigation.navigate('Questionnaire')}
-            text="Return home"
+            text="Volver atrás"
             buttonStyle={{
               backgroundColor: '#f2f2f2',
             }}
@@ -303,7 +303,7 @@ const handleSubmit = async () => {
             {/* buttons */}
             {index === 8 && (
               <View style={FormStyle.smallButtonContainer}>
-                <SmallFormButton onPress={handleSubmit} text={'Submit'} />
+                <SmallFormButton onPress={handleSubmit} text={'Responder'} />
               </View>
             )}
           </View>

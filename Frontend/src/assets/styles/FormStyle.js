@@ -208,7 +208,7 @@ export default StyleSheet.create({
   // return home button
   buttonPosition: {
     position: 'absolute',
-    bottom: 30,
+    bottom: 5,
     left: 0,
     right: 0,
   },

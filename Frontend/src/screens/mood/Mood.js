@@ -267,24 +267,24 @@ const Mood = ({ navigation }) => {
         </View>
         <View style={GlobalStyle.moodsContainer}>
           <PickMoodButton
-            onPress={() => startTracking('Bad', 1)}
+            onPress={() => startTracking('Mal', 1)}
             emoji="😞"
-            text="Bad"
+            text="Mal"
           />
           <PickMoodButton
-            onPress={() => startTracking('Good', 2)}
+            onPress={() => startTracking('Regular', 2)}
             emoji="🙂"
-            text="Good"
+            text="Regular"
           />
           <PickMoodButton
-            onPress={() => startTracking('Great', 3)}
+            onPress={() => startTracking('Bien', 3)}
             emoji="😊"
-            text="Great"
+            text="Bien"
           />
           <PickMoodButton
-            onPress={() => startTracking('Excellent', 4)}
+            onPress={() => startTracking('Excelente', 4)}
             emoji="😃"
-            text="Excellent"
+            text="Excelente"
           />
                     {/* Motivational Quote Section */}
   
@@ -306,13 +306,13 @@ const Mood = ({ navigation }) => {
        */}
       <View style={GlobalStyle.rowTwo}>
         <View style={GlobalStyle.statsContainer}>
-          <Text style={GlobalStyle.statsTitle}>Statistics</Text>
+          <Text style={GlobalStyle.statsTitle}>Estadísticas</Text>
           <StatsButton onPress={() => navigation.navigate('MoodStats')} />
         </View>
         <HistoryButton
           onPress={() => navigation.navigate('MoodHistory')}
-          textLeft="Recent"
-          textRight="See all"
+          textLeft="Resultados"
+          textRight="Ver todos"
         />
         <FlatList
           data={moods.slice(0, 5)}
@@ -321,21 +321,21 @@ const Mood = ({ navigation }) => {
             <CustomButton
               buttonStyle={{
                 backgroundColor:
-                  item.mood === 'Bad'
+                  item.mood === 'Mal'
                     ? '#f7d8e3'
-                    : item.mood === 'Good'
+                    : item.mood === 'Regular'
                     ? '#d8eef7'
-                    : item.mood === 'Great'
+                    : item.mood === 'Bien'
                     ? '#d8f7ea'
                     : '#f7e7d8',
               }}
               textStyle={{
                 color:
-                  item.mood === 'Bad'
+                  item.mood === 'Mal'
                     ? '#d85a77'
-                    : item.mood === 'Good'
+                    : item.mood === 'Regular'
                     ? '#238bdf'
-                    : item.mood === 'Great'
+                    : item.mood === 'Bien'
                     ? '#109f5c'
                     : '#af7b56',
               }}

@@ -196,10 +196,10 @@ const Register = ({ navigation }) => {
     // Manejo de errores
     if (error.response) {
       // La solicitud se realizó y el servidor respondió con un estado de error
-      alert(`Registration failed: ${error.response.data}`);
+      alert(`Error en el registro: ${error.response.data}`);
     } else if (error.request) {
       // La solicitud se realizó pero no se recibió respuesta
-      alert('No response from server.');
+      alert('No hay respuesta del servidor..');
     } else {
       // Algo salió mal al configurar la solicitud
       alert(`Error: ${error.message}`);

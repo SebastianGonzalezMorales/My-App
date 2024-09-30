@@ -251,7 +251,7 @@ function Questionnaire({ navigation }) {
        */}
       <View style={GlobalStyle.rowTwo}>
         <View style={GlobalStyle.statsContainer}>
-          <Text style={GlobalStyle.statsTitle}>Estadística</Text>
+          <Text style={GlobalStyle.statsTitle}>Estadísticas</Text>
           <StatsButton
             onPress={() => navigation.navigate('QuestionnaireStats')}
           />
@@ -264,31 +264,31 @@ function Questionnaire({ navigation }) {
           textRight="Ver todos"
         />
         <FlatList
-          data={results.slice(0, 20)}
+          data={results.slice(0, 5)}
           numColumns={1}
           renderItem={({ item }) => (
             <CustomButton
               buttonStyle={{
                 backgroundColor:
-                  item.severity === 'None'
+                  item.severity === 'Normal'
                     ? '#f7e7d8'
-                    : item.severity === 'Mild'
+                    : item.severity === 'Leve'
                     ? '#d8f7ea'
-                    : item.severity === 'Moderate'
+                    : item.severity === 'Moderado'
                     ? '#d8eef7'
-                    : item.severity === 'Moderately severe'
+                    : item.severity === 'Moderadamente grave'
                     ? '#f7d8e3'
                     : '#f7d8e3',
               }}
               textStyle={{
                 color:
-                  item.severity === 'None'
+                  item.severity === 'Normal'
                     ? '#af7b56'
-                    : item.severity === 'Mild'
+                    : item.severity === 'Leve'
                     ? '#109f5c'
-                    : item.severity === 'Moderate'
+                    : item.severity === 'Moderado'
                     ? '#238bdf'
-                    : item.severity === 'Moderately severe'
+                    : item.severity === 'Moderadamente grave'
                     ? '#d85a77'
                     : '#d85a77',
               }}

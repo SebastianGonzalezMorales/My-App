@@ -19,7 +19,7 @@ const loginUser = async (req, res) => {
     // Busca en la colección de usuarios
     const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
-        return res.status(400).send('The user not found');
+        return res.status(400).send('Usuario no encontrado');
     }
 
     if (!user.verified) {
@@ -81,16 +81,16 @@ const registerUser = async (req, res) => {
         const normalizedEmail = email.toLowerCase();
 
         if (!name || !normalizedEmail || !rut || !birthdate || !carrera || !password || !confirmPassword) {
-            return res.status(400).send('All fields are required.');
+            return res.status(400).send('Todos los campos son obligatorios.');
         }
 
         if (password !== confirmPassword) {
-            return res.status(400).send('Passwords do not match.');
+            return res.status(400).send('Las contraseñas no coinciden.');
         }
 
         const existingUser = await User.findOne({ email: normalizedEmail });
         if (existingUser) {
-            return res.status(400).send('Email already in use.');
+            return res.status(400).send('Correo electrónico ya en uso.');
         }
 
         const existingRut = await User.findOne({ rut: rut });
@@ -118,14 +118,14 @@ const registerUser = async (req, res) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'sgonzalezm9045@gmail.com',
-                pass: 'anbv thom ijss ybxq'
+                user: 'appacompanamientouv@gmail.com',
+                pass: 'equn vtzn mkai ufga'
             }
         });
 
         await transporter.sendMail({
             to: normalizedEmail,
-            subject: '[Verifique su correo electrónico]',
+            subject: '[Verifique su correo electrónico - App Acompañamiento UV]',
             text: `Por favor verifique su cuenta haciendo clic en el siguiente enlace: ${verificationLink}`,
         });
 
@@ -153,7 +153,7 @@ const verifyEmail = async (req, res) => {
             return res.status(400).send(`
                 <html>
                     <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
-                        <h1 style="font-size: 32px; color: #000C7B;">Invalid or expired verification token.</h1>
+                        <h1 style="font-size: 32px; color: #000C7B;">Token de verificación no válido o caducado.</h1>
                     </body>
                 </html>
             `);
@@ -177,7 +177,7 @@ const verifyEmail = async (req, res) => {
         return res.send(`
             <html>
                 <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
-                    <h1 style="font-size: 32px; color: #000C7B;">Email verified successfully. Your account is now active.</h1>
+                    <h1 style="font-size: 32px; color: #000C7B;">El correo electrónico se ha verificado correctamente. Su cuenta ya está activa.</h1>
                 </body>
             </html>
         `);
@@ -186,7 +186,7 @@ const verifyEmail = async (req, res) => {
         return res.status(400).send(`
             <html>
                 <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
-                    <h1 style="font-size: 32px; color: #000C7B;">Invalid or expired verification link.</h1>
+                    <h1 style="font-size: 32px; color: #000C7B;">Enlace de verificación no válido o vencido.</h1>
                 </body>
             </html>
         `);
