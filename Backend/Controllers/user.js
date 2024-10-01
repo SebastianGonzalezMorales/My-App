@@ -331,7 +331,7 @@ const forgotPassword = async (req, res) => {
 
         // Lógica para generar el token y enviar el correo...
         const resetToken = jwt.sign({ userId: user._id, email: user.email }, process.env.secret, { expiresIn: '1h' });
-        const resetLink = `http://localhost:3000/api/v1/users/reset-password?token=${resetToken}`;
+        const resetLink = `http://localhost:3000/api/v1/users/change-password?token=${resetToken}`;
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -355,8 +355,13 @@ const forgotPassword = async (req, res) => {
 };
 
 
-const resetPassword = async (req, res) => {
+const changePassword = async (req, res) => {
     const { token, newPassword, confirmPassword } = req.body;
+
+        // Validar que todas las propiedades necesarias estén presentes
+        if (!token || !newPassword || !confirmPassword) {
+            return res.status(400).send('Faltan datos necesarios: token, newPassword y confirmPassword son requeridos.');
+        }
 
     // Validar que las contraseñas coincidan
     if (newPassword !== confirmPassword) {
@@ -489,5 +494,5 @@ module.exports = {
     logoutUser,
     verifyEmail,
     forgotPassword,
-    resetPassword
+    changePassword
 };
