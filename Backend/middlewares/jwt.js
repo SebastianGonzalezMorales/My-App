@@ -10,10 +10,16 @@ const authJwt = jwt({
                     path:[
                             //{url: /\/api\/v1\/moodState(.*)/ , methods: ['POST', 'OPTIONS'] },
                             //Con la línea de abajo "solo" permito que los usuarios puedan obtener los tips, 
-                            //logiarse y registrarse
+                            //logiarse y registrarse, forgot-passowrd
                             //Por ejemplo: para poder publicar tips tendrían que estar registrados como administrador.
                             //{url: /\/api\/v1\/tips(.*)/ , methods: ['GET', 'OPTIONS'] },
                           //  {url: /\/api\/v1\/users\/get-random-user(.*)/ , methods: ['GET', 'OPTIONS'] },
+
+
+                            `${api}/users/forgot-password`,  //Está línea la tengo que agregar por que el 
+                                                             //usuario no esta autenticado en la aplicación
+                                                             // y si no la agrego aquí me pide un token de authorización
+                            `${api}/users/reset-password`, 
                             `${api}/users/verificar`,
                             `${api}/tips`,
                             `${api}/users/login`,

@@ -10,7 +10,9 @@ const {
     updateUser,
     deleteUser,
     logoutUser,
-    verifyEmail
+    verifyEmail,
+    forgotPassword,
+    resetPassword
 } = require('../controllers/user');
 
 // Rutas asociadas a cada controlador
@@ -18,6 +20,8 @@ router.post('/login', loginUser);
 router.post('/userdata', getUserData);
 router.post('/userid', getUserId);
 router.post('/register', registerUser);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
 router.get('/get-random-user', getRandomUser);
 router.get('/get-all-user', getAllUsers);
 router.post('/update-user', updateUser);

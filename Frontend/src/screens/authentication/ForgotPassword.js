@@ -31,16 +31,31 @@ const ForgotPassword = ({ navigation }) => {
     try {
       // Convertir el correo electrónico a minúsculas
       const lowercaseEmail = email.toLowerCase();
-      const response = await axios.post('http://192.168.1.8:3000/api/v1/users/recover-password', { email: lowercaseEmail });
-      
-      alert('Se ha enviado un enlace de recuperación a tu correo.');
-      navigation.replace('Login');
+  
+      // Enviar la solicitud al backend
+      const response = await axios.post('http://192.168.1.8:3000/api/v1/users/forgot-password', { email: lowercaseEmail });
+  
+      // Manejar la respuesta del backend
+      if (response.data.success) {
+        alert(response.data.message); // Mensaje de éxito del backend
+        navigation.replace('Login');
+      } else {
+        alert(response.data.message || 'Error al enviar el enlace de recuperación.'); // Mensaje de error del backend
+      }
     } catch (error) {
-      alert('Error al enviar el enlace de recuperación. Por favor, intenta nuevamente.');
+      // Manejo de errores del backend
+      if (error.response) {
+        // El servidor respondió con un código de estado fuera del rango 2xx
+        alert(error.response.data.message || 'Error al enviar el enlace de recuperación. Por favor, intenta nuevamente.');
+      } else {
+        // Error en la configuración de la solicitud
+        alert('Error inesperado: ' + error.message);
+      }
       console.log('Error @handlePasswordRecovery:', error);
     }
   };
-
+  
+  
   /*
    * ****************
    * **** Screen ****

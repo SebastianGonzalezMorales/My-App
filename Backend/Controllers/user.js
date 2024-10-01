@@ -74,6 +74,25 @@ const getUserId = async (req, res) => {
     }
 };
 
+const isStrongPassword = (password) => {
+    // Verificar longitud mínima
+    if (password.length < 8) return false;
+
+    // Verificar si contiene al menos una letra mayúscula
+    if (!/[A-Z]/.test(password)) return false;
+
+    // Verificar si contiene al menos una letra minúscula
+    if (!/[a-z]/.test(password)) return false;
+
+    // Verificar si contiene al menos un número
+    if (!/[0-9]/.test(password)) return false;
+
+    // Verificar si contiene al menos un símbolo
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return false;
+
+    return true;
+};
+
 const registerUser = async (req, res) => {
     try {
         const { name, email, rut, birthdate, carrera, password, confirmPassword } = req.body;
@@ -84,6 +103,11 @@ const registerUser = async (req, res) => {
             return res.status(400).send('Todos los campos son obligatorios.');
         }
 
+
+            // Verificar si la contraseña es fuerte
+        if (!isStrongPassword(password)) {
+        return res.status(400).send('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un símbolo.');
+    }
         if (password !== confirmPassword) {
             return res.status(400).send('Las contraseñas no coinciden.');
         }
@@ -294,6 +318,83 @@ const logoutUser = (req, res) => {
     res.status(200).send({ message: "User logged out successfully" });
 };
 
+
+const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+    const normalizedEmail = email.toLowerCase();
+    
+    try {
+        const user = await User.findOne({ email: normalizedEmail });
+        if (!user) {
+            return res.status(400).json({ success: false, message: 'Este usuario no tiene una cuenta creada con esta dirección de correo.' });
+        }
+
+        // Lógica para generar el token y enviar el correo...
+        const resetToken = jwt.sign({ userId: user._id, email: user.email }, process.env.secret, { expiresIn: '1h' });
+        const resetLink = `http://localhost:3000/api/v1/users/reset-password?token=${resetToken}`;
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'appacompanamientouv@gmail.com',
+                pass: 'equn vtzn mkai ufga'
+            }
+        });
+
+        await transporter.sendMail({
+            to: normalizedEmail,
+            subject: 'Restablece tu contraseña - App Acompañamiento UV',
+            text: `Haz clic en el siguiente enlace para restablecer tu contraseña: ${resetLink}`,
+        });
+
+        res.status(200).json({ success: true, message: 'Se ha enviado un correo para restablecer la contraseña.' });
+    } catch (error) {
+        console.error('Error al enviar el correo de restablecimiento:', error);
+        res.status(500).json({ success: false, message: 'Error interno del servidor' });
+    }
+};
+
+
+const resetPassword = async (req, res) => {
+    const { token, newPassword, confirmPassword } = req.body;
+
+    // Validar que las contraseñas coincidan
+    if (newPassword !== confirmPassword) {
+        return res.status(400).send('Las contraseñas no coinciden.');
+    }
+
+        // Verificar si la nueva contraseña es fuerte
+    if (!isStrongPassword(newPassword)) {
+        return res.status(400).send('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un símbolo.');
+        }
+    
+
+    try {
+        // Verificar el token
+        const decoded = jwt.verify(token, process.env.secret);
+        const userId = decoded.userId;
+
+        // Buscar el usuario por su ID
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(400).send('Usuario no encontrado.');
+        }
+
+        // Actualizar la contraseña
+        const newPasswordHash = bcrypt.hashSync(newPassword, 8);
+        user.passwordHash = newPasswordHash;
+        await user.save();
+
+        res.status(200).send('Contraseña restablecida con éxito.');
+    } catch (error) {
+        console.error('Error al restablecer la contraseña:', error);
+        res.status(400).send('El enlace de restablecimiento es inválido o ha caducado.');
+    }
+};
+
+
+
+
 /*    router.post("/userdata", async (req, res) => {
     const { token } = req.body;
     try {
@@ -386,5 +487,7 @@ module.exports = {
     updateUser,
     deleteUser,
     logoutUser,
-    verifyEmail
+    verifyEmail,
+    forgotPassword,
+    resetPassword
 };
