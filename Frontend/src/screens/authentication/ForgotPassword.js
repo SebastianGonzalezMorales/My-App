@@ -91,8 +91,10 @@ const ForgotPassword = ({ navigation }) => {
           {/* Recover Password Button */}
           <AuthButton
             onPress={handlePasswordRecovery}
-            text="Recuperar Contraseña"
-            Ionicons name="lock-open" size={24} color="#92959f" 
+            text="Recuperar contraseña"
+            iconName="lock-open"
+           
+           
           />
 
           <View style={AuthStyle.changeScreenContainer}>
