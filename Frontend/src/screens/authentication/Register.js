@@ -33,6 +33,58 @@ const Register = ({ navigation }) => {
    * *******************
    */
 
+  const handleBirthdateChange = (text) => {
+    // Permitir solo números y guiones
+    const validText = text.replace(/[^0-9\-]/g, '');
+  
+    // Aplicar formato YYYY-MM-DD de forma dinámica
+    let formattedDate = '';
+    const numbersOnly = validText.replace(/-/g, ''); // Eliminar guiones para contar caracteres
+  
+    if (numbersOnly.length > 0) {
+      formattedDate += numbersOnly.substring(0, 4); // Añadir año
+    }
+    if (numbersOnly.length >= 5) {
+      formattedDate += '-' + numbersOnly.substring(4, 6); // Añadir mes
+    }
+    if (numbersOnly.length >= 7) {
+      formattedDate += '-' + numbersOnly.substring(6, 8); // Añadir día
+    }
+  
+    // Actualizar el estado con el formato actual
+    setBirthdate(formattedDate);
+  
+    // Solo hacer la validación cuando se haya ingresado una fecha completa
+    if (formattedDate.length === 10) {
+      const [year, month, day] = formattedDate.split('-').map(Number);
+  
+      // Validar el año (por ejemplo, debe ser un valor razonable)
+      if (year < 1900 || year > new Date().getFullYear()) {
+        console.log('Año inválido');
+        return;
+      }
+  
+      // Validar el mes (1 a 12)
+      if (month < 1 || month > 12) {
+        console.log('Mes inválido');
+        return;
+      }
+  
+      // Validar el día en función del mes y si el año es bisiesto
+      const daysInMonth = [31, (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  
+      if (day < 1 || day > daysInMonth[month - 1]) {
+        console.log('Día inválido');
+        return;
+      }
+  
+      // La fecha es válida
+      console.log('Fecha válida');
+    }
+  };
+  
+
+
   const validateRut = (rut) => {
     
     // Remover puntos y guiones
@@ -332,13 +384,15 @@ const Register = ({ navigation }) => {
               size={24}
               style={AuthStyle.icon}
             />
-            <TextInput
-              onChangeText={(text) => setBirthdate(text)} // every time the text changes, we can set the email to that text (callback function)
-              placeholder="Fecha de nacimiento"
-              placeholderTextColor="#92959f"
-              selectionColor="#5da5a9"
-              style={AuthStyle.input}
-            />
+          <TextInput
+            value={birthdate}
+            onChangeText={handleBirthdateChange}
+            placeholder="Fecha de nacimiento (Año, mes, día)"
+            placeholderTextColor="#92959f"
+            selectionColor="#5da5a9"
+            style={AuthStyle.input}
+            keyboardType="default" // Solo números en el teclado
+          />
           </View>
 
           <View style={AuthStyle.inputContainer}>

@@ -87,6 +87,32 @@ const registerUser = async (req, res) => {
         if (password !== confirmPassword) {
             return res.status(400).send('Las contraseñas no coinciden.');
         }
+                // Verificar que el formato de la fecha sea correcto y que la fecha sea válida
+        const birthdateRegex = /^\d{4}-\d{2}-\d{2}$/;
+        if (!birthdateRegex.test(birthdate)) {
+            return res.status(400).send('El formato de la fecha de nacimiento debe ser YYYY-MM-DD.');
+        }
+
+        // Descomponer la fecha en año, mes y día
+        const [year, month, day] = birthdate.split('-').map(Number);
+
+        // Verificar que el año sea razonable (1900 < año < año actual)
+        const currentYear = new Date().getFullYear();
+        if (year < 1900 || year > currentYear) {
+            return res.status(400).send('El año de nacimiento no es válido.');
+        }
+
+        // Verificar que el mes esté entre 1 y 12
+        if (month < 1 || month > 12) {
+            return res.status(400).send('El mes de nacimiento no es válido.');
+        }
+
+        // Verificar que el día sea válido para el mes y año dado
+        const daysInMonth = [31, (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        if (day < 1 || day > daysInMonth[month - 1]) {
+            return res.status(400).send('El día de nacimiento no es válido.');
+        }
+
 
         const existingUser = await User.findOne({ email: normalizedEmail });
         if (existingUser) {
