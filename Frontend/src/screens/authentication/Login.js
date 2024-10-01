@@ -201,7 +201,7 @@ const handleLogin = async (email, password) => {
             </Text>
             <SmallAuthButton
               text="Olvidaste tu contraseña"
-              onPress={() => navigation.replace('Register')}
+              onPress={() => navigation.replace('ForgotPassword')}
             />
           </View>
         
