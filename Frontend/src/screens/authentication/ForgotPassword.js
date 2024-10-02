@@ -38,7 +38,7 @@ const ForgotPassword = ({ navigation }) => {
       // Manejar la respuesta del backend
       if (response.data.success) {
         alert(response.data.message); // Mensaje de éxito del backend
-        navigation.replace('Login');
+        navigation.replace('ChangePassword');
       } else {
         alert(response.data.message || 'Error al enviar el enlace de recuperación.'); // Mensaje de error del backend
       }
@@ -108,6 +108,7 @@ const ForgotPassword = ({ navigation }) => {
             onPress={handlePasswordRecovery}
             text="Recuperar contraseña"
             iconName="lock-open"
+            
            
            
           />

@@ -18,6 +18,7 @@ import HomeScreen from './src/components/buttons/HomeScreen';
 import Login from './src/screens/authentication/Login';
 import Register from './src/screens/authentication/Register';
 import ForgotPassword from './src/screens/authentication/ForgotPassword';
+import ChangePassword from './src/screens/authentication/ChangePassword';
 import Mood from './src/screens/mood/Mood';
 
 import Questionnaire from './src/screens/SaludMental/Questionnaire';
@@ -188,6 +189,8 @@ export default function App() {
         <Stack.Screen name="Register" component={Register} />
 
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+
+        <Stack.Screen name="ChangePassword" component={ChangePassword} />
         {/* mood tracker */}
        {/*  <Stack.Screen name="TrackMood" component={TrackMood} /> */}
  {/*        <Stack.Screen name="UpdateMood" component={UpdateMood} />

@@ -358,42 +358,53 @@ const forgotPassword = async (req, res) => {
 const changePassword = async (req, res) => {
     const { token, newPassword, confirmPassword } = req.body;
 
-        // Validar que todas las propiedades necesarias estén presentes
-        if (!token || !newPassword || !confirmPassword) {
-            return res.status(400).send('Faltan datos necesarios: token, newPassword y confirmPassword son requeridos.');
-        }
-
-    // Validar que las contraseñas coincidan
-    if (newPassword !== confirmPassword) {
-        return res.status(400).send('Las contraseñas no coinciden.');
+    if (!token || !newPassword || !confirmPassword) {
+        return res.status(400).json({
+            error: true,
+            message: 'Faltan datos necesarios: token, newPassword y confirmPassword son requeridos.'
+        });
     }
 
-        // Verificar si la nueva contraseña es fuerte
+    if (newPassword !== confirmPassword) {
+        return res.status(400).json({
+            error: true,
+            message: 'Las contraseñas no coinciden.'
+        });
+    }
+
     if (!isStrongPassword(newPassword)) {
-        return res.status(400).send('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un símbolo.');
-        }
-    
+        return res.status(400).json({
+            error: true,
+            message: 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un símbolo.'
+        });
+    }
 
     try {
-        // Verificar el token
         const decoded = jwt.verify(token, process.env.secret);
         const userId = decoded.userId;
 
-        // Buscar el usuario por su ID
         const user = await User.findById(userId);
         if (!user) {
-            return res.status(400).send('Usuario no encontrado.');
+            return res.status(404).json({
+                error: true,
+                message: 'Usuario no encontrado.'
+            });
         }
 
-        // Actualizar la contraseña
         const newPasswordHash = bcrypt.hashSync(newPassword, 8);
         user.passwordHash = newPasswordHash;
         await user.save();
 
-        res.status(200).send('Contraseña restablecida con éxito.');
+        res.status(200).json({
+            error: false,
+            message: 'Contraseña restablecida con éxito.'
+        });
     } catch (error) {
         console.error('Error al restablecer la contraseña:', error);
-        res.status(400).send('El enlace de restablecimiento es inválido o ha caducado.');
+        res.status(400).json({
+            error: true,
+            message: 'El enlace de restablecimiento es inválido o ha caducado.'
+        });
     }
 };
 
