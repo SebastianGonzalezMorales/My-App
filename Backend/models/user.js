@@ -34,8 +34,19 @@ const usersSchema = new mongoose.Schema({
     verified: { 
         type: Boolean,
         default: false 
+    },
+    canResetPassword: { 
+        type: Boolean, 
+        default: false // Para controlar si el usuario puede restablecer la contraseña
+    },
+    resetPasswordToken: { 
+        type: String,
+        default: null 
+    },
+    resetPasswordExpires: { 
+        type: Date,
+        default: null
     }
-
 });
 
 

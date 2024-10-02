@@ -19,6 +19,7 @@ const authJwt = jwt({
                             `${api}/users/forgot-password`,  //Está línea la tengo que agregar por que el 
                                                              //usuario no esta autenticado en la aplicación
                                                              // y si no la agrego aquí me pide un token de authorización
+                            `${api}/users/verify-reset-token`,          
                             `${api}/users/change-password`, 
                             `${api}/users/verificar`,
                             `${api}/tips`,
