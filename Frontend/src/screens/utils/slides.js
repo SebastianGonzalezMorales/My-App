@@ -4,7 +4,7 @@ export default [
       title: '¡ Bienvenido !',
       description:
         'Está es la aplicación de acompañamiento de Salud Mental de estudiantes de primer año de la Universidad de Valparaiso.',
-      image: require('../../../assets/icon - copia.png'),
+      image: require('../../../assets/icon-copia-removebg.png'),
      
     },
     {
@@ -19,28 +19,28 @@ export default [
       title: 'Estados de ánimo',
       description:
         'Registre su estado de ánimo diariamente, y conozca como evoluciona a lo largo del tiempo.',
-        image: require('../../../assets/tracking_mood.jpg'),
+        image: require('../../../assets/tracking_mood-removebg.png'),
     },
     {
       id: '4',
       title: 'Información UV',
       description:
         'Descubre los recursos y servicios que ofrece la Universidad para apoyar tu bienestar emocional y psicológico.',
-        image: require('../../../assets/Salud-mental-UV.jpg'),
+        image: require('../../../assets/Salud-mental-UV-removebg.png'),
     },
     {
       id: '5',
       title: 'Novedades UV',
       description:
         'Mantente al tanto de todas las actividades y eventos deportivos y recreativos.',
-        image: require('../../../assets/area-deporte-uv.jpg'),
+        image: require('../../../assets/area-deporte-uv-removebg.png'),
     },
     {
       id: '6',
       title: '¡ Casi terminamos !',
       description:
         'Regístrese e inicie sesión, para acceder a las increíbles funcionalidades de la aplicación.',
-        image: require('../../../assets/Register.png'),
+        image: require('../../../assets/regjster-removebg.png'),
     },
 
   ];
