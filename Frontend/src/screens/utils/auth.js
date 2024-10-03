@@ -21,8 +21,10 @@ export const onAuthStateChanged = async (setUser, setInitialising) => {
       return;
     }
 
-    // Verificar el token con el backend
-   const response = await axios.get('http://localhost:3000/api/verifyToken', {
+
+    console.log(token)
+    // Verificar el token con el backen
+   const response = await axios.get('http://192.168.1.8:3000/api/verifyToken', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -34,7 +36,7 @@ export const onAuthStateChanged = async (setUser, setInitialising) => {
       setUser(null); // Token inválido
     }
   } catch (error) {
-    console.error('Error verificando la autenticación', error);
+    console.log('Error verificando la autenticación', error);
     setUser(null);
   } finally {
     setInitialising(false); // Finalizar la inicialización

@@ -21,6 +21,9 @@ const authJwt = jwt({
                                                              // y si no la agrego aquí me pide un token de authorización
                             `${api}/users/verify-reset-token`,          
                             `${api}/users/change-password`, 
+                            `${api}/users/getReset-PasswordToken`, 
+
+
                             `${api}/users/verificar`,
                             `${api}/tips`,
                             `${api}/users/login`,

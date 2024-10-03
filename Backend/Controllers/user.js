@@ -333,9 +333,10 @@ const forgotPassword = async (req, res) => {
         // Generar un token de restablecimiento
         const resetToken = jwt.sign({ userId: user._id, email: user.email }, process.env.secret, { expiresIn: '1h' });
 
-        // Guardar el token y su tiempo de expiración en el usuario
+        // Guardar el token y su tiempo de expiración en el usuario, y reiniciar canResetPassword
         user.resetPasswordToken = resetToken;
         user.resetPasswordExpires = Date.now() + 3600000; // Token válido por 1 hora
+        user.canResetPassword = false; // Reiniciar la capacidad de restablecer contraseña
         await user.save();
 
         const resetLink = `http://localhost:3000/api/v1/users/verify-reset-token?token=${resetToken}`;
@@ -364,7 +365,6 @@ const forgotPassword = async (req, res) => {
 };
 
 
-
 const changePassword = async (req, res) => {
     const { token, newPassword, confirmPassword } = req.body;
 
@@ -377,7 +377,10 @@ const changePassword = async (req, res) => {
     }
 
     if (!isStrongPassword(newPassword)) {
-        return res.status(400).json({ success: false, message: 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un símbolo.' });
+        return res.status(400).json({
+            success: false,
+            message: 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un símbolo.',
+        });
     }
 
     try {
@@ -385,30 +388,36 @@ const changePassword = async (req, res) => {
         const decoded = jwt.verify(token, process.env.secret);
         const userId = decoded.userId;
 
-        // Buscar al usuario con el token de restablecimiento y verificar que no haya caducado
+        // Buscar al usuario con el token, que no haya expirado y que pueda restablecer la contraseña
         const user = await User.findOne({
             _id: userId,
             resetPasswordToken: token,
-            resetPasswordExpires: { $gt: Date.now() } // Asegurarse de que el token no haya expirado
+            resetPasswordExpires: { $gt: Date.now() },
+            canResetPassword: true // Usar el campo correcto
         });
 
         if (!user) {
-            return res.status(400).json({ success: false, message: 'El enlace de restablecimiento es inválido o ha caducado.' });
+            return res.status(400).json({
+                success: false,
+                message: 'El enlace de restablecimiento es inválido, ha caducado o no ha sido verificado.',
+            });
         }
 
         // Actualizar la contraseña del usuario
         user.passwordHash = bcrypt.hashSync(newPassword, 8);
-        user.resetPasswordToken = null; // Limpiar el token de restablecimiento
-        user.resetPasswordExpires = null; // Limpiar la fecha de expiración
+        user.resetPasswordToken = null;
+        user.resetPasswordExpires = null;
+        user.canResetPassword = false; // Resetear la capacidad de restablecer contraseña
         await user.save();
 
         res.status(200).json({ success: true, message: 'Contraseña actualizada con éxito. Ahora puedes iniciar sesión.' });
     } catch (error) {
         console.error('Error al cambiar la contraseña:', error);
-        res.status(400).json({ success: false, message: 'El enlace de restablecimiento es inválido o ha caducado.' });
+        res.status(400).json({ success: false, message: 'Error al cambiar la contraseña.' });
     }
 };
 
+  
 
 const verifyResetToken = async (req, res) => {
     const { token } = req.query;
@@ -435,11 +444,16 @@ const verifyResetToken = async (req, res) => {
             `);
         }
 
+        // Marcar que el usuario puede restablecer la contraseña
+        user.canResetPassword = true;
+        await user.save();
+
+  
         // Si el token es válido, responder al frontend indicando que puede cambiar su contraseña
         res.status(200).send(`
             <html>
                 <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
-                    <h1 style="font-size: 32px; color: #000C7B;">El token es válido. Puedes restablecer tu contraseña ahora.</h1>
+                    <h1 style="font-size: 32px; color: #000C7B;">El token es válido. Puedes restablecer tu contraseña ahora, volviendo a tu aplicación móvil</h1>
                 </body>
             </html>
         `);
@@ -456,7 +470,42 @@ const verifyResetToken = async (req, res) => {
 };
 
 
+// Controlador para obtener el token de restablecimiento de contraseña
+const getResetPasswordToken = async (req, res) => {
+    const { email } = req.body; // Obtiene el correo electrónico del cuerpo de la solicitud
 
+    // Expresión regular para validar el formato nombre.apellido@alumnos.uv.cl
+    const emailRegex = /^[a-z]+\.[a-z]+@alumnos\.uv\.cl$/;
+
+    // Verifica que el formato del correo sea correcto
+    if (!emailRegex.test(email)) {
+        return res.status(400).send({ message: "El correo electrónico no tiene el formato correcto" });
+    }
+
+    try {
+        // Busca al usuario por correo electrónico
+        const user = await User.findOne({ email: email });
+
+        if (!user) {
+            return res.status(404).send({ message: "Usuario no encontrado" });
+        }
+
+        // Verifica si hay un token de restablecimiento
+        if (!user.resetPasswordToken) {
+            return res.status(400).send({ message: "No hay token de restablecimiento para este usuario" });
+        }
+
+        // Devuelve el token de restablecimiento
+        return res.status(200).send({
+            message: "Token encontrado",
+            resetPasswordToken: user.resetPasswordToken
+        });
+
+    } catch (error) {
+        // Manejo de errores
+        return res.status(500).send({ message: "Error del servidor", error: error.message });
+    }
+};
 
 
 
@@ -555,5 +604,6 @@ module.exports = {
     verifyEmail,
     forgotPassword,
     changePassword,
-    verifyResetToken
+    verifyResetToken,
+    getResetPasswordToken
 };

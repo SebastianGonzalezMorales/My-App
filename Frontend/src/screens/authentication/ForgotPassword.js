@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Svg, { Circle } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // components
 import AuthButton from '../../components/buttons/AuthButton';
@@ -26,36 +27,45 @@ const ForgotPassword = ({ navigation }) => {
    * *******************
    */
 
-  // Send password recovery email
-  const handlePasswordRecovery = async () => {
-    try {
-      // Convertir el correo electrónico a minúsculas
-      const lowercaseEmail = email.toLowerCase();
-  
-      // Enviar la solicitud al backend
-      const response = await axios.post('http://192.168.1.8:3000/api/v1/users/forgot-password', { email: lowercaseEmail });
-  
-      // Manejar la respuesta del backend
-      if (response.data.success) {
-        alert(response.data.message); // Mensaje de éxito del backend
-        navigation.replace('ChangePassword');
-      } else {
-        alert(response.data.message || 'Error al enviar el enlace de recuperación.'); // Mensaje de error del backend
+// Función de recuperación de contraseña
+const handlePasswordRecovery = async () => {
+  try {
+    // Convertir el correo electrónico a minúsculas
+    const lowercaseEmail = email.toLowerCase();
+    
+    // Enviar la solicitud al backend
+    const response = await axios.post('http://192.168.1.8:3000/api/v1/users/forgot-password', { email: lowercaseEmail });
+    
+    // Manejar la respuesta del backend
+    if (response.data.success) {
+      alert(response.data.message); // Mensaje de éxito del backend
+
+      // Guardar el correo electrónico en AsyncStorage
+      try {
+        await AsyncStorage.setItem('resetPasswordEmail', lowercaseEmail);
+        console.log('Correo electrónico guardado exitosamente en AsyncStorage');
+
+      } catch (error) {
+        console.error('Error al guardar en AsyncStorage:', error);
       }
-    } catch (error) {
-      // Manejo de errores del backend
-      if (error.response) {
-        // El servidor respondió con un código de estado fuera del rango 2xx
-        alert(error.response.data.message || 'Error al enviar el enlace de recuperación. Por favor, intenta nuevamente.');
-      } else {
-        // Error en la configuración de la solicitud
-        alert('Error inesperado: ' + error.message);
-      }
-      console.log('Error @handlePasswordRecovery:', error);
+
+      // Navegar a la pantalla de cambio de contraseña
+      navigation.replace('ChangePassword');
+    } else {
+      alert(response.data.message || 'Error al enviar el enlace de recuperación.'); // Mensaje de error del backend
     }
-  };
-  
-  
+  } catch (error) {
+    // Manejo de errores del backend
+    if (error.response) {
+      // El servidor respondió con un código de estado fuera del rango 2xx
+      alert(error.response.data.message || 'Error al enviar el enlace de recuperación. Por favor, intenta nuevamente.');
+    } else {
+      // Error en la configuración de la solicitud
+      alert('Error inesperado: ' + error.message);
+    }
+    console.log('Error @handlePasswordRecovery:', error);
+  }
+};
   /*
    * ****************
    * **** Screen ****

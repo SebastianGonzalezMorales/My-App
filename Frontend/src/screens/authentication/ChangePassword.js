@@ -27,33 +27,51 @@ const ChangePassword = ({ navigation }) => {
    * *******************
    */
 
-  // Function to handle password change
-  const handleChangePassword = async () => {
-    if (newPassword !== confirmPassword) {
-      alert('Las contraseñas no coinciden.');
+ // Function to handle password change
+ const handleChangePassword = async () => {
+  if (newPassword !== confirmPassword) {
+    alert('Las contraseñas no coinciden.');
+    return;
+  }
+
+  try {
+    // Recuperar el correo electrónico desde AsyncStorage
+    const retrievedEmail = await AsyncStorage.getItem('resetPasswordEmail');
+    if (!retrievedEmail) {
+      alert('No se ha encontrado un correo para restablecer la contraseña.');
+      return;
+    }
+    
+    //  Obtener el token de restablecimiento desde el backend
+    const tokenResponse = await axios.post(
+      'http://192.168.1.8:3000/api/v1/users/getReset-PasswordToken',
+      { email: retrievedEmail }
+    );
+    
+    const token = tokenResponse.data.resetPasswordToken;
+
+    if (!token) {
+      alert('No se ha encontrado un token de restablecimiento.');
       return;
     }
 
-    try {
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmZjNTQwYjNkNjI3NDYwYjcxYTc5YTgiLCJlbWFpbCI6InNlYmFzdGlhbi5nb256YWxlekBhbHVtbm9zLnV2LmNsIiwiaWF0IjoxNzI3ODI0OTk2LCJleHAiOjE3Mjc4Mjg1OTZ9.3hJJ3gzct5lmDasdc_lM2-vZ1lV-6XbpZpzTlanOQM4"
-      /* const token = await AsyncStorage.getItem('token'); */
-      console.log(token)
-      console.log(newPassword)
-      console.log(confirmPassword)
-      const response = await axios.post(
-        'http://192.168.1.8:3000/api/v1/users/change-password',
-        {token, newPassword: newPassword, confirmPassword: confirmPassword },
-        
-      );
-      alert('Contraseña cambiada exitosamente.');
-      navigation.replace('Login');
-    } catch (error) {
-      alert('Error al cambiar la contraseña. Intenta nuevamente más tarde.');
-      console.log('Error @handleChangePassword:', error.response?.data || error.message);
+    //  Cambiar la contraseña usando el token, el correo y las nuevas contraseñas
+    const response = await axios.post(
+      'http://192.168.1.8:3000/api/v1/users/change-password',
+      { 
+        token: token,
+        newPassword: newPassword, 
+        confirmPassword: confirmPassword, 
+      }
+    );
 
-    }
-  };
-
+    alert('Contraseña cambiada exitosamente.');
+    navigation.replace('Login');
+  } catch (error) {
+    alert('Error al cambiar la contraseña. Intenta nuevamente más tarde.');
+    console.log('Error @handleChangePassword:', error.response?.data || error.message);
+  }
+};
   /*
    * ****************
    * **** Screen ****
