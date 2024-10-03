@@ -27,51 +27,56 @@ const ChangePassword = ({ navigation }) => {
    * *******************
    */
 
- // Function to handle password change
- const handleChangePassword = async () => {
-  if (newPassword !== confirmPassword) {
-    alert('Las contraseñas no coinciden.');
-    return;
-  }
-
-  try {
-    // Recuperar el correo electrónico desde AsyncStorage
-    const retrievedEmail = await AsyncStorage.getItem('resetPasswordEmail');
-    if (!retrievedEmail) {
-      alert('No se ha encontrado un correo para restablecer la contraseña.');
+  const handleChangePassword = async () => {
+    if (newPassword !== confirmPassword) {
+      alert('Las contraseñas no coinciden.');
       return;
     }
-    
-    //  Obtener el token de restablecimiento desde el backend
-    const tokenResponse = await axios.post(
-      'http://192.168.1.8:3000/api/v1/users/getReset-PasswordToken',
-      { email: retrievedEmail }
-    );
-    
-    const token = tokenResponse.data.resetPasswordToken;
-
-    if (!token) {
-      alert('No se ha encontrado un token de restablecimiento.');
-      return;
-    }
-
-    //  Cambiar la contraseña usando el token, el correo y las nuevas contraseñas
-    const response = await axios.post(
-      'http://192.168.1.8:3000/api/v1/users/change-password',
-      { 
-        token: token,
-        newPassword: newPassword, 
-        confirmPassword: confirmPassword, 
+  
+    try {
+      // Recuperar el correo electrónico desde AsyncStorage
+      const retrievedEmail = await AsyncStorage.getItem('resetPasswordEmail');
+      if (!retrievedEmail) {
+        alert('No se ha encontrado un correo para restablecer la contraseña.');
+        return;
       }
-    );
-
-    alert('Contraseña cambiada exitosamente.');
-    navigation.replace('Login');
-  } catch (error) {
-    alert('Error al cambiar la contraseña. Intenta nuevamente más tarde.');
-    console.log('Error @handleChangePassword:', error.response?.data || error.message);
-  }
-};
+  
+      // Obtener el token de restablecimiento desde el backend
+      const tokenResponse = await axios.post(
+        'http://192.168.1.8:3000/api/v1/users/getReset-PasswordToken',
+        { email: retrievedEmail }
+      );
+  
+      const token = tokenResponse.data.resetPasswordToken;
+  
+      if (!token) {
+        alert('No se ha encontrado un token de restablecimiento.');
+        return;
+      }
+  
+      // Cambiar la contraseña usando el token y las nuevas contraseñas
+      await axios.post(
+        'http://192.168.1.8:3000/api/v1/users/change-password',
+        {
+          token: token,
+          newPassword: newPassword,
+          confirmPassword: confirmPassword,
+        }
+      );
+  
+      alert('Contraseña cambiada exitosamente.');
+      navigation.replace('Login');
+    } catch (error) {
+      // Obtener el mensaje de error del backend
+      const errorMessage = error.response?.data?.message || 'Error al cambiar la contraseña. Intenta nuevamente más tarde.';
+      
+      // Mostrar el mensaje de error al usuario
+      alert(errorMessage);
+  
+      console.log('Error @handleChangePassword:', error.response?.data || error.message);
+    }
+  };
+  
   /*
    * ****************
    * **** Screen ****
