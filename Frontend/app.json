@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "AppAcompañamientoUV",
-    "slug": "AppAcompanhamientoUV",
+    "slug": "AppAcompanhamientoUV-development_build",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/icon.png",
@@ -18,10 +18,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#000C7B"
-      }
+      },
+      "package": "com.sebastian2040.AppAcompanhamientoUVdevelopment_build"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5640adae-eeb5-444b-bc8c-7f844cf16b9c"
+      }
     }
   }
 }
