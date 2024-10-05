@@ -40,7 +40,7 @@ app.use(`${api}/questions`, questionRoutes);
 app.use(`${api}/resultsTests`, resultsTestsRoutes);
 
 app.get('/', (req, res) => {
-    res.send('Funcionando');
+    res.send('<h1> Funcionando </h1>');
   });
   
 mongoose.connect(process.env.CONNECTION_STRING, {
@@ -55,7 +55,9 @@ mongoose.connect(process.env.CONNECTION_STRING, {
     console.log(err);
 })
 
-app.listen(3000, ()=>{
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, ()=>{
     console.log(api);
-    console.log('Server is running http://localhost:3000');
+    console.log(`Server is running http://localhost:${PORT}`);
 })
