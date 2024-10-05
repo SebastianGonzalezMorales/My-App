@@ -1,0 +1,9 @@
+{
+    "name": "app-root",
+    "version": "1.0.0",
+    "description": "Root package for Heroku deployment",
+    "scripts": {
+      "start": "cd Backend && npm install && npm start"
+    }
+  }
+  
