@@ -2,6 +2,11 @@ const { expressjwt: jwt } = require("express-jwt");
 
 const secret =  process.env.SECRET
 const api = process.env.API_URL
+
+if (!secret) {
+    throw new Error("JWT secret is not defined in environment variables");
+  }
+  
 const authJwt = jwt({
                     secret: secret,
                     algorithms: ["HS256"],
@@ -41,15 +46,3 @@ async function isRevoked(req, token) {
 
 module.exports = authJwt; 
 
-/* import { expressjwt: jwt } from 'express-jwt'
-
-function authJwt() {
-    const secret = process.env.secret;
-    return expressjwt({
-        secret,
-        algorithms: ['HS256'] 
-    })
-}
-
-module.exports = authJwt;
- */
