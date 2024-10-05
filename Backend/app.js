@@ -39,7 +39,10 @@ app.use(`${api}/moodState`, moodStateRoutes);
 app.use(`${api}/questions`, questionRoutes);
 app.use(`${api}/resultsTests`, resultsTestsRoutes);
 
-
+app.get('/', (req, res) => {
+    res.send('Funcionando');
+  });
+  
 mongoose.connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
