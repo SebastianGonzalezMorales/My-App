@@ -6,10 +6,12 @@ import Svg, { Circle } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Import the API URL from environment variables
+import { API_URL } from '@env';
+
 // components
 import AuthButton from '../../components/buttons/AuthButton';
 import SmallAuthButton from '../../components/buttons/SmallAuthButton';
-
 
 // customisation
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -34,7 +36,7 @@ const handlePasswordRecovery = async () => {
     const lowercaseEmail = email.toLowerCase();
     
     // Enviar la solicitud al backend
-    const response = await axios.post('http://192.168.1.8:3000/api/v1/users/forgot-password', { email: lowercaseEmail });
+    const response = await axios.post(`${API_URL}/users/forgot-password`, { email: lowercaseEmail });
     
     // Manejar la respuesta del backend
     if (response.data.success) {

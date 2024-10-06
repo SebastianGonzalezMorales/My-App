@@ -6,10 +6,12 @@ import Svg, { Circle } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 
+// Import the API URL from environment variables
+import { API_URL } from '@env';
+
 // components
 import AuthButton from '../../components/buttons/AuthButton';
 import SmallAuthButton from '../../components/buttons/SmallAuthButton';
-
 
 // customisation
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -42,7 +44,7 @@ const handleLogin = async (email, password) => {
   try {
     // Convertir el correo electrónico a minúsculas
     const lowercaseEmail = email.toLowerCase();
-    const response = await axios.post('http://192.168.1.8:3000/api/v1/users/login', { email: lowercaseEmail, password });
+    const response = await axios.post(`${API_URL}/users/login`, { email: lowercaseEmail, password });
     
     // Guarda el token en AsyncStorage
     await AsyncStorage.setItem('token', response.data.token);

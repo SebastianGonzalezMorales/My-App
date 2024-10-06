@@ -5,6 +5,9 @@ import Svg, { Circle } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 
+// Import the API URL from environment variables
+import { API_URL } from '@env';
+
 // components
 import AuthButton from '../../components/buttons/AuthButton';
 import SmallAuthButton from '../../components/buttons/SmallAuthButton';
@@ -235,7 +238,7 @@ const Register = ({ navigation }) => {
       };
 
        // Realizar la solicitud POST al backend
-    const response = await axios.post('http://192.168.1.8:3000/api/v1/users/register', userData);
+    const response = await axios.post(`${API_URL}/users/register`, userData);
    
     // Verificar la respuesta del servidor
     if (response.status === 201) {

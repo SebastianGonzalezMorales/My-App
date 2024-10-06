@@ -1,22 +1,14 @@
 // react imports
-import {
-    Linking,
-    NativeModules,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    View,
+import { Linking, NativeModules, Platform, SafeAreaView, ScrollView, Text, View,
   } from 'react-native';
   import React, { useEffect, useState } from 'react';
   import Icon from 'react-native-vector-icons/FontAwesome';
   import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
   import axios from 'axios';
   import AsyncStorage from '@react-native-async-storage/async-storage';
-  
-  // firebase
  
+  // Import the API URL from environment variables
+import { API_URL } from '@env';
   
   // components
   import CustomButton from '../../components/buttons/CustomButton';
@@ -98,7 +90,7 @@ import {
         try {
           const token = await AsyncStorage.getItem('token');
           if (token) {
-          const response = await axios.post('http://192.168.1.8:3000/api/v1/users/userdata',
+          const response = await axios.post(`${API_URL}/users/userdata`,
             {
               // Token en el cuero de la solicitud
               token: `${token}`

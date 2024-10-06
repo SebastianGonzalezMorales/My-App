@@ -6,6 +6,9 @@ import Svg, { Circle } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 
+// Import the API URL from environment variables
+import { API_URL } from '@env';
+
 // components
 import AuthButton from '../../components/buttons/AuthButton';
 import SmallAuthButton from '../../components/buttons/SmallAuthButton';
@@ -43,7 +46,7 @@ const ChangePassword = ({ navigation }) => {
   
       // Obtener el token de restablecimiento desde el backend
       const tokenResponse = await axios.post(
-        'http://192.168.1.8:3000/api/v1/users/getReset-PasswordToken',
+        `${API_URL}/users/getReset-PasswordToken`,
         { email: retrievedEmail }
       );
   
@@ -56,7 +59,7 @@ const ChangePassword = ({ navigation }) => {
   
       // Cambiar la contraseña usando el token y las nuevas contraseñas
       await axios.post(
-        'http://192.168.1.8:3000/api/v1/users/change-password',
+        `${API_URL}/users/change-password`,
         {
           token: token,
           newPassword: newPassword,

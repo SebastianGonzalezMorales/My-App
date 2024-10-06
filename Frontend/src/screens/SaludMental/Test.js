@@ -8,6 +8,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // firebase
 /* import { firebase } from '../../../firebase'; */
 
+// Import the API URL from environment variables
+import { API_URL } from '@env';
+
 // components
 import BackButton from '../../components/buttons/BackButton';
 import FormButton from '../../components/buttons/FormButton';
@@ -53,7 +56,7 @@ const Test = ({ navigation }) => {
 
         if (token) {
         
-        const response = await axios.get('http://192.168.1.8:3000/api/v1/questions/get-questions', { // obtén las preguntas desde tu API
+        const response = await axios.get(`${API_URL}/questions/get-questions`, { // obtén las preguntas desde tu API
         headers: {
           'Authorization': `Bearer ${token}`  // Usa el token recuperado
         }
@@ -124,7 +127,7 @@ const handleSubmit = async () => {
 
     if (token) {
         // Llama al backend para obtener el userId usando el token
-        const userResponse = await axios.post('http://192.168.1.8:3000/api/v1/users/userid', {
+        const userResponse = await axios.post(`${API_URL}/users/userid`, {
             token: `${token}`
         }, {
             headers: {
@@ -135,7 +138,7 @@ const handleSubmit = async () => {
         const userId = userResponse.data.userId; // Extrae el userId de la respuesta
 
         // Ahora envía los resultados de la prueba
-        const response = await axios.post('http://192.168.1.8:3000/api/v1/resultsTests/post-resultsTest', {
+        const response = await axios.post(`${API_URL}/resultsTests/post-resultsTest`, {
             userId,    // Usa el userId obtenido
             total,
             severity,

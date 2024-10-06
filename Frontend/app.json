@@ -19,6 +19,10 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#000C7B"
       },
+      "permissions": [
+        "INTERNET"
+      ],
+      "usesCleartextTraffic": true,
       "package": "com.sebastian2040.AppAcompanhamientoUVdevelopment_build"
     },
     "web": {

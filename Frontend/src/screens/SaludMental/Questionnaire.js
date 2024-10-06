@@ -4,6 +4,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Import the API URL from environment variables
+import { API_URL } from '@env';
+
 // components
 import CustomButton from '../../components/buttons/CustomButton';
 import FormButton from '../../components/buttons/FormButton';
@@ -58,7 +61,7 @@ function Questionnaire({ navigation }) {
         console.log(token)
   
         // Llamada para obtener el userId basado en el token
-        const userResponse = await axios.post('http://192.168.1.8:3000/api/v1/users/userid', {
+        const userResponse = await axios.post(`${API_URL}/users/userid`, {
           token: `${token}`
         }, {
           headers: {
@@ -74,7 +77,7 @@ function Questionnaire({ navigation }) {
         }
   
         // Llamada para obtener los resultados del test por userId
-        const response = await axios.post(`http://192.168.1.8:3000/api/v1/resultsTests/get-resultsTestUser/${userId}`, {
+        const response = await axios.post(`API_URL/resultsTests/get-resultsTestUser/${userId}`, {
           token: `${token}`
         }, {
           headers: {
