@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createQuestion, getAllQuestions, getQuestionById, updateQuestion, deleteQuestion } = require('../Controllers/questions');
+const { createQuestion, getAllQuestions, getQuestionById, updateQuestion, deleteQuestion } = require('../controllers/questions');
 
 // Rutas para las preguntas
 router.post('/post-questions', createQuestion); // Crear pregunta
