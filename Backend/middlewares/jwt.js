@@ -30,8 +30,8 @@ const authJwt = jwt({
                             `${api}/users/getReset-PasswordToken`, 
 
 
-                            `${baseUrl}/${api}/users/verificar`,
-                            `${baseUrl}/${api}/users/verify-reset-token`,
+                            `${baseUrl}${api}/users/verificar`,
+                            `${baseUrl}${api}/users/verify-reset-token`,
 
                             `/`,  
                             `${api}/users/verificar`,
