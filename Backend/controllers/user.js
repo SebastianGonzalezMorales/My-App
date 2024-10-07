@@ -167,7 +167,7 @@ const registerUser = async (req, res) => {
         const baseUrl = process.env.BASE_URL;
         const api = process.env.API_URL;
         
-        const verificationLink = `${baseUrl}/${api}/users/verificar?token=${verificationToken}`;
+        const verificationLink = `${baseUrl}${api}/users/verificar?token=${verificationToken}`;
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -347,7 +347,7 @@ const forgotPassword = async (req, res) => {
         const baseUrl = process.env.BASE_URL;
         const api = process.env.API_URL;
         
-        const resetLink = `${baseUrl}/${api}/users/verify-reset-token?token=${resetToken}`;
+        const resetLink = `${baseUrl}${api}/users/verify-reset-token?token=${resetToken}`;
 
         // Configurar el transporte de nodemailer
         const transporter = nodemailer.createTransport({
