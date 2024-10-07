@@ -163,13 +163,11 @@ const registerUser = async (req, res) => {
         const savedTempUser = await tempUser.save();
         if (!savedTempUser) return res.status(400).send('User could not be created.');
 
-        // Obtener el puerto
-        const PORT = process.env.PORT || 3001;
-
         // Obtener BASE_URL para producción
         const baseUrl = process.env.BASE_URL;
+        const api = process.env.API_URL;
         
-        const verificationLink = `http://${baseUrl}:${PORT}/api/v1/users/verificar?token=${verificationToken}`;
+        const verificationLink = `${baseUrl}/${api}/users/verificar?token=${verificationToken}`;
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -345,13 +343,11 @@ const forgotPassword = async (req, res) => {
         user.canResetPassword = false; // Reiniciar la capacidad de restablecer contraseña
         await user.save();
 
-        // Obtener el puerto
-        const PORT = process.env.PORT || 3001;
-
         // Obtener BASE_URL para producción
         const baseUrl = process.env.BASE_URL;
+        const api = process.env.API_URL;
         
-        const resetLink = `http://${baseUrl}:${PORT}/api/v1/users/verify-reset-token?token=${resetToken}`;
+        const resetLink = `${baseUrl}/${api}/users/verify-reset-token?token=${resetToken}`;
 
         // Configurar el transporte de nodemailer
         const transporter = nodemailer.createTransport({

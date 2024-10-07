@@ -2,6 +2,7 @@ const { expressjwt: jwt } = require("express-jwt");
 
 const secret =  process.env.SECRET
 const api = process.env.API_URL
+const baseUrl = process.env.BASE_URL
 
 if (!secret) {
     throw new Error("JWT secret is not defined in environment variables");
@@ -13,7 +14,7 @@ const authJwt = jwt({
                     isRevoked: async (req, token) => undefined
                 }).unless({
                     path:[
-                            //{url: /\/api\/v1\/moodState(.*)/ , methods: ['POST', 'OPTIONS'] },
+                            //{url: /\/api\/v1\/moodState , methods: ['POST', 'OPTIONS'] },
                             //Con la línea de abajo "solo" permito que los usuarios puedan obtener los tips, 
                             //logiarse y registrarse, forgot-passowrd
                             //Por ejemplo: para poder publicar tips tendrían que estar registrados como administrador.
@@ -27,6 +28,10 @@ const authJwt = jwt({
                             `${api}/users/verify-reset-token`,          
                             `${api}/users/change-password`, 
                             `${api}/users/getReset-PasswordToken`, 
+
+
+                            `${baseUrl}/${api}/users/verificar`,
+                            `${baseUrl}/${api}/users/verify-reset-token`,
 
                             `/`,  
                             `${api}/users/verificar`,
