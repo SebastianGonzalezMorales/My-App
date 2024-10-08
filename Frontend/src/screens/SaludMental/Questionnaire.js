@@ -272,46 +272,37 @@ function Questionnaire({ navigation }) {
           textRight="Ver todos"
         />
         <FlatList
-          data={results.slice(0, 10)}
-          numColumns={1}
-          renderItem={({ item }) => (
-            <CustomButton
-              buttonStyle={{
-                backgroundColor:
-                  item.severity === 'Normal'
-                    ? '#f7e7d8'
-                    : item.severity === 'Leve'
-                    ? '#d8f7ea'
-                    : item.severity === 'Moderado'
-                    ? '#d8eef7'
-                    : item.severity === 'Moderadamente grave'
-                    ? '#f7d8e3'
-                    : '#f7d8e3',
-              }}
-              textStyle={{
-                color:
-                  item.severity === 'Normal'
-                    ? '#af7b56'
-                    : item.severity === 'Leve'
-                    ? '#109f5c'
-                    : item.severity === 'Moderado'
-                    ? '#238bdf'
-                    : item.severity === 'Moderadamente grave'
-                    ? '#d85a77'
-                    : '#d85a77',
-              }}
-              title={item.severity}
-              textOne={item.dateData}
-              textTwo={item.totalScore}
-              onLongPress={() => (
-                setModalVisible(true), setSelectedId(item.id)
-              )}
-              onPress={() => {
-                navigation.navigate('ResultView', { documentId: item.id });
-              }}
-            />
-          )}
-        />
+  data={results.slice(0, 10)} // Mostrar solo los primeros 10 resultados
+  numColumns={1}
+  renderItem={({ item }) => (
+    <CustomButton
+      buttonStyle={{
+        backgroundColor:
+          item.severity === 'Normal'
+            ? '#fdf3e4'
+            : item.severity === 'Leve'
+            ? '#e4f7f1'
+            : item.severity === 'Moderado'
+            ? '#e4eff7'
+            : item.severity === 'Moderadamente grave'
+            ? '#f7e4eb'
+            : '#f7d8e3', // Colores para cada tipo de severidad
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        marginBottom: 10,
+        borderRadius: 10,
+      }}
+      onPress={() => {
+        navigation.navigate('ResultView', { documentId: item.id });
+      }}
+      title={item.severity} // Pasar la severidad
+      textOne={item.dateData} // Pasar la fecha
+      textTwo={item.totalScore} // Pasar el puntaje
+      textStyle={{ color: '#af7b56' }} // Estilos del texto
+    />
+  )}
+/>
+
 
         {/* button */}
         <View style={GlobalStyle.circularButtonContainer}>

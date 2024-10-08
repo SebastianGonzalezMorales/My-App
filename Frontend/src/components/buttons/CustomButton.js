@@ -3,30 +3,35 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function CustomButton(props) {
-  return (
-    <TouchableOpacity
-      onPress={props.onPress}
-      onLongPress={props.onLongPress}
-      style={[styles.button, props.buttonStyle]}
-    >
-      <View style={styles.content}>
-        {/* Agrega el ícono solo si se proporciona */}
-        {props.icon && (
-          <MaterialCommunityIcons
-            name={props.icon}
-            size={props.size || 24} // Tamaño por defecto si no se proporciona
-            color={props.color || '#d85a77'} // Color por defecto si no se proporciona
-            style={styles.icon} // Clase de estilo para el ícono
-          />
-        )}
-        <Text style={[styles.title, props.textStyle]}>{props.title}</Text>
-        <Text style={[styles.textOne, props.textStyle]}>{props.textOne}</Text>
-        <Text style={[styles.textTwo, props.textStyle]}>{props.textTwo}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-}
+
+  export default function CustomButton(props) {
+    return (
+      <TouchableOpacity
+        onPress={props.onPress}
+        onLongPress={props.onLongPress}
+        style={[styles.button, props.buttonStyle]}
+      >
+        <View style={[styles.content, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+          {/* Texto de la severidad (en negrita) */}
+          <Text style={[styles.title, { flex: 1, textAlign: 'left', fontWeight: 'bold' }, props.textStyle]}>
+            {props.title} {/* Esto sería "Normal", "Leve", etc. */}
+          </Text>
+  
+          {/* Texto de la fecha (normal) */}
+          <Text style={[styles.textOne, { flex: 1, textAlign: 'center', fontWeight: 'normal' }, props.textStyle]}>
+            {props.textOne} {/* Esto sería la fecha */}
+          </Text>
+  
+          {/* Texto del resultado (normal) */}
+          <Text style={[styles.textTwo, { flex: 1, textAlign: 'right', fontWeight: 'normal' }, props.textStyle]}>
+            {props.textTwo} {/* Esto sería el resultado, por ejemplo, "0/27" */}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+  
+
 
 const styles = StyleSheet.create({
   button: {
