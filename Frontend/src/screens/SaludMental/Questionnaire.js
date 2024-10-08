@@ -3,6 +3,7 @@ import { FlatList, Modal, SafeAreaView, Text, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native'; // Importar useFocusEffect
 
 // Import the API URL from environment variables
 import { API_URL } from '@env';
@@ -48,85 +49,62 @@ function Questionnaire({ navigation }) {
    * *******************
    */
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-  
-        if (!token) {
-          console.error('No se encontró el token');
-          return;
-        }
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const token = await AsyncStorage.getItem('token');
+          if (!token) {
+            console.error('No se encontró el token');
+            return;
+          }
 
-        console.log(token)
-        console.log(" ")
-        
-        // Llamada para obtener el userId basado en el token
-        const userResponse = await axios.post(`${API_URL}/users/userid`, {
-          token: `${token}`
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`
+          const userResponse = await axios.post(`${API_URL}/users/userid`, {
+            token: `${token}`
+          }, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+
+          const userId = userResponse.data.userId;
+          if (!userId) {
+            console.error('No se encontró userId en la respuesta');
+            return;
           }
-        });
-       
-        const userId = userResponse.data.userId;
-        
-        console.log(userId)
-        console.log(" ")
-        if (!userId) {
-          console.error('No se encontró userId en la respuesta');
-          return;
-        }
-        console.log("hola")
-  
-        // Llamada para obtener los resultados del test por userId
-        const response = await axios.post(`${API_URL}/resultsTests/get-resultsTestUser/${userId}`, {
-          token: `${token}`
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`
+
+          const response = await axios.post(`${API_URL}/resultsTests/get-resultsTestUser/${userId}`, {
+            token: `${token}`
+          }, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+
+          const responseData = response.data;
+          const results = responseData.map((doc) => {
+            const { severity, date, total } = doc;
+            return {
+              id: doc._id,
+              severity,
+              dateData: date,
+              totalScore: `${total}/27`,
+            };
+          });
+
+          setResults(results);
+
+          if (results.length > 0) {
+            setLastTest(results[0].dateData);
           }
-        });
-        console.log("hola")
-        console.log(response)
-        // Asumiendo que la respuesta tiene la estructura adecuada
-        const responseData = response.data; // Obtén los datos de la respuesta
-        console.log(responseData)
-  
-        // Mapeo de los resultados del test
-        const results = responseData.map((doc) => {
-          const { severity, date, total } = doc;
-          const dateData = date// Formatea la fecha si es necesario
-          const totalScore = `${total}/27`;
-  
-          console.log('Gravedad:', severity);
-          console.log('Fecha:', dateData);
-          console.log('Puntuación total:', totalScore);
-  
-          return {
-            id: doc._id, // Suponiendo que _id es el identificador del documento
-            severity,
-            dateData,
-            totalScore,
-          };
-        });
-  
-        // Guardar los resultados en el estado
-        setResults(results);
-  
-        // Guardar la fecha del último test si existen resultados
-        if (results.length > 0) {
-          setLastTest(results[0].dateData); // Guardar la fecha del último test
+        } catch (error) {
+          console.error('Error al obtener los resultados:', error.response ? error.response.data : error.message);
         }
-      } catch (error) {
-        console.error('Error al obtener los resultados:', error.response ? error.response.data : error.message);
-      }
-    };
-  
-    fetchData(); // Llamar la función para obtener los datos
-  }, []); // Se ejecuta solo al montar el componente
-  
+      };
+
+      fetchData();
+    }, []) // Se ejecuta cada vez que la pantalla tiene foco
+  );
 
   // delete document function
   const deleteItem = () => {
