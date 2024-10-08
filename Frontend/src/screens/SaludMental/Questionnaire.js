@@ -59,7 +59,8 @@ function Questionnaire({ navigation }) {
         }
 
         console.log(token)
-  
+        console.log(" ")
+        
         // Llamada para obtener el userId basado en el token
         const userResponse = await axios.post(`${API_URL}/users/userid`, {
           token: `${token}`
@@ -70,20 +71,24 @@ function Questionnaire({ navigation }) {
         });
        
         const userId = userResponse.data.userId;
+        
         console.log(userId)
+        console.log(" ")
         if (!userId) {
           console.error('No se encontró userId en la respuesta');
           return;
         }
+        console.log("hola")
   
         // Llamada para obtener los resultados del test por userId
-        const response = await axios.post(`API_URL/resultsTests/get-resultsTestUser/${userId}`, {
+        const response = await axios.post(`${API_URL}/resultsTests/get-resultsTestUser/${userId}`, {
           token: `${token}`
         }, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
+        console.log("hola")
         console.log(response)
         // Asumiendo que la respuesta tiene la estructura adecuada
         const responseData = response.data; // Obtén los datos de la respuesta
@@ -267,7 +272,7 @@ function Questionnaire({ navigation }) {
           textRight="Ver todos"
         />
         <FlatList
-          data={results.slice(0, 5)}
+          data={results.slice(0, 10)}
           numColumns={1}
           renderItem={({ item }) => (
             <CustomButton

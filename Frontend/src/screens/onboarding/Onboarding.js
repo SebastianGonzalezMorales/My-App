@@ -14,9 +14,13 @@ const Onboarding = ({ navigation }) => {
   const slideRef = useRef(null);
 
   const viewableItemsChanged = useRef(({ viewableItems }) => {
-    setCurrentIndex(viewableItems[0].index);
+    console.log("Viewable Items: ", viewableItems);
+    if (viewableItems.length > 0) {
+      console.log("Current Index: ", viewableItems[0].index);
+      setCurrentIndex(viewableItems[0].index);
+    }
   }).current;
-
+  
   // La siguiente diapositiva debe estar al menos en un 50 % en la pantalla antes de que pueda cambiar.
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 

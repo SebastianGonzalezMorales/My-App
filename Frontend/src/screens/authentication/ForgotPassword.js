@@ -37,7 +37,7 @@ const handlePasswordRecovery = async () => {
     
     // Enviar la solicitud al backend
     const response = await axios.post(`${API_URL}/users/forgot-password`, { email: lowercaseEmail });
-    
+    console.log(response)
     // Manejar la respuesta del backend
     if (response.data.success) {
       alert(response.data.message); // Mensaje de éxito del backend
