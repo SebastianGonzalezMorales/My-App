@@ -10,6 +10,7 @@ export default StyleSheet.create({
   container: {
     backgroundColor: '#000C7B',
     flex: 1,
+
   },
   rowTwo: {
     backgroundColor: '#fff',
@@ -18,6 +19,65 @@ export default StyleSheet.create({
     flex: 1,
     paddingLeft: 30,
     paddingRight: 30,
+    marginBottom: 20,  // Espacio entre secciones
+  },
+
+
+  titleWhite: {
+    color: '#000C7B',
+    fontFamily: 'DoppioOne',
+    fontSize: 20,
+    paddingTop: 20,
+    paddingBottom: 10,  // Espacio entre el título y la siguiente sección
+    textAlign: 'left',  // Alineación a la izquierda
+  },
+
+  subtitleBlack: {
+    color: '#5c6169',
+    fontFamily: 'DoppioOne',
+    fontSize: 16,
+    paddingTop: 5,
+    textAlign: 'left',
+  },
+
+  // Contenedor exterior para el borde negro
+  outerContainer: {
+    width: 95,
+    height: 95,
+    borderRadius: 47.5,
+    borderWidth: 2,
+    borderColor: '#000C7B',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',  // Agregar sombra
+    shadowOffset: { width: 0, height: 4 },  // Desplazamiento de la sombra
+    shadowOpacity: 0.3,  // Opacidad de la sombra
+    shadowRadius: 4,  // Difusión de la sombra
+    elevation: 5,  // Para que funcione en Android
+    backgroundColor: '#fff',  // Fondo blanco para resaltar el botón
+    marginHorizontal: 10,   // Añadir espacio horizontal entre los botones
+    marginBottom: 20,  // Aumentar el espacio debajo del contenedor
+  },
+
+  // La imagen en sí
+  storyImage: {
+    width: '100%',  // La imagen ocupa todo el ancho del contenedor
+    height: '100%',  // La imagen ocupa todo el alto del contenedor
+    borderRadius: 50,  // Mantener la imagen redondeada dentro del contenedor blanco
+    resizeMode: 'cover',  // Ajustar la imagen sin distorsionar
+  },
+  // Contenedor de las historias
+  storiesContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flexWrap: 'wrap',  // Permite que las filas se ajusten
+    padding: 10,
+    marginBottom: 20,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginBottom: 80, //Aumentar el espacio entre filas
   },
 
   // row one
