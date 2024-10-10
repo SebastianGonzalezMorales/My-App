@@ -5,10 +5,15 @@ import Icon from 'react-native-vector-icons/Ionicons'; // O el tipo de ícono qu
 
 export default function AuthButton(props) {
   return (
-    <TouchableOpacity onPress={props.onPress} style={styles.button}>
+    <TouchableOpacity
+      onPress={props.onPress}
+      style={[styles.button, props.buttonStyle]} 
+      // Asegura que props.buttonStyle pueda sobrescribir el estilo predeterminado
+    >
       <View style={styles.buttonContent}>
-        <Icon name={props.iconName} size={30} color="#fff" style={styles.icon} />
-        <Text style={styles.text}>{props.text}</Text>
+        <Icon name={props.iconName} size={30} color={props.iconColor || "#fff"} style={styles.icon} />
+        <Text style={[styles.text, props.textStyle]}>{props.text}</Text>
+         {/* Asegura que props.textStyle también se aplique */}
       </View>
     </TouchableOpacity>
   );
@@ -17,7 +22,7 @@ export default function AuthButton(props) {
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    backgroundColor: '#000C7B',
+    backgroundColor: '#000C7B', // Color predeterminado que puede ser sobrescrito
     borderRadius: 10,
     height: 60,
     justifyContent: 'center',
@@ -29,7 +34,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    color: '#fff',
+    color: '#fff', // Color predeterminado del texto que puede ser sobrescrito
     fontFamily: 'DoppioOne',
     fontSize: 20,
     marginLeft: 20, // Espacio entre el ícono y el texto

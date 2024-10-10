@@ -11,9 +11,9 @@ import { Linking, NativeModules, Platform, SafeAreaView, ScrollView, Text, View,
 import { API_URL } from '@env';
   
   // components
-  import CustomButton from '../../components/buttons/CustomButton';
   import SmallFormButton from '../../components/buttons/SmallFormButton';
   import SettingsButton from '../../components/buttons/SettingsButton';
+  import AuthButton from '../../components/buttons/AuthButton';
   
   // customisation
   import GlobalStyle from '../../assets/styles/GlobalStyle';
@@ -181,19 +181,15 @@ import { API_URL } from '@env';
                  onPress={() => navigation.navigate('Notification')}
               /> */}
               
-              <CustomButton
-                buttonStyle={{
-                  backgroundColor: '#f7d8e3',
-                }}
-                
-                textStyle={{
-                  color: '#d85a77',
-                }}
-              
-                onPress={() => handleSignOut()}
-                title="Cerrar sesión"
-                icon="logout"
-              />
+              <AuthButton
+            onPress={handleSignOut}
+            text="Cerrar sesión"
+            iconName="log-out-outline"
+            iconColor="#d85a77" 
+            buttonStyle={{ backgroundColor: '#f7d8e3' }}  // Color personalizado para cerrar sesión
+            textStyle={{ color: '#d85a77' }}  // Personaliza el color del texto
+          />
+
             </View>
            </View> 
       
