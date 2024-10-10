@@ -33,10 +33,11 @@ export const onAuthStateChanged = async (setUser, setInitialising) => {
       },
     }); 
 
-    if (response.data.user) {
-      setUser(response.data.user); // Actualizar el estado con el usuario autenticado
+    if (response.data.message === 'Token válido') {
+      console.log(response.data.message)
+      setUser(true); // El token es  válido, el usuario está autenticado
     } else {
-      setUser(null); // Token inválido
+      setUser(null); // Token inválido, no está autenticado
     }
   } catch (error) {
     console.log('Error verificando la autenticación', error);
