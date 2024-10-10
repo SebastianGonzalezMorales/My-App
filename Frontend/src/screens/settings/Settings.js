@@ -11,6 +11,7 @@ import { Linking, NativeModules, Platform, SafeAreaView, ScrollView, Text, View,
 import { API_URL } from '@env';
   
   // components
+
   import SmallFormButton from '../../components/buttons/SmallFormButton';
   import SettingsButton from '../../components/buttons/SettingsButton';
   import AuthButton from '../../components/buttons/AuthButton';

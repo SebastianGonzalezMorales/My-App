@@ -1,6 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
+// Import the API URL from environment variables
+import { API_URL } from '@env';
+
 // Guardar el token JWT en AsyncStorage
  export const saveToken = async (token) => {
   try {
@@ -24,7 +27,7 @@ export const onAuthStateChanged = async (setUser, setInitialising) => {
 
     console.log(token)
     // Verificar el token con el backen
-   const response = await axios.get('http://192.168.1.8:3000/api/verifyToken', {
+   const response = await axios.get(`${API_URL}/users/verifyToken`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

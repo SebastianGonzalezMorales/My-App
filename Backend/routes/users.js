@@ -14,8 +14,11 @@ const {
     forgotPassword,
     changePassword,
     verifyResetToken,
-    getResetPasswordToken
+    getResetPasswordToken,
+    verifyTokenController
 } = require('../controllers/user');
+
+const  verifyToken  = require('../middlewares/verifyToken')
 
 // Rutas asociadas a cada controlador
 router.post('/login', loginUser);
@@ -32,5 +35,6 @@ router.post('/update-user', updateUser);
 router.post('/delete-user', deleteUser);
 router.post('/logout-user', logoutUser);
 router.get('/verificar', verifyEmail);
+router.get('/verifyToken', verifyTokenController, verifyToken);
 
 module.exports = router;
