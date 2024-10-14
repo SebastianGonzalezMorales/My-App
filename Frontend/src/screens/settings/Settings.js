@@ -1,11 +1,13 @@
 // react imports
 import { Linking, NativeModules, Platform, SafeAreaView, ScrollView, Text, View,
   } from 'react-native';
-  import React, { useEffect, useState } from 'react';
+  import React, { useEffect, useState, useContext } from 'react';
   import Icon from 'react-native-vector-icons/FontAwesome';
   import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
   import axios from 'axios';
   import AsyncStorage from '@react-native-async-storage/async-storage';
+
+  import { AuthContext } from '../../context/AuthContext';
  
   // Import the API URL from environment variables
 import { API_URL } from '@env';
@@ -20,6 +22,7 @@ import { API_URL } from '@env';
   import GlobalStyle from '../../assets/styles/GlobalStyle';
   
   function Settings({ navigation }) {
+    const { logout } = useContext(AuthContext);
 
     // states
     const [name, setName] = useState('');
@@ -48,27 +51,10 @@ import { API_URL } from '@env';
   
     // sign out function
     const handleSignOut = async () => {
-      try {
-        // Aquí puedes enviar una solicitud de logout a tu backend si es necesario
-    /*     await fetch('http://tu-backend.com/api/logout', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
- */
-        // Eliminar el token del almacenamiento local
-        await AsyncStorage.removeItem('token');
-        
-        // Redirigir al usuario a la pantalla de login
-        navigation.replace('Login');
-        console.log("Cierre de sesión exitoso");
-    } catch (error) {
-        console.error("Error al cerrar sesión:", error);
-    }
-
+      await logout();
+      navigation.replace('Login');
     };
+  
   
     // go to settings
     const { RNAndroidOpenSettings } = NativeModules;

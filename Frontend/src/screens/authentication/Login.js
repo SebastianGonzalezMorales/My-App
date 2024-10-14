@@ -1,10 +1,12 @@
 // react imports
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Svg, { Circle } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
+
+import { AuthContext } from '../../context/AuthContext';
 
 // Import the API URL from environment variables
 import { API_URL } from '@env';
@@ -19,6 +21,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AuthStyle from '../../assets/styles/AuthStyle';
 
 const Login = ({ navigation }) => {
+
+  const { login } = useContext(AuthContext);
+
   // states
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -46,29 +51,14 @@ const handleLogin = async (email, password) => {
     const lowercaseEmail = email.toLowerCase();
     const response = await axios.post(`${API_URL}/users/login`, { email: lowercaseEmail, password });
     
-    // Guarda el token en AsyncStorage
-    await AsyncStorage.setItem('token', response.data.token);
-
-    // Puedes usar también otros datos como el nombre o el email si lo necesitas
-    console.log(response.data.name);  // Nombre del usuario logueado
-    console.log(response.data.user);  // Email del usuario logueado
-
+    const { token } = response.data;
+    await login(token);
     navigation.replace('Home');
   } catch (error) {
-    // Verifica si el error tiene respuesta y un código de estado
-    if (error.response) {
-      if (error.response.status === 403) {
-        alert(error.response.data); // Muestra el mensaje de verificación
-      } else {
-        alert('Error al iniciar sesión. Por favor, verifica tus credenciales.');
-      }
-    } else {
-      alert('Error al iniciar sesión. Intenta nuevamente más tarde.');
-    }
-    console.log('Error @handleLogin:', error);
+    console.error('Error during login:', error);
+    alert('Error al iniciar sesión. Verifica tus credenciales.');
   }
 };
-
 
   
   /*

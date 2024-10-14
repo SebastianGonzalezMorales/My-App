@@ -1,13 +1,18 @@
 // React Imports
 
-import React, {useState, useEffect } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 // Navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import { NavigationContainer } from '@react-navigation/native';
+
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { AuthContext, AuthProvider } from './src/context/AuthContext';
+
+
 
 import { StatusBar } from 'expo-status-bar';
 
@@ -108,7 +113,8 @@ function Home() {
   );
 }
 
-export default function App() {
+const AppNavigator = () => {
+  const { userToken, isLoading } = useContext(AuthContext);
   //const [loading, setLoading] = useState(true);
   const [viewedOnboarding, setViewedOnboarding] = useState(false);
   const checkOnboarding = async () => {
@@ -167,74 +173,30 @@ export default function App() {
     return <ActivityIndicator size="large" color="#0000ff" />; // Indicador de carga
   }
   
- return (
+  return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* authentication */}
-        {/* {viewedOnboarding ? (
-          <Stack.Screen name="Login" component={Login} />
+        {!userToken ? (
+          <>
+            <Stack.Screen name="Onboarding" component={Onboarding} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+            <Stack.Screen name="ChangePassword" component={ChangePassword} />
+          </>
         ) : (
-          <Stack.Screen name="Onboarding" component={Onboarding} />
-        )} */}
-        {!viewedOnboarding ? ( <Stack.Screen name="Onboarding" component={Onboarding} options={{ gestureEnabled: false }}
-          />
-        ) : (
-          <></>
+          <>
+            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="Tests" component={Tests} />
+            <Stack.Screen name="Questionnaire" component={Questionnaire} />
+            <Stack.Screen name="Test" component={Test} />
+          </>
         )}
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ gestureEnabled: false }}
-        />
-        <Stack.Screen name="Register" component={Register} />
-
-        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-
-        <Stack.Screen name="ChangePassword" component={ChangePassword} />
-        {/* mood tracker */}
-       {/*  <Stack.Screen name="TrackMood" component={TrackMood} /> */}
- {/*        <Stack.Screen name="UpdateMood" component={UpdateMood} />
-        <Stack.Screen name="MoodStats" component={MoodStats} />
-        <Stack.Screen
-          name="MoodHistory"
-          component={MoodHistory}
-          options={{
-            presentation: 'modal',
-            animationTypeForReplace: 'push',
-            animation: 'slide_from_bottom',
-          }}
-        /> */}
-
-
-        
-        {/* questionnaire */}
-         <Stack.Screen name="Tests" component={Tests} />
-         <Stack.Screen name="Questionnaire" component={Questionnaire} />
-         <Stack.Screen name="Test" component={Test} />
- {/*        <Stack.Screen
-          name="QuestionnaireStats"
-          component={QuestionnaireStats}
-        /> */}
-       {/* <Stack.Screen name="ResultView" component={ResultView} />
-        <Stack.Screen
-          name="QuestionnaireHistory"
-          component={QuestionnaireHistory}
-          options={{
-            presentation: 'modal',
-            animationTypeForReplace: 'push',
-            animation: 'slide_from_bottom',
-          }}
-        /> */}
-
-
-        {/* settings */}
-     {/*    <Stack.Screen name="EditProfile" component={EditProfile} />
-        <Stack.Screen name="Counselling" component={Counselling} /> */}
-        <Stack.Screen name="Home" component={Home} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
+
 
 const styles = StyleSheet.create({
   container: {
@@ -244,3 +206,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppNavigator />
+    </AuthProvider>
+  );
+}
