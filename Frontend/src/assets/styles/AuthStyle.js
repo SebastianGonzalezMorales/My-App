@@ -75,7 +75,7 @@ export default StyleSheet.create({
   changeScreenText: {
     color: '#85888e',
     fontFamily: 'Actor',
-    fontSize: 12,
+    fontSize: 13,
     right: 5,
     paddingBottom: 20
   },

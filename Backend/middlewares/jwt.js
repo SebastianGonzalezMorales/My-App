@@ -33,6 +33,8 @@ const authJwt = jwt({
                             `${api}/tips`,
                             `${api}/users/login`,
                             `${api}/users/register`,    
+                            { url: new RegExp(`${api}/users/[^/]+/accept-policy`), methods: ['POST', 'OPTIONS'] },
+
                         
                     ]
                 })

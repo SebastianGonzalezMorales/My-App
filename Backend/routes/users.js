@@ -15,7 +15,8 @@ const {
     changePassword,
     verifyResetToken,
     getResetPasswordToken,
-    verifyTokenController
+    verifyTokenController,
+    acceptPrivacyPolicy
 } = require('../controllers/user');
 
 const  verifyToken  = require('../middlewares/verifyToken')

@@ -14,6 +14,6 @@ const styles = StyleSheet.create({
   text: {
     color: '#5da5a9',
     fontFamily: 'Actor',
-    fontSize: 12,
+    fontSize: 13,
   },
 });

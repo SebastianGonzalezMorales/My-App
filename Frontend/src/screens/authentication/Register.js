@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Svg, { Circle } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import the API URL from environment variables
 import { API_URL } from '@env';
@@ -29,11 +30,18 @@ const Register = ({ navigation }) => {
   const [birthdate, setBirthdate] = useState(''); 
   const [carrera, setCarrera] = useState(''); 
   const [passwordError, setPasswordError] = useState('');
+  const [policyAccepted, setPolicyAccepted] = useState(false);
 
   /*
    * *******************
    * **** Functions ****
    * *******************
+   */
+
+   /*
+   * ***********************
+   * **** Recuperación de AsyncStorage ****
+   * ***********************
    */
 
   const handleBirthdateChange = (text) => {
@@ -188,7 +196,7 @@ const Register = ({ navigation }) => {
 
 
   // sign up function
-  const handleSignUp = async (fullName, rut, email, password, confirmPassword, birthdate, carrera) => {
+  const handleSignUp = async (fullName, rut, email, password, confirmPassword, birthdate, carrera ) => {
     try {
         console.log(fullName)
         console.log(rut)
@@ -197,18 +205,22 @@ const Register = ({ navigation }) => {
         console.log(confirmPassword)
         console.log(birthdate)
         console.log(carrera)
+   
 
-        // Verificar que todos los campos estén completos
-   /*  if (!fullName || !rut || !email || !password || !confirmPassword || !birthdate || !carrera) {
-      alert('Por favor, completa todos los campos.');
-      return;
-    } */
+         // Verifica si se aceptó la política
+    const accepted = await AsyncStorage.getItem('policyAccepted');
+    console.log('Policy Accepted:', accepted); // Verificar en consola
 
-      // Validar el RUT
-      if (!validateRut(rut)) {
+    if (accepted !== 'true') {
+      alert('Debes aceptar la política de privacidad para continuar.');
+      return; // Detenemos el registro si no se aceptó la política
+    }
+
+      // Validar el RUT 
+    if (!validateRut(rut)) {
         alert('RUT inválido. Por favor, verifica el RUT ingresado.');
         return;
-      }
+    }
 
        // Validar el email
     if (!validateEmail(email)) {
@@ -234,7 +246,8 @@ const Register = ({ navigation }) => {
         password: password,
         confirmPassword: confirmPassword,
         birthdate: birthdate,
-        carrera: carrera
+        carrera: carrera,
+        policyAccepted: accepted,
       };
 
        // Realizar la solicitud POST al backend

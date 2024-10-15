@@ -100,7 +100,7 @@ const isStrongPassword = (password) => {
 
 const registerUser = async (req, res) => {
     try {
-        const { name, email, rut, birthdate, carrera, password, confirmPassword } = req.body;
+        const { name, email, rut, birthdate, carrera, password, confirmPassword, policyAccepted } = req.body;
         // Convertir el email a minúsculas antes de guardarlo
         const normalizedEmail = email.toLowerCase();
 
@@ -121,6 +121,10 @@ const registerUser = async (req, res) => {
         if (!birthdateRegex.test(birthdate)) {
             return res.status(400).send('El formato de la fecha de nacimiento debe ser YYYY-MM-DD.');
         }
+        if (!policyAccepted) {
+            return res.status(400).send('Debes aceptar la política de privacidad para registrarte.');
+          }
+      
 
         // Descomponer la fecha en año, mes y día
         const [year, month, day] = birthdate.split('-').map(Number);
@@ -162,7 +166,9 @@ const registerUser = async (req, res) => {
             birthdate,
             carrera,
             passwordHash: bcrypt.hashSync(password, 8),
-            verificationToken
+            verificationToken,
+            policyAccepted: true,
+            policyAcceptedAt: new Date(),
         });
 
         const savedTempUser = await tempUser.save();
@@ -227,13 +233,40 @@ const verifyEmail = async (req, res) => {
             birthdate: tempUser.birthdate,
             carrera: tempUser.carrera,
             passwordHash: tempUser.passwordHash,
-            verified: true
+            verified: true,
+            policyAccepted: true,
+            policyAcceptedAt: new Date(),
         });
 
         await user.save();
         console.log('New user saved:', user);
 
-        await TempUser.deleteOne({ verificationToken: token });
+        // Envolver la eliminación del usuario temporal en un bloque try-catch
+        try {
+            const deleteResult = await TempUser.deleteOne({ verificationToken: token });
+
+            if (deleteResult.deletedCount === 0) {
+                console.error('Failed to delete temporary user');
+                return res.status(500).send(`
+                    <html>
+                        <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
+                            <h1 style="font-size: 32px; color: #000C7B;">Hubo un problema al eliminar el usuario temporal. Por favor, intenta nuevamente.</h1>
+                        </body>
+                    </html>
+                `);
+            }
+
+            console.log('Temporary user deleted successfully');
+        } catch (error) {
+            console.error('Error during temporary user deletion:', error.message);
+            return res.status(500).send(`
+                <html>
+                    <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
+                        <h1 style="font-size: 32px; color: #000C7B;">Error al eliminar el usuario temporal. Intenta nuevamente más tarde.</h1>
+                    </body>
+                </html>
+            `);
+        }
 
         return res.send(`
             <html>
@@ -253,7 +286,6 @@ const verifyEmail = async (req, res) => {
         `);
     }
 };
-
 
 module.exports = registerUser;
 
@@ -525,6 +557,7 @@ const getResetPasswordToken = async (req, res) => {
 };
 
 
+
 module.exports = {
     loginUser,
     getUserData,
@@ -540,5 +573,6 @@ module.exports = {
     changePassword,
     verifyResetToken,
     getResetPasswordToken,
-    verifyTokenController
+    verifyTokenController,
+ 
 };

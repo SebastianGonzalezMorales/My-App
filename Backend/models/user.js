@@ -9,63 +9,56 @@ const usersSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
-     }, 
+    },
     email: {
-       type: String,
-       required: true,
-       unique: true
+        type: String,
+        required: true,
+        unique: true
     },
     passwordHash: {
         type: String,
         required: true,
     },
     birthdate: {
-         type: Date,
+        type: Date,
         required: true,
-     },
+    },
     carrera: {
         type: String,
         required: true,
-   }, 
-   isAdmin: {
+    },
+    isAdmin: {
         type: Boolean,
         default: false,
-    }, 
-    verified: { 
-        type: Boolean,
-        default: false 
     },
-    canResetPassword: { 
-        type: Boolean, 
+    verified: {
+        type: Boolean,
+        default: false
+    },
+    canResetPassword: {
+        type: Boolean,
         default: false // Para controlar si el usuario puede restablecer la contraseña
     },
-    resetPasswordToken: { 
+    resetPasswordToken: {
         type: String,
-        default: null 
+        default: null
     },
-    resetPasswordExpires: { 
+    resetPasswordExpires: {
         type: Date,
+        default: null
+    },
+
+    // Nuevos campos para la política de privacidad
+    policyAccepted: { 
+        type: Boolean, 
+        default: false 
+    },
+    policyAcceptedAt: { 
+        type: Date, 
         default: null
     }
 });
 
-
-/*     street: {
-        type: String,
-        default: ''
-    },
-    apartment: {
-        type: String,
-        default: ''
-    },
-    zip: {
-        type: String,
-        default: ''
-    },
-    city: {
-        type: String,
-        default: ''
-    }  */
 
 
 exports.User = mongoose.model('User', usersSchema);

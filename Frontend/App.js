@@ -18,6 +18,7 @@ import { StatusBar } from 'expo-status-bar';
 
 //Screens
 import Onboarding from './src/screens/onboarding/Onboarding';
+import Policy from './src/screens/onboarding/Policy';
 import HomeScreen from './src/components/buttons/HomeScreen';
 
 import Login from './src/screens/authentication/Login';
@@ -179,6 +180,7 @@ const AppNavigator = () => {
         {!userToken ? (
           <>
             <Stack.Screen name="Onboarding" component={Onboarding} />
+            <Stack.Screen name="Policy" component={Policy} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
             <Stack.Screen name="ForgotPassword" component={ForgotPassword} />

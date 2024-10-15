@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }) => {
       await AsyncStorage.setItem('token', token);
       setUserToken(token);
     } catch (error) {
+      console.log("hola")
       console.error('Error during login:', error);
     }
   };
