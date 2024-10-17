@@ -197,8 +197,10 @@ const handleLogin = async (email, password) => {
             />
           </View>
         
-          <TouchableOpacity onPress={clearOnboarding} style={{ marginTop: 20 }}>
-            <Text>Clear onboarding</Text>
+          <TouchableOpacity onPress={() => navigation.replace('Onboarding')}>
+            
+            
+            <Text>Conoce las funcionalidades</Text>
           </TouchableOpacity>
         </View>
       </View>
