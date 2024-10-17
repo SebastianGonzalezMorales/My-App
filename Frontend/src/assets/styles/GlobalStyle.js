@@ -12,7 +12,7 @@ export default StyleSheet.create({
     flex: 1,
 
   },
-  rowTwo: {
+/*   rowTwo: {
     backgroundColor: '#fff',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -20,6 +20,16 @@ export default StyleSheet.create({
     paddingLeft: 30,
     paddingRight: 30,
     marginBottom: 20,  // Espacio entre secciones
+  },
+ */
+
+  rowTwo: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    flex: 1,
+    paddingLeft: 30,
+    paddingRight: 30,
   },
 
 

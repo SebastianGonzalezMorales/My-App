@@ -2,13 +2,10 @@ const mongoose = require('mongoose');
 
 const moodStateSchema = new mongoose.Schema({
 
-    user_id: {              
-        type: String,
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',  
         required: true,
-     },
-    date: {
-       type: Date,
-       required: true,
     },
     mood_state: {
         type: String,
@@ -18,10 +15,24 @@ const moodStateSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    Activities: {              
+        type: [String], 
+        required: false,
+     },
+    title: {              
+        type: String,
+        required: false,
+     },
     commentarios: {
         type: String,
         required: false,
-    }
+    },
+    date: {
+       type: Date,
+       default: Date.now, 
+       required: true,
+    },
+
 })
 
 

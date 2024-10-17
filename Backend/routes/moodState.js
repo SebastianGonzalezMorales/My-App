@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { getMoodStates, postMoodState } = require('../controllers/moodState');
-const authJwt = require('../middlewares/jwt');
-const isAuthenticated = require('../middlewares/authorization');
+const { getMoodStates, postMoodState, getMoodStatesByUserId } = require('../controllers/moodState');
 
 // Rutas asociadas a cada controlador
-/* router.post('/post-moodState', authJwt, isAuthenticated, postMoodState);
-router.get('/get-moodState', isAuthenticated, getMoodStates);
-//router.post('/post-moodState', postMoodState); */
+router.get('/get-moodState', getMoodStates);
+router.post('/post-moodState', postMoodState); 
+router.get('/get-MoodStatesByUserId', getMoodStatesByUserId)
 
 module.exports = router;

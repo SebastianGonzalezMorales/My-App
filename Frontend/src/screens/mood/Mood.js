@@ -1,7 +1,8 @@
 // react imports
 import { FlatList, Modal, SafeAreaView, Text, View, ScrollView } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Image, TouchableOpacity, Linking, StyleSheet } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 // Import the API URL from environment variables
 import { API_URL } from '@env';
@@ -30,6 +31,13 @@ const Mood = ({ navigation }) => {
   const [infoModalVisible, setInfoModalVisible] = useState(false);
   const [selectedId, setSelectedId] = useState('');
   const [motivationalQuote, setMotivationalQuote] = useState('');
+
+    // Llama a la función fetchData cuando la pantalla obtiene el enfoque
+    useFocusEffect(
+      useCallback(() => {
+        fetchData();  // Llama a la función que recupera los datos
+      }, [])
+    );
   /*
    * *******************
    * **** Functions ****
@@ -41,23 +49,23 @@ const Mood = ({ navigation }) => {
     Linking.openURL(url);
   };
 
-  // transfer document id to the next screen
   const startTracking = async (mood, value) => {
-    const selectedMood = userRef.collection('mood').doc();
-    // store id of document into documentId
-    const documentId = selectedMood.id;
-    await selectedMood.set({
-      mood,
-      value,
-    });
-
-    /* // pass the documentId to the following page
-    navigation.navigate('TrackMood', { documentId }); */
-
-    // delay promise execution
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log('New document created');
+    try {
+      // Navega a la pantalla `MoodTrack` pasando el estado de ánimo y el valor
+      navigation.navigate('MoodTrack', {
+        mood: mood,   // Estado de ánimo seleccionado
+        value: value  // Valor de la intensidad del estado de ánimo
+      });
+  
+      // Simulación de retraso 
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      console.log('Navegando a MoodTrack con mood:', mood, 'y valor:', value);
+  
+    } catch (error) {
+      console.error('Error al iniciar el tracking del estado de ánimo:', error);
+    }
   };
+  
 
   // hook to fetch user's data
   /*  useEffect(() => {
@@ -72,28 +80,48 @@ const Mood = ({ navigation }) => {
    }, []);
   */
   // hook to fetch all documents
-  useEffect(() => {
-    const fetchData = async () => {
-      /*       // onSnapshot method to listen to real time updates
-            moodRef.orderBy('created', 'desc').onSnapshot((querySnapshot) => {
-              const moods = [];
-              querySnapshot.forEach((doc) => {
-                const { mood, created } = doc.data();
-                const date = created.toDate().toString().slice(4, 10);
-                const time = created.toDate().toString().slice(16, 21);
-                moods.push({
-                  id: doc.id, // document id
-                  mood,
-                  date,
-                  time,
-                });
-              });
-              setMoods(moods);
-            }); */
-    };
-
-    fetchData(); // call the async function to fetch data
-  }, []);
+ 
+  const fetchData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        const response = await axios.get(`${API_URL}/moodState/get-MoodStatesByUserId`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        
+        if (response.data.data.length === 0) {
+          // Si la lista está vacía, puedes mostrar un mensaje en la UI
+          console.log('No se encontraron estados de ánimo para este usuario.');
+        } else {
+          // Mapear los datos obtenidos
+          const moodsData = response.data.data.map((item) => {
+            const date = new Date(item.date).toLocaleDateString();
+            const time = new Date(item.date).toLocaleTimeString();
+    
+            return {
+              id: item._id,
+              mood: item.mood_state,
+              date,
+              time,
+            };
+          });
+  
+          // Actualizar el estado con los estados de ánimo formateados
+          setMoods(moodsData);
+        }
+      } else {
+        console.log('No se encontró el token. Por favor, inicia sesión.');
+      }
+    } catch (error) {
+      console.error('Error al obtener los estados de ánimo:', error);
+    }
+  };
+  
+    useEffect(() => {
+      fetchData();
+    }, []);
 
   // delete document function
   const deleteItem = () => {
@@ -121,6 +149,7 @@ const Mood = ({ navigation }) => {
         const { mensaje, autor } = response.data;
         console.log(`Mensaje: ${mensaje}`);
         console.log(`Autor: ${autor}`);
+
         setMotivationalQuote(`${mensaje} - ${autor}`);
       } else {
         console.log('No se encontró el token. Por favor, inicia sesión.');
@@ -158,7 +187,7 @@ const Mood = ({ navigation }) => {
           // Actualiza el estado con el nombre
           setName(userName);
           // Para verificar en la consola
-          console.log('User name:', userName);
+       //   console.log('User name:', userName);
 
         } else {
           console.log('No se encontró el token. Por favor, inicia sesión.');
@@ -186,7 +215,7 @@ const Mood = ({ navigation }) => {
        */}
 
       {/* info modal */}
-      <ScrollView>
+   
         <Modal
           visible={infoModalVisible}
           transparent={true}
@@ -260,7 +289,7 @@ const Mood = ({ navigation }) => {
        */}
         {/* Espacio hasta la frase del día  */}
         <View style={{ height: 301 }}>
-          <Text style={GlobalStyle.welcomeText}>Hola, {name} 😀 !</Text>
+          <Text style={GlobalStyle.welcomeText}>Hola, {name}  !</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={[GlobalStyle.subtitle, { textAlign: 'left' }]}> Cómo te sientes ahora mismo ?</Text>
 
@@ -306,107 +335,65 @@ const Mood = ({ navigation }) => {
        * ***** Section 2 *****
        * *********************
        */}
+        
         <View style={GlobalStyle.rowTwo}>
-          <Text style={[GlobalStyle.titleWhite, { textAlign: 'left' }]}>Novedades UV</Text>
-          <Text style={[GlobalStyle.subtitleBlack, { textAlign: 'left' }]}>
-            Mantente informado sobre los eventos de la UV a través de nuestras redes sociales.
-          </Text>
-          {/* Sección Vida Estudiantil y Apoyo */}
-          <Text style={[GlobalStyle.titleWhite, { textAlign: 'left' }]}>Vida Estudiantil y Apoyo</Text>
-          <View style={styles.storiesContainer}>
-            <View style={styles.row}>
-              <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/daeuvalpo/')}>
-                <View style={GlobalStyle.outerContainer}>
-                  <Image
-                    source={require('./../../../assets/Instagram/DaeUV.jpeg')}
-                    style={GlobalStyle.storyImage}
-                  />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/buentratoyconvivenciauv/')}>
-                <View style={GlobalStyle.outerContainer}>
-                  <Image
-                    source={require('./../../../assets/Instagram/BuenTratoYConvivenciaUV.jpeg')}
-                    style={GlobalStyle.storyImage}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.row}>
-              <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/conectadosuv_dae/')}>
-                <View style={GlobalStyle.outerContainer}>
-                  <Image
-                    source={require('./../../../assets/Instagram/ConectadosUV1.png')}
-                    style={GlobalStyle.storyImage}
-                  />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/viveuv.saludable/')}>
-                <View style={GlobalStyle.outerContainer}>
-                  <Image
-                    source={require('./../../../assets/Instagram/ViveUVSaludable.png')}
-                    style={GlobalStyle.storyImage}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Sección Institucional y Universitario */}
-          <Text style={GlobalStyle.titleWhite}>Institucional y Universitario</Text>
-          <View style={styles.storiesContainer}>
-            <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/uvalpochile/')}>
-              <View style={GlobalStyle.outerContainer}>
-
-                <Image
-                  source={require('./../../../assets/Instagram/UValpoChile.jpeg')}
-                  style={GlobalStyle.storyImage}
-                />
-
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/federacionuv/')}>
-              <View style={GlobalStyle.outerContainer}>
-
-                <Image
-                  source={require('./../../../assets/Instagram/FeUV.png')}
-                  style={GlobalStyle.storyImage}
-                />
-
-              </View>
-            </TouchableOpacity>
-          </View>
-          {/* Sección Deporte y Recreación */}
-          <Text style={GlobalStyle.titleWhite}>Deporte y Recreación</Text>
-          <View style={styles.storiesContainer}>
-            <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/deportesyrecreacionuv/?hl=es')}>
-              <View style={GlobalStyle.outerContainer}>
-
-                <Image
-                  source={require('./../../../assets/Instagram/Druv.jpeg')}
-                  style={GlobalStyle.storyImage}
-                />
-
-              </View>
-            </TouchableOpacity>
-          </View>
-          {/* Sección Ciencia y Conocimiento */}
-          <Text style={GlobalStyle.titleWhite}>Ciencia y Conocimiento</Text>
-          <View style={styles.storiesContainer}>
-            <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/cienciaabiertauv/')}>
-              <View style={GlobalStyle.outerContainer}>
-
-                <Image
-                  source={require('./../../../assets/Instagram/CienciaAbiertaUV.jpeg')}
-                  style={GlobalStyle.storyImage}
-                />
-
-              </View>
-            </TouchableOpacity>
-          </View>
+        <View style={GlobalStyle.statsContainer}>
+          <Text style={GlobalStyle.statsTitle}>Estadísticas</Text>
+          <StatsButton onPress={() => navigation.navigate('MoodStats')} />
         </View>
-      </ScrollView>
+        <HistoryButton
+          onPress={() => navigation.navigate('MoodHistory')}
+          textLeft="Recientes"
+          textRight="Ver todo"
+        />
+<FlatList
+  data={moods.slice(0, 5)}
+  numColumns={1}
+  renderItem={({ item }) => (
+    <CustomButton
+      buttonStyle={{
+        backgroundColor:
+          item.mood === 'Mal'
+            ? '#f7d8e3'
+            : item.mood === 'Regular'
+            ? '#d8eef7'
+            : item.mood === 'Bien'
+            ? '#d8f7ea'
+            : '#f7e7d8',
+      }}
+      textStyle={{
+        color:
+          item.mood === 'Mal'
+            ? '#d85a77'
+            : item.mood === 'Regular'
+            ? '#238bdf'
+            : item.mood === 'Bien'
+            ? '#109f5c'
+            : '#af7b56',
+      }}
+      // En lugar de mostrar texto, mostramos emojis
+      title={
+        item.mood === 'Mal'
+          ? '😞'
+          : item.mood === 'Regular'
+          ? '🙂'
+          : item.mood === 'Bien'
+          ? '😊'
+          : '😃' // Puedes añadir más casos si tienes más estados de ánimo
+      }
+              textOne={item.date}   
+              textTwo={item.time}
+              onLongPress={() => (
+                setModalVisible(true), setSelectedId(item.id) // set id as the document id
+              )}
+              onPress={() => {
+                navigation.navigate('UpdateMood', { documentId: item.id });
+              }}
+            />
+          )}
+        />
+      </View>
+
     </SafeAreaView>
   );
 };
