@@ -42,6 +42,7 @@ import SaludMental from './src/screens/SaludMental/SaludMental';
 import Tests from './src/screens/SaludMental/Tests';
 import Test from './src/screens/SaludMental/Test';
 import MoodTrack from './src/screens/mood/MoodTrack';
+import QuestionnaireStats from './src/screens/SaludMental/QuestionnaireStats';
 
 const Tab = createBottomTabNavigator(); // create tab navigator method
 const Stack = createNativeStackNavigator(); // create stack navigator method
@@ -193,6 +194,8 @@ const AppNavigator = () => {
             <Stack.Screen name="Tests" component={Tests} />
             <Stack.Screen name="Questionnaire" component={Questionnaire} />
             <Stack.Screen name="Test" component={Test} />
+
+            <Stack.Screen name="QuestionnaireStats" component={QuestionnaireStats} />
 
             <Stack.Screen name="MoodTrack" component={MoodTrack} />
           </>
