@@ -43,6 +43,8 @@ function Questionnaire({ navigation }) {
   const [selectedId, setSelectedId] = useState('');
   const [visible, setVisble] = useState(false);
 
+  const [graveCount, setGraveCount] = useState(0);  // Estado para contar los resultados graves
+
   /*
    * *******************
    * **** Functions ****
@@ -92,6 +94,10 @@ function Questionnaire({ navigation }) {
             };
           });
 
+            // Contar cuántos resultados tienen severidad "Grave"
+            const graveResults = results.filter(result => result.severity === 'Grave');
+            setGraveCount(graveResults.length);  // Guardar el número de resultados graves
+
           setResults(results);
 
           if (results.length > 0) {
@@ -131,6 +137,67 @@ function Questionnaire({ navigation }) {
        * ***** Modals *****
        * ******************
        */}
+
+{/* Mostrar alerta si tiene 4 o más resultados graves */}
+{/* Mostrar alerta si tiene 4 o más resultados graves */}
+{/* Mostrar alerta si tiene 4 o más resultados graves */}
+{graveCount >= 2 && (
+  <View style={{ 
+    padding: 15, 
+    backgroundColor: '#fff3e0',  // Fondo claro
+    borderRadius: 12, 
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: '#ffd699',  // Borde rojo claro
+  }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <MaterialCommunityIcons 
+        name="alert-circle-outline" 
+        size={16}  
+        color="#e53935"  // Rojo más prominente
+        style={{ marginRight: 8 }}
+      />
+      <Text style={{ 
+        color: '#e53935',  // Título en rojo
+        fontWeight: 'bold', 
+        fontSize: 16, 
+        lineHeight: 22,  
+        flex: 1 
+      }}>
+        Atención
+      </Text>
+      <MaterialCommunityIcons 
+        name="close" 
+        size={16}  
+        color="#e53935"  // Color rojo
+        onPress={() => setGraveCount(0)}  // Oculta el mensaje al presionar
+      />
+    </View>
+
+    <Text style={{ 
+      color: '#e53935',  // Texto principal en rojo
+      fontSize: 15,  
+      lineHeight: 22,  
+      textAlign: 'justify', 
+      marginTop: 8,
+      fontWeight: 'bold'
+    }}>
+      Hemos detectado que podrías estar atravesando una situación difícil.
+    </Text>
+    
+    <Text style={{ 
+      color: '#333',  // Texto secundario en negro
+      fontSize: 14,  
+      lineHeight: 22,  
+      textAlign: 'justify', 
+      marginTop: 5
+    }}>
+      Por favor, envíanos un correo a <Text style={{ fontWeight: 'bold' }}>dae@uv.cl</Text>, indicando tu teléfono. También puedes llamarnos o escribirnos un WhatsApp al +569 68301655 de Lunes a Viernes de 8:30 a 17:30 horas.
+    </Text>
+  </View>
+)}
+
+
 
       {/* modal one - questionnaire history */}
       <GestureRecognizer onSwipeDown={() => setSeeAllModalVisible(false)}>
@@ -219,7 +286,7 @@ function Questionnaire({ navigation }) {
       <View style={{ height: 290 }}>
         <Text style={GlobalStyle.welcomeText}>Test PHQ-9 </Text>
         <Text style={GlobalStyle.subtitle}>Test de depresión</Text>
-        <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>
+        <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>
         El cuestionario PHQ-9 es una herramienta que se utiliza para medir la gravedad de la depresión a 
         través de nueve preguntas. Ayuda a identificar a las personas que pueden requerir una evaluación 
         o tratamiento adicional para la depresión.
