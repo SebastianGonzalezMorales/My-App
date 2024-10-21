@@ -556,6 +556,38 @@ const getResetPasswordToken = async (req, res) => {
     }
 };
 
+//Controlador de prueba, para verificar que decodigicar token.
+const decodeToken = (req, res) => {
+    const { token } = req.body;
+
+    if (!token) {
+        return res.status(400).json({ message: 'Token no proporcionado' });
+    }
+
+    const secret = process.env.secret;
+    let decoded;
+
+    // Intentar verificar el token para ver si ha expirado
+    try {
+        jwt.verify(token, secret);
+        // Si la verificación es exitosa, decodificar el token normalmente
+        decoded = jwt.decode(token);
+        return res.status(200).json({ message: 'Token válido', decoded });
+    } catch (error) {
+        if (error.name === 'TokenExpiredError') {
+            // Decodificar el token sin verificarlo si ha expirado
+            decoded = jwt.decode(token);
+            return res.status(400).json({
+                message: 'Token expirado',
+                decoded
+            });
+        } else {
+            // Cualquier otro error
+            return res.status(400).json({ message: 'Token inválido', error: error.message });
+        }
+    }
+};
+
 
 
 module.exports = {
@@ -574,5 +606,5 @@ module.exports = {
     verifyResetToken,
     getResetPasswordToken,
     verifyTokenController,
- 
+    decodeToken  
 };

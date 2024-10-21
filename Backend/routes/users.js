@@ -16,7 +16,8 @@ const {
     verifyResetToken,
     getResetPasswordToken,
     verifyTokenController,
-    acceptPrivacyPolicy
+    acceptPrivacyPolicy,
+    decodeToken
 } = require('../controllers/user');
 
 const  verifyToken  = require('../middlewares/verifyToken')
@@ -37,5 +38,6 @@ router.post('/delete-user', deleteUser);
 router.post('/logout-user', logoutUser);
 router.get('/verificar', verifyEmail);
 router.get('/verifyToken', verifyTokenController, verifyToken);
+router.get('/decodeToken', decodeToken);
 
 module.exports = router;
