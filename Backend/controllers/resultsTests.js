@@ -1,4 +1,4 @@
-const { ResultsTests } = require('../models/resultsTests'); // Asegúrate de ajustar la ruta según tu estructura de carpetas
+const { ResultsTests }  = require('../models/resultsTests'); // Asegúrate de ajustar la ruta según tu estructura de carpetas
 const mongoose = require('mongoose');
 const { User } = require('../models/user');
 
@@ -57,6 +57,42 @@ const getResultsTestsByUserId = async (req, res) => {
 };
 
 
+const getResultsTestByMonth = async (req, res) => {
+  try {
+    const userId = req.user._id; // Asigna el ID del usuario autenticado
+    const { month } = req.query;
+
+    console.log('User ID autenticado:', userId); // Verifica el userId
+
+    if (!month || !/^\d{4}-\d{2}$/.test(month)) {
+      return res.status(400).json({ message: 'Formato de mes inválido. Use YYYY-MM.' });
+    }
+
+    // Crear el rango de fechas para el mes especificado
+    const startDate = new Date(`${month}-01T00:00:00Z`);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);
+
+    // Consulta en la base de datos
+    const results = await ResultsTests.find({
+      userId: userId, // Filtra por el userId correcto
+      created: { $gte: startDate, $lt: endDate }
+    }).sort({ created: 1 });
+
+    // Verifica si hay resultados
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'No se encontraron resultados para el mes especificado.' });
+    }
+
+    // Retorna los resultados si se encuentran
+    res.status(200).json(results);
+  } catch (err) {
+    console.error('Error al obtener resultados:', err.message); // Log para errores
+    res.status(500).json({ message: 'Error al obtener resultados', error: err.message });
+  }
+};
+
+
 // Obtener todos los resultados de tests
 const getAllResultsTests = async (req, res) => {
   try {
@@ -83,10 +119,13 @@ const getResultTestById = async (req, res) => {
   }
 };
 
+
+
 // Exportar los controladores
 module.exports = {
   createResultTest,
   getResultsTestsByUserId,
   getAllResultsTests,
   getResultTestById,
+  getResultsTestByMonth
 };

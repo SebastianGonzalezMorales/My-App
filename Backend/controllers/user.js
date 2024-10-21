@@ -1,8 +1,10 @@
-const { User } = require('../models/user');
+const User  = require('../models/user');
 const { TempUser } = require('../models/tempUser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer'); // Para enviar correos
+
+
 
 
 const verifyTokenController = (req, res) => {
@@ -590,6 +592,7 @@ const decodeToken = (req, res) => {
 
 
 
+
 module.exports = {
     loginUser,
     getUserData,
@@ -606,5 +609,5 @@ module.exports = {
     verifyResetToken,
     getResetPasswordToken,
     verifyTokenController,
-    decodeToken  
+    decodeToken
 };
