@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwtDecode from 'jwt-decode';
 
 export const AuthContext = createContext();
 
@@ -8,17 +9,35 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const loadToken = async () => {
+    const checkToken = async () => {
+      setIsLoading(true);
       try {
         const token = await AsyncStorage.getItem('token');
-        if (token) setUserToken(token);
+
+        if (token) {
+          console.log(" ")
+          console.log('Token:', token);
+          const decodedToken = jwtDecode(token);
+          console.log('Decoded Token:', decodedToken);
+        
+          const currentTime = Math.floor(Date.now() / 1000);
+          if (decodedToken.exp < currentTime) {
+            await AsyncStorage.removeItem('token');
+            setUserToken(null);
+          } else {
+            setUserToken(token);
+          }
+        }
+        
       } catch (error) {
-        console.error('Error loading token:', error);
+        console.error('Error al verificar el token:', error);
+        setUserToken(null);
       } finally {
         setIsLoading(false);
       }
     };
-    loadToken();
+
+    checkToken();
   }, []);
 
   const login = async (token) => {
@@ -26,8 +45,7 @@ export const AuthProvider = ({ children }) => {
       await AsyncStorage.setItem('token', token);
       setUserToken(token);
     } catch (error) {
-      console.log("hola")
-      console.error('Error during login:', error);
+      console.error('Error durante el login:', error);
     }
   };
 
@@ -36,7 +54,7 @@ export const AuthProvider = ({ children }) => {
       await AsyncStorage.removeItem('token');
       setUserToken(null);
     } catch (error) {
-      console.error('Error during logout:', error);
+      console.error('Error durante el logout:', error);
     }
   };
 
