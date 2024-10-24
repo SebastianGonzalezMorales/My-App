@@ -166,6 +166,19 @@ export default StyleSheet.create({
     fontFamily: 'DoppioOne',
     fontSize: 14,
   },
+  tableColumnHeader: {
+    backgroundColor: '#f2f2f2',
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    fontWeight: 'bold',
+  },
+  tableColumnText: {
+    color: '#5c6169', // Texto negro para subtítulos
+    fontFamily: 'DoppioOne',
+    fontSize: 14,
+  },
   tableRowOdd: {
     backgroundColor: 'rgba(241, 241, 254, 0.3)',
     paddingVertical: 10,
@@ -201,7 +214,6 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
 

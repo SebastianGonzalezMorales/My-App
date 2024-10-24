@@ -1,6 +1,6 @@
-const { ResultsTests }  = require('../models/resultsTests'); // Asegúrate de ajustar la ruta según tu estructura de carpetas
+const { ResultsTests } = require('../models/resultsTests'); // Asegúrate de ajustar la ruta según tu estructura de carpetas
 const mongoose = require('mongoose');
-const { User } = require('../models/user');
+const User = require('../models/user');
 
 // Crear un nuevo resultado de test
 const createResultTest = async (req, res) => {
@@ -64,12 +64,17 @@ const getResultsTestByMonth = async (req, res) => {
 
     console.log('User ID autenticado:', userId); // Verifica el userId
 
-    if (!month || !/^\d{4}-\d{2}$/.test(month)) {
-      return res.status(400).json({ message: 'Formato de mes inválido. Use YYYY-MM.' });
+    // Nueva validación para aceptar meses de uno o dos dígitos
+    if (!month || !/^\d{4}-\d{1,2}$/.test(month)) {
+      return res.status(400).json({ message: 'Formato de mes inválido. Use YYYY-M o YYYY-MM.' });
     }
 
+    // Ajustar el formato del mes si es de un dígito, para que sea compatible con la fecha
+    const [year, monthValue] = month.split('-');
+    const formattedMonth = `${year}-${String(monthValue).padStart(2, '0')}`;
+
     // Crear el rango de fechas para el mes especificado
-    const startDate = new Date(`${month}-01T00:00:00Z`);
+    const startDate = new Date(`${formattedMonth}-01T00:00:00Z`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
 
@@ -79,18 +84,23 @@ const getResultsTestByMonth = async (req, res) => {
       created: { $gte: startDate, $lt: endDate }
     }).sort({ created: 1 });
 
-    // Verifica si hay resultados
+    // Verificar si no hay resultados
     if (results.length === 0) {
-      return res.status(404).json({ message: 'No se encontraron resultados para el mes especificado.' });
+      return res.status(200).json({
+        message: 'No se encontraron resultados para el mes especificado.',
+        results: [],
+      });
     }
 
     // Retorna los resultados si se encuentran
-    res.status(200).json(results);
+    return res.status(200).json({ message: 'Resultados encontrados.', results });
   } catch (err) {
     console.error('Error al obtener resultados:', err.message); // Log para errores
     res.status(500).json({ message: 'Error al obtener resultados', error: err.message });
   }
 };
+
+
 
 
 // Obtener todos los resultados de tests

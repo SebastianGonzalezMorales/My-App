@@ -2,9 +2,9 @@
 import { Dimensions, SafeAreaView, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { BarChart } from 'react-native-chart-kit';
-
-/* // firebase
-import { firebase } from '../../../firebase'; */
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_URL } from '@env';
 
 // components
 import BackButton from '../../components/buttons/BackButton';
@@ -18,146 +18,114 @@ import ChartStyle from '../../assets/styles/ChartStyle';
 import GlobalStyle from '../../assets/styles/GlobalStyle';
 import FormStyle from '../../assets/styles/FormStyle';
 
- const QuestionnaireStats = ({ navigation }) => {
-  // references
- /* const questionnaireRef = firebase
-    .firestore()
-    .collection('users')
-    .doc(firebase.auth().currentUser.uid)
-    .collection('questionnaire');
- */
+const QuestionnaireStats = ({ navigation }) => {
+
   // states
   const [x, setX] = useState([]);
   const [y, setY] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState('');
   const [monthChart, setMonthChart] = useState('');
 
-  /*
-   * *******************
-   * **** Functions ****
-   * *******************
-   */
-
   const currentMonth = getMonth();
   const months = getMonths();
 
   // fetch questionnaire data
   useEffect(() => {
-    const fetchData = async () => {
-    /*   try {
-        questionnaireRef
-          .orderBy('created', 'asc')
-          .limit(30)
-          .onSnapshot((querySnapshot) => {
-            const x = [];
-            const y = [];
-
-            querySnapshot.forEach((doc) => {
-              const { total, created } = doc.data();
-              const date = created.toDate().toString().slice(7, 10);
-              const month = getMonthName(created.toDate().getMonth());
-
-              console.log(month);
-
-              if (currentMonth === month) {
-                x.push('');
-                y.push(total);
-              }
-            });
-
-            // line chart
-            y.unshift(0);
-            setX(x);
-            setY(y);
-            setMonthChart(currentMonth);
-          });
-      } catch (error) {
-        console.error(error);
-      } */
-    };
-
-    fetchData();
+    const currentYear = new Date().getFullYear();
+    const currentMonthIndex = new Date().getMonth() + 1;
+    const initialMonth = `${currentYear}-${String(currentMonthIndex).padStart(2, '0')}`;
+    fetchData(initialMonth);
   }, []);
 
-  // handle month selection
-  const handleMonthSelected = async (item) => {
-    setSelectedMonth(item.value);
-    console.log('selected item:', item.value);
-
-    const x = [];
-    const y = [];
-
- /*    const questionnaireSnapshot = await questionnaireRef
-      .orderBy('created', 'desc')
-      .get(); // get the data once
+  const fetchData = async (month) => {
     try {
-      questionnaireSnapshot.forEach((doc) => {
-        const { total, created } = doc.data();
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.error('No se encontró el token');
+        return;
+      }
 
-        const date = created.toDate().toString().slice(7, 10);
-        const month = getMonthName(created.toDate().getMonth());
-        console.log(monthChart);
-        if (item.value === month) {
-          x.push('');
-          y.push(total);
-          setMonthChart(month);
-        }
+      const response = await axios.get(`${API_URL}/resultsTests/getResultsTestByMonth`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { month },
       });
-      y.unshift(0);
-      setX(x);
-      setY(y);
+
+      const data = response.data.results; // Obtén los resultados del objeto de respuesta
+
+      // Verifica si data es un array antes de iterar
+      if (Array.isArray(data) && data.length > 0) {
+        const x = [];
+        const y = [];
+
+        data.forEach(({ total, created }) => {
+          const itemMonth = `${new Date(created).getFullYear()}-${String(new Date(created).getMonth() + 1).padStart(2, '0')}`;
+          const day = new Date(created).getDate(); // Obtener el día del test
+          if (itemMonth === month) {
+            x.push(String(day)); // Agrega el día al eje X
+            y.push(total);
+          }
+        });
+
+        y.unshift(0); // Añade 0 al inicio para la gráfica
+        setX(x);
+        setY(y);
+        setMonthChart(month);
+        console.log(`Valores de y para el gráfico: ${y}`);
+      } else {
+        console.log('No se encontraron resultados para el mes especificado.');
+        setX([]);
+        setY([]);
+        setMonthChart(month);
+      }
     } catch (error) {
-      console.error(error);
-    } */
+      console.error('Error al obtener datos del cuestionario:', error);
+    }
   };
+
+
+  //console.error('Data:', error.response.data);
+  // console.error('Status:', error.response.status);
+  //console.error('Headers:', error.response.headers);
+
+  // handle month selection
+  const handleMonthSelected = (month) => {
+    setSelectedMonth(month); // Establece el mes seleccionado correctamente
+    fetchData(month); // Llama a fetchData con el mes formateado
+  };
+
 
   return (
     <SafeAreaView style={[FormStyle.container, GlobalStyle.androidSafeArea]}>
       <View style={FormStyle.flexContainer}>
         <BackButton onPress={() => navigation.goBack()} />
-
         <Text style={FormStyle.title}>Estadísticas</Text>
       </View>
 
-      {/*
-       * *********************
-       * ***** Bar chart *****
-       * *********************
-       */}
+      {/* Dropdown for selecting month */}
       <View style={{ paddingHorizontal: 30, marginVertical: 20 }}>
         <Dropdown
-          placeholderStyle={{
-            color: '#f2f2f2',
-            fontFamily: 'DoppioOne',
-          }}
-          containerStyle={{
-            borderRadius: 10,
-          }}
-          selectedTextStyle={{
-            color: '#f2f2f2',
-            fontFamily: 'DoppioOne',
-            fontSize: 14,
-          }}
+          placeholderStyle={{ color: '#f2f2f2', fontFamily: 'DoppioOne' }}
+          containerStyle={{ borderRadius: 10 }}
+          selectedTextStyle={{ color: '#f2f2f2', fontFamily: 'DoppioOne', fontSize: 14 }}
           itemTextStyle={{ color: '#666a72', fontFamily: 'DoppioOne' }}
           iconStyle={{ tintColor: '#fff' }}
-          placeholder={currentMonth}
-          data={months.map((month) => ({ label: month, value: month }))}
+          placeholder={currentMonth} // Muestra solo el nombre del mes actual
+          data={getMonths()} // Utiliza la nueva función getMonths()
           value={selectedMonth}
-          onChange={(month) => handleMonthSelected(month)}
+          onChange={(item) => handleMonthSelected(item.value)} // Pasa solo el valor
           labelField="label"
           valueField="value"
         />
+
+
       </View>
+
       {y.length > 0 ? (
         <View>
           <BarChart
             data={{
-              labels: x,
-              datasets: [
-                {
-                  data: y,
-                },
-              ],
+               labels: x, // Días en los que se realizó el test
+              datasets: [{ data: y }],
             }}
             width={Dimensions.get('window').width * 0.85}
             height={200}
@@ -165,46 +133,74 @@ import FormStyle from '../../assets/styles/FormStyle';
               backgroundGradientFrom: '#f2f2f2',
               backgroundGradientTo: '#f2f2f2',
               decimalPlaces: 0,
+              fillShadowGradient: '#5da5a9',
+              fillShadowGradientOpacity: 1,
               color: (opacity = 1) => `rgba(93, 165, 169, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(40, 42, 45, ${opacity})`,
-              style: {
-                marginTop: 20,
-                backgroundColor: '#f2f2f2',
-              },
               propsForDots: {
                 r: '3',
                 strokeWidth: '1',
                 stroke: '#5da5a9',
               },
+              propsForBackgroundLines: {
+                strokeDasharray: '', // Para líneas continuas en el fondo
+              },
             }}
             style={ChartStyle.chartStyle}
             bezier
             yAxisInterval={4}
+            fromZero={true} // Para comenzar el eje Y desde 0
           />
 
+          {/* Etiqueta del eje Y */}
           <Text
             style={{
               position: 'absolute',
-              alignSelf: 'center',
-              bottom: '3%',
-              paddingLeft: 30,
-              color: '#666a72',
+              top: '40%', // Centrado relativo a la altura del gráfico
+              left: Dimensions.get('window').width * 0.05, // Ajuste de posición horizontal
+              transform: [{ rotate: '-90deg' }],
               fontFamily: 'DoppioOne',
+              color: '#666a72',
             }}
           >
-            {monthChart}
+            Puntaje
+          </Text>
+
+          {/* Etiqueta del eje X */}
+          <Text
+            style={{
+              position: 'absolute',
+              bottom: '3%', // Ajuste relativo a la parte inferior del gráfico
+       
+              left: Dimensions.get('window').width * 0.45, // Ajuste de posición horizontal
+              fontFamily: 'DoppioOne',
+              color: '#666a72',
+            }}
+          >
+            Días del mes
           </Text>
         </View>
+
+
+
       ) : (
-        <Text>   Cargando gráfico...</Text>
+        <Text>Cargando gráfico...</Text>
       )}
-      {/* table */}
+
+      {/* Table */}
       <View style={[FormStyle.tableSubContainer, FormStyle.tableShadow]}>
+
         <View style={FormStyle.tableHeader}>
           <Text style={FormStyle.tableHeaderTitle}>
-            Gravedad de la depresión (Eje-y)
+            Clasificación del Test
           </Text>
         </View>
+        {/* Subtítulos para las columnas */}
+        <View style={FormStyle.tableColumnHeader}>
+          <Text style={FormStyle.tableColumnText}>Estado</Text>
+          <Text style={FormStyle.tableColumnText}>Puntaje</Text>
+        </View>
+
         <View style={FormStyle.tableRowOdd}>
           <Text style={FormStyle.tableText}>Normal</Text>
           <Text style={FormStyle.tableText}>0 - 4</Text>
@@ -224,6 +220,7 @@ import FormStyle from '../../assets/styles/FormStyle';
         <View style={[FormStyle.tableRowOdd, FormStyle.tableRowEnd]}>
           <Text style={FormStyle.tableText}>Grave</Text>
           <Text style={FormStyle.tableText}>20 - 27</Text>
+          
         </View>
       </View>
     </SafeAreaView>

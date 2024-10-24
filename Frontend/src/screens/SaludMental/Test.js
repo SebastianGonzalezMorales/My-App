@@ -23,17 +23,17 @@ import GlobalStyle from '../../assets/styles/GlobalStyle';
 
 const Test = ({ navigation }) => {
   // references
-/*   const userRef = firebase
-    .firestore()
-    .collection('users')
-    .doc(firebase.auth().currentUser.uid);
- */
+  /*   const userRef = firebase
+      .firestore()
+      .collection('users')
+      .doc(firebase.auth().currentUser.uid);
+   */
   /* const questionsRef = firebase.firestore().collection('questions'); */
 
   // states
   const [questions, setQuestions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState({});
-  const [score, setScore] = useState(0);
+ const [score, setScore] = useState(0);
   const [showResults, setShowResults] = useState(false);
   const [date, setDate] = useState('');
   const [severity, setSeverity] = useState('');
@@ -51,20 +51,20 @@ const Test = ({ navigation }) => {
       setSelectedOptions({});
       setShowResults(false);
       try {
-    
+
         const token = await AsyncStorage.getItem('token');
 
         if (token) {
-        
-        const response = await axios.get(`${API_URL}/questions/get-questions`, { // obtén las preguntas desde tu API
-        headers: {
-          'Authorization': `Bearer ${token}`  // Usa el token recuperado
-        }
-      });
-        const questions = response.data; // Asumiendo que la respuesta tiene la estructura adecuada
-        //console.log(questions)
-        setQuestions(questions);
-      }else {
+
+          const response = await axios.get(`${API_URL}/questions/get-questions`, { // obtén las preguntas desde tu API
+            headers: {
+              'Authorization': `Bearer ${token}`  // Usa el token recuperado
+            }
+          });
+          const questions = response.data; // Asumiendo que la respuesta tiene la estructura adecuada
+          //console.log(questions)
+          setQuestions(questions);
+        } else {
           console.log('No se encontró el token. Por favor, inicia sesión.');
         }
       } catch (error) {
@@ -84,79 +84,79 @@ const Test = ({ navigation }) => {
       [index]: option, // set selected option on the current index
     });
   };
-// submit for results and set data to database
-const handleSubmit = async () => {
-  let total = 0;
-  questions.forEach((question, index) => {
-    if (selectedOptions[index] === question.selectedoption1) {
-      total = total + 0;
-    } else if (selectedOptions[index] === question.selectedoption2) {
-      total = total + 1;
-    } else if (selectedOptions[index] === question.selectedoption3) {
-      total = total + 2;
-    } else if (selectedOptions[index] === question.selectedoption4) {
-      total = total + 3;
+  // submit for results and set data to database
+  const handleSubmit = async () => {
+    let total = 0;
+    questions.forEach((question, index) => {
+      if (selectedOptions[index] === question.selectedoption1) {
+        total = total + 0;
+      } else if (selectedOptions[index] === question.selectedoption2) {
+        total = total + 1;
+      } else if (selectedOptions[index] === question.selectedoption3) {
+        total = total + 2;
+      } else if (selectedOptions[index] === question.selectedoption4) {
+        total = total + 3;
+      }
+    });
+
+    let severity = '';
+    if (total >= 0 && total <= 4) {
+      severity = 'Normal';
+    } else if (total > 4 && total < 10) {
+      severity = 'leve';
+    } else if (total >= 10 && total < 15) {
+      severity = 'Moderado';
+    } else if (total >= 15 && total < 20) {
+      severity = 'Moderadamente grave';
+    } else {
+      severity = 'Grave';
     }
-  });
 
-  let severity = '';
-  if (total >= 0 && total <= 4) {
-    severity = 'Normal';
-  } else if (total > 4 && total < 10) {
-    severity = 'leve';
-  } else if (total >= 10 && total < 15) {
-    severity = 'Moderado';
-  } else if (total >= 15 && total < 20) {
-    severity = 'Moderadamente grave';
-  } else {
-    severity = 'Grave';
-  }
+    setSeverity(severity);
+    setScore(total);
+    setShowResults(true);
 
-  setSeverity(severity);
-  setScore(total);
-  setShowResults(true);
+    // get date
+    const date = new Date().toDateString().slice(4, 15);
+    setDate(date);
 
-  // get date
-  const date = new Date().toDateString().slice(4, 15);
-  setDate(date);
+    // Enviar los resultados a la API
+    try {
+      // Recupera el token del almacenamiento
+      const token = await AsyncStorage.getItem('token');
 
-  // Enviar los resultados a la API
-  try {
-    // Recupera el token del almacenamiento
-    const token = await AsyncStorage.getItem('token');
-
-    if (token) {
+      if (token) {
         // Llama al backend para obtener el userId usando el token
         const userResponse = await axios.post(`${API_URL}/users/userid`, {
-            token: `${token}`
+          token: `${token}`
         }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         });
 
         const userId = userResponse.data.userId; // Extrae el userId de la respuesta
 
         // Ahora envía los resultados de la prueba
         const response = await axios.post(`${API_URL}/resultsTests/post-resultsTest`, {
-            userId,    // Usa el userId obtenido
-            total,
-            severity,
-            date,
-            created: new Date() // O usa el formato que necesites
+          userId,    // Usa el userId obtenido
+          total,
+          severity,
+          date,
+          created: new Date() // O usa el formato que necesites
         }, {
-            headers: {
-                'Authorization': `Bearer ${token}` // Usar el token recuperado
-            }
+          headers: {
+            'Authorization': `Bearer ${token}` // Usar el token recuperado
+          }
         });
 
         console.log('Datos enviados correctamente:', response.data);
+      }
+    } catch (error) {
+      console.error('Error al enviar datos:', error);
+      Alert.alert('Error', 'No se pudo enviar los resultados. Por favor, inténtalo de nuevo.');
     }
-} catch (error) {
-    console.error('Error al enviar datos:', error);
-    Alert.alert('Error', 'No se pudo enviar los resultados. Por favor, inténtalo de nuevo.');
-}
-};
+  };
 
 
   /*
@@ -190,20 +190,24 @@ const handleSubmit = async () => {
         </View>
 
         <View style={FormStyle.tableContainer}>
-          <View style={FormStyle.tableHeader}>
-            <Text style={FormStyle.tableHeaderTitle}>Fecha del test realizado: </Text>
-          </View>
-          <View style={[FormStyle.tableRowOdd, FormStyle.tableRowEnd]}>
-            <Text style={FormStyle.tableText}>Fecha</Text>
-            <Text style={FormStyle.tableText}>{date}</Text>
+
+          <View style={[FormStyle.tableRowOdd, [FormStyle.tableRowEnd, {borderRadius: 10}, {backgroundColor: '#f2f2f2'}]]}>
+            <Text style={[FormStyle.tableText, { color: '#5c6169' }]}>Fecha del test</Text>
+            <Text style={[FormStyle.tableText, { color: '#5c6169' }]}>{date}</Text>
           </View>
 
           <View style={FormStyle.tableSubContainer}>
             <View style={FormStyle.tableHeader}>
               <Text style={FormStyle.tableHeaderTitle}>
-              Gravedad de la depresión
+                Clasificación del Test
               </Text>
             </View>
+            {/* Subtítulos para las columnas */}
+            <View style={FormStyle.tableColumnHeader}>
+              <Text style={FormStyle.tableColumnText}>Estado</Text>
+              <Text style={FormStyle.tableColumnText}>Puntaje</Text>
+            </View>
+
             <View style={FormStyle.tableRowOdd}>
               <Text style={FormStyle.tableText}>Normal</Text>
               <Text style={FormStyle.tableText}>0 - 4</Text>
@@ -244,7 +248,7 @@ const handleSubmit = async () => {
   return (
     <SafeAreaView style={[FormStyle.container, GlobalStyle.androidSafeArea]}>
       <View style={FormStyle.flexContainer}>
-       <BackButton onPress={() => navigation.goBack()} />
+        <BackButton onPress={() => navigation.goBack()} />
 
         <Text style={FormStyle.title}>PHQ-9</Text>
       </View>
@@ -257,7 +261,7 @@ const handleSubmit = async () => {
           <View>
             {index === 0 && (
               <Text style={FormStyle.questionnaireText}>
-               Durante las últimas dos semanas, ¿ con qué frecuencia le han molestado alguno de los siguientes problemas ?
+                Durante las últimas dos semanas, ¿ con qué frecuencia le han molestado alguno de los siguientes problemas ?
               </Text>
             )}
             <Text style={FormStyle.question}>{item.question}</Text>

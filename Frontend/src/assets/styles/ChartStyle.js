@@ -14,6 +14,7 @@ export default StyleSheet.create({
     elevation: 5,
     borderRadius: 10,
     alignItems: 'center',
+    
   },
 
   // pie chart

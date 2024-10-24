@@ -37,8 +37,10 @@ export function getMonth() {
     const months = [];
   
     for (let i = 5; i >= 0; i--) {
-      const month = currentDate.getMonth() - i;
-      months.push(monthsAbbreviated[month]);
+      const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+      const monthValue = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+      const monthLabel = monthsAbbreviated[date.getMonth()]; // Solo el nombre del mes
+      months.push({ label: monthLabel, value: monthValue });
     }
   
     return months;
