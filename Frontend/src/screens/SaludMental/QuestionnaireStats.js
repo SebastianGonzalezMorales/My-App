@@ -99,7 +99,7 @@ const QuestionnaireStats = ({ navigation }) => {
     <SafeAreaView style={[FormStyle.container, GlobalStyle.androidSafeArea]}>
       <View style={FormStyle.flexContainer}>
         <BackButton onPress={() => navigation.goBack()} />
-        <Text style={FormStyle.title}>Estadísticas por mes</Text>
+        <Text style={[FormStyle.title, {left: 40}]}>Estadísticas por mes</Text>
       </View>
 
       {/* Dropdown for selecting month */}
@@ -151,9 +151,6 @@ const QuestionnaireStats = ({ navigation }) => {
             bezier
             yAxisInterval={4}
             fromZero={true} // Para comenzar el eje Y desde 0
-            yAxisSuffix="" // Opcional para etiquetar valores del eje Y si es necesario
-            yAxisMin={0} // Establece el valor mínimo del eje Y
-            yAxisMax={27} // Establece el valor máximo del eje Y
           />
 
           {/* Etiqueta del eje Y */}
