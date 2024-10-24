@@ -65,8 +65,9 @@ const QuestionnaireStats = ({ navigation }) => {
             y.push(total);
           }
         });
+        
 
-        y.unshift(0); // Añade 0 al inicio para la gráfica
+        //y.unshift(0); // Añade 0 al inicio para la gráfica
         setX(x);
         setY(y);
         setMonthChart(month);
@@ -98,7 +99,7 @@ const QuestionnaireStats = ({ navigation }) => {
     <SafeAreaView style={[FormStyle.container, GlobalStyle.androidSafeArea]}>
       <View style={FormStyle.flexContainer}>
         <BackButton onPress={() => navigation.goBack()} />
-        <Text style={FormStyle.title}>Estadísticas</Text>
+        <Text style={FormStyle.title}>Estadísticas por mes</Text>
       </View>
 
       {/* Dropdown for selecting month */}
@@ -128,7 +129,7 @@ const QuestionnaireStats = ({ navigation }) => {
               datasets: [{ data: y }],
             }}
             width={Dimensions.get('window').width * 0.85}
-            height={200}
+            height={275}
             chartConfig={{
               backgroundGradientFrom: '#f2f2f2',
               backgroundGradientTo: '#f2f2f2',
@@ -150,6 +151,9 @@ const QuestionnaireStats = ({ navigation }) => {
             bezier
             yAxisInterval={4}
             fromZero={true} // Para comenzar el eje Y desde 0
+            yAxisSuffix="" // Opcional para etiquetar valores del eje Y si es necesario
+            yAxisMin={0} // Establece el valor mínimo del eje Y
+            yAxisMax={27} // Establece el valor máximo del eje Y
           />
 
           {/* Etiqueta del eje Y */}
@@ -165,6 +169,7 @@ const QuestionnaireStats = ({ navigation }) => {
           >
             Puntaje
           </Text>
+          
 
           {/* Etiqueta del eje X */}
           <Text
@@ -177,7 +182,7 @@ const QuestionnaireStats = ({ navigation }) => {
               color: '#666a72',
             }}
           >
-            Días del mes
+            Días
           </Text>
         </View>
 
