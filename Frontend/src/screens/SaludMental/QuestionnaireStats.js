@@ -131,6 +131,7 @@ const QuestionnaireStats = ({ navigation }) => {
             width={Dimensions.get('window').width * 0.85}
             height={275}
             chartConfig={{
+              barPercentage: 0.8,
               backgroundGradientFrom: '#f2f2f2',
               backgroundGradientTo: '#f2f2f2',
               decimalPlaces: 0,
@@ -152,6 +153,8 @@ const QuestionnaireStats = ({ navigation }) => {
             yAxisInterval={4}
             fromZero={true} // Asegura que el eje Y comience desde cero
             fromNumber={27} // Establece el valor máximo del eje Y en 27.
+            showValuesOnTopOfBars={true} //Muestra los valores de cada barra arriba.
+
           />
 
           {/* Etiqueta del eje Y */}
