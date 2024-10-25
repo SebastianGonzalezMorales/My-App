@@ -150,7 +150,8 @@ const QuestionnaireStats = ({ navigation }) => {
             style={ChartStyle.chartStyle}
             bezier
             yAxisInterval={4}
-            fromZero={true} // Para comenzar el eje Y desde 0
+            fromZero={true} // Asegura que el eje Y comience desde cero
+            fromNumber={27} // Establece el valor máximo del eje Y en 27.
           />
 
           {/* Etiqueta del eje Y */}
@@ -179,7 +180,7 @@ const QuestionnaireStats = ({ navigation }) => {
               color: '#666a72',
             }}
           >
-            Días
+            Días del mes
           </Text>
         </View>
 
