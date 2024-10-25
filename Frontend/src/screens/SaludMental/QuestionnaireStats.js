@@ -180,7 +180,7 @@ const QuestionnaireStats = ({ navigation }) => {
               color: '#666a72',
             }}
           >
-            Días del mes
+            Día del mes
           </Text>
         </View>
 
