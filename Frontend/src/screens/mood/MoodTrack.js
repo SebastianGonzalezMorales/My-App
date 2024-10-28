@@ -9,6 +9,7 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback,
     View,
+    Alert
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Activity from './Activities';
@@ -33,7 +34,7 @@ import GlobalStyle from '../../assets/styles/GlobalStyle';
 const MoodTrack = ({ route, navigation }) => {
 
     // Obtener mood y value desde la pantalla anterior
-    const { mood, value } = route.params;
+    const { mood, value, consejo } = route.params;
     // references
 
     /*    // document id passed from previous screen
@@ -120,7 +121,7 @@ const MoodTrack = ({ route, navigation }) => {
                         comentarios: quickNote,  // Nota rápida introducida por el usuario
                         Activities: selectedActivities.map((activity) => activity.activity), // Actividades seleccionadas
                         title: title,       // Título introducido por el usuario
-                      
+
                     },
                     {
                         headers: {
@@ -129,9 +130,17 @@ const MoodTrack = ({ route, navigation }) => {
                     }
                 );
                 console.log('Estado de ánimo guardado:', response.data);
+                console.log("hola ")
+                console.log(" ")
 
-                // Navegar de regreso a la pantalla principal después de guardar
-                navigation.navigate('Mood');
+                console.log(consejo)
+
+                // Mostrar el consejo al usuario con una alerta
+                Alert.alert('Consejo para ti', consejo, [
+                    // Navegar de regreso a la pantalla principal después de guardar
+                    { text: 'OK', onPress: () => navigation.navigate('Mood') },
+                ]);
+
             } else {
                 console.log('No se encontró el token. Por favor, inicia sesión.');
             }

@@ -17,7 +17,7 @@ const Activity = [
     },
     {
       id: 4,
-      activity: 'En la escuela',
+      activity: 'En la Universidad',
       selected: false,
     },
     {

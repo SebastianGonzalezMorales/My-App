@@ -1,8 +1,11 @@
 // react imports
 import { FlatList, Modal, SafeAreaView, Text, View, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { Image, TouchableOpacity, Linking, StyleSheet } from 'react-native';
+import { Image, TouchableOpacity, Linking, StyleSheet, Alert } from 'react-native';
 import React, { useState, useEffect, useCallback } from 'react';
+import { fetchWithToken } from '../utils/apiHelpers';
+
+
 
 // Import the API URL from environment variables
 import { API_URL } from '@env';
@@ -32,12 +35,12 @@ const Mood = ({ navigation }) => {
   const [selectedId, setSelectedId] = useState('');
   const [motivationalQuote, setMotivationalQuote] = useState('');
 
-    // Llama a la función fetchData cuando la pantalla obtiene el enfoque
-    useFocusEffect(
-      useCallback(() => {
-        fetchData();  // Llama a la función que recupera los datos
-      }, [])
-    );
+  // Llama a la función fetchData cuando la pantalla obtiene el enfoque
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();  // Llama a la función que recupera los datos
+    }, [])
+  );
   /*
    * *******************
    * **** Functions ****
@@ -51,21 +54,36 @@ const Mood = ({ navigation }) => {
 
   const startTracking = async (mood, value) => {
     try {
+      // Utilizar la función genérica para obtener el consejo
+      const response = await fetchWithToken('/tips/get-tips', 'GET', null, { estado: mood });
+
+      // Guardar el consejo recibido
+      const consejo = response.consejo;
+      console.log(" ")
+      console.log(" ")
+
       // Navega a la pantalla `MoodTrack` pasando el estado de ánimo y el valor
       navigation.navigate('MoodTrack', {
         mood: mood,   // Estado de ánimo seleccionado
-        value: value  // Valor de la intensidad del estado de ánimo
+        value: value,  // Valor de la intensidad del estado de ánimo
+        consejo: consejo  // Consejo obtenido del backend
       });
-  
+
       // Simulación de retraso 
       await new Promise((resolve) => setTimeout(resolve, 100));
-      console.log('Navegando a MoodTrack con mood:', mood, 'y valor:', value);
-  
+      console.log('Navegando a MoodTrack con mood:', mood, 'y valor:', value, 'y consejo:', consejo);
+
     } catch (error) {
+      // Mostrar un mensaje al usuario si hay un error
+      Alert.alert(
+        'Error',
+        'Ocurrió un problema al iniciar el seguimiento del estado de ánimo. Por favor, inténtalo nuevamente más tarde.'
+      );
+
       console.error('Error al iniciar el tracking del estado de ánimo:', error);
     }
   };
-  
+
 
   // hook to fetch user's data
   /*  useEffect(() => {
@@ -80,7 +98,7 @@ const Mood = ({ navigation }) => {
    }, []);
   */
   // hook to fetch all documents
- 
+
   const fetchData = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -90,7 +108,7 @@ const Mood = ({ navigation }) => {
             'Authorization': `Bearer ${token}`,
           },
         });
-        
+
         if (response.data.data.length === 0) {
           // Si la lista está vacía, puedes mostrar un mensaje en la UI
           console.log('No se encontraron estados de ánimo para este usuario.');
@@ -99,7 +117,7 @@ const Mood = ({ navigation }) => {
           const moodsData = response.data.data.map((item) => {
             const date = new Date(item.date).toLocaleDateString();
             const time = new Date(item.date).toLocaleTimeString();
-    
+
             return {
               id: item._id,
               mood: item.mood_state,
@@ -107,7 +125,7 @@ const Mood = ({ navigation }) => {
               time,
             };
           });
-  
+
           // Actualizar el estado con los estados de ánimo formateados
           setMoods(moodsData);
         }
@@ -118,10 +136,10 @@ const Mood = ({ navigation }) => {
       console.error('Error al obtener los estados de ánimo:', error);
     }
   };
-  
-    useEffect(() => {
-      fetchData();
-    }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   // delete document function
   const deleteItem = () => {
@@ -187,7 +205,7 @@ const Mood = ({ navigation }) => {
           // Actualiza el estado con el nombre
           setName(userName);
           // Para verificar en la consola
-       //   console.log('User name:', userName);
+          //   console.log('User name:', userName);
 
         } else {
           console.log('No se encontró el token. Por favor, inicia sesión.');
@@ -215,128 +233,128 @@ const Mood = ({ navigation }) => {
        */}
 
       {/* info modal */}
-   
-        <Modal
-          visible={infoModalVisible}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={() => {
-            setInfoModalVisible(!infoModalVisible);
-          }}
-        >
-          <View style={ModalStyle.smallModalContainer}>
-            <View style={ModalStyle.smallModalContent}>
-              <View
-                style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-              >
-                <Text style={ModalStyle.smallModalTitle}>Tips</Text>
-                <MaterialCommunityIcons
-                  name="close"
-                  color="#f2f2f2"
-                  size={30}
-                  style={ModalStyle.modalToggleExit}
-                  onPress={() => setInfoModalVisible(!infoModalVisible)}
-                />
-              </View>
-              <Text style={ModalStyle.smallModalText}>
-                1. Tap on a mood to start tracking!
-              </Text>
-              <Text style={ModalStyle.smallModalTextTwo}>
-                2. Tap and hold to delete an entry
-              </Text>
-            </View>
-          </View>
-        </Modal>
 
-        {/* delete document modal */}
-        <Modal
-          visible={modalVisible}
-          transparent={true}
-          animationType="slide"
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={ModalStyle.halfModalContent}>
-            <View style={ModalStyle.halfModalWrapper}>
-              <FormButton
-                text="Delete"
-                onPress={() => {
-                  deleteItem(), setModalVisible(!modalVisible);
-                }}
-                buttonStyle={{
-                  backgroundColor: '#e55e7e',
-                }}
-                textStyle={{ color: '#f2f2f2' }}
-              />
-
-              <FormButton
-                text="Cancel"
-                onPress={() => setModalVisible(!modalVisible)}
-                buttonStyle={{
-                  backgroundColor: '#5da5a9',
-                }}
-                textStyle={{ color: '#f2f2f2' }}
+      <Modal
+        visible={infoModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => {
+          setInfoModalVisible(!infoModalVisible);
+        }}
+      >
+        <View style={ModalStyle.smallModalContainer}>
+          <View style={ModalStyle.smallModalContent}>
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+            >
+              <Text style={ModalStyle.smallModalTitle}>Tips</Text>
+              <MaterialCommunityIcons
+                name="close"
+                color="#f2f2f2"
+                size={30}
+                style={ModalStyle.modalToggleExit}
+                onPress={() => setInfoModalVisible(!infoModalVisible)}
               />
             </View>
+            <Text style={ModalStyle.smallModalText}>
+              1. Tap on a mood to start tracking!
+            </Text>
+            <Text style={ModalStyle.smallModalTextTwo}>
+              2. Tap and hold to delete an entry
+            </Text>
           </View>
-        </Modal>
+        </View>
+      </Modal>
 
-        {/*
+      {/* delete document modal */}
+      <Modal
+        visible={modalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={ModalStyle.halfModalContent}>
+          <View style={ModalStyle.halfModalWrapper}>
+            <FormButton
+              text="Delete"
+              onPress={() => {
+                deleteItem(), setModalVisible(!modalVisible);
+              }}
+              buttonStyle={{
+                backgroundColor: '#e55e7e',
+              }}
+              textStyle={{ color: '#f2f2f2' }}
+            />
+
+            <FormButton
+              text="Cancel"
+              onPress={() => setModalVisible(!modalVisible)}
+              buttonStyle={{
+                backgroundColor: '#5da5a9',
+              }}
+              textStyle={{ color: '#f2f2f2' }}
+            />
+          </View>
+        </View>
+      </Modal>
+
+      {/*
        * *********************
        * ***** Section 1 *****
        * *********************
        */}
-        {/* Espacio hasta la frase del día  */}
-        <View style={{ height: 301 }}>
-          <Text style={GlobalStyle.welcomeText}>Hola, {name}  !</Text>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={[GlobalStyle.subtitle, { textAlign: 'left' }]}> Cómo te sientes ahora mismo ?</Text>
+      {/* Espacio hasta la frase del día  */}
+      <View style={{ height: 301 }}>
+        <Text style={GlobalStyle.welcomeText}>Hola, {name}  !</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={[GlobalStyle.subtitle, { textAlign: 'left' }]}> Cómo te sientes ahora mismo ?</Text>
 
-            <MaterialCommunityIcons
-              name="information"
-              color="#f2f2f2"
-              size={24}
-              style={{ paddingTop: 28, paddingRight: 30 }}
-              onPress={() => setInfoModalVisible(true)}
-            />
-          </View>
-          <View style={GlobalStyle.moodsContainer}>
-            <PickMoodButton onPress={() => startTracking('Mal', 1)}
-              emoji="😞"
-              text="Mal"
-            />
-            <PickMoodButton onPress={() => startTracking('Regular', 2)}
-              emoji="🙂"
-              text="Regular"
-            />
-            <PickMoodButton onPress={() => startTracking('Bien', 3)}
-              emoji="😊"
-              text="Bien"
-            />
-            <PickMoodButton
-              onPress={() => startTracking('Excelente', 4)}
-              emoji="😃"
-              text="Excelente"
-            />
-            {/* Motivational Quote Section */}
-
-          </View>
-          <View style={{ marginTop: -10, alignItems: 'left', paddingHorizontal: 20 }}>
-            <Text style={GlobalStyle.subtitle}>Frase del día: </Text>
-            <Text style={[GlobalStyle.quoteText, { textAlign: 'left', marginTop: 10 }]}>
-              {motivationalQuote}
-            </Text>
-          </View>
+          <MaterialCommunityIcons
+            name="information"
+            color="#f2f2f2"
+            size={24}
+            style={{ paddingTop: 28, paddingRight: 30 }}
+            onPress={() => setInfoModalVisible(true)}
+          />
         </View>
+        <View style={GlobalStyle.moodsContainer}>
+          <PickMoodButton onPress={() => startTracking('Mal', 1)}
+            emoji="😞"
+            text="Mal"
+          />
+          <PickMoodButton onPress={() => startTracking('Regular', 2)}
+            emoji="🙂"
+            text="Regular"
+          />
+          <PickMoodButton onPress={() => startTracking('Bien', 3)}
+            emoji="😊"
+            text="Bien"
+          />
+          <PickMoodButton
+            onPress={() => startTracking('Excelente', 4)}
+            emoji="😃"
+            text="Excelente"
+          />
+          {/* Motivational Quote Section */}
 
-        {/*
+        </View>
+        <View style={{ marginTop: -10, alignItems: 'left', paddingHorizontal: 20 }}>
+          <Text style={GlobalStyle.subtitle}>Frase del día: </Text>
+          <Text style={[GlobalStyle.quoteText, { textAlign: 'left', marginTop: 10 }]}>
+            {motivationalQuote}
+          </Text>
+        </View>
+      </View>
+
+      {/*
        * *********************
        * ***** Section 2 *****
        * *********************
        */}
-        
-        <View style={GlobalStyle.rowTwo}>
+
+      <View style={GlobalStyle.rowTwo}>
         <View style={GlobalStyle.statsContainer}>
           <Text style={GlobalStyle.statsTitle}>Estadísticas</Text>
           <StatsButton onPress={() => navigation.navigate('MoodStats')} />
@@ -346,42 +364,42 @@ const Mood = ({ navigation }) => {
           textLeft="Recientes"
           textRight="Ver todo"
         />
-<FlatList
-  data={moods.slice(0, 5)}
-  numColumns={1}
-  renderItem={({ item }) => (
-    <CustomButton
-      buttonStyle={{
-        backgroundColor:
-          item.mood === 'Mal'
-            ? '#f7d8e3'
-            : item.mood === 'Regular'
-            ? '#d8eef7'
-            : item.mood === 'Bien'
-            ? '#d8f7ea'
-            : '#f7e7d8',
-      }}
-      textStyle={{
-        color:
-          item.mood === 'Mal'
-            ? '#d85a77'
-            : item.mood === 'Regular'
-            ? '#238bdf'
-            : item.mood === 'Bien'
-            ? '#109f5c'
-            : '#af7b56',
-      }}
-      // En lugar de mostrar texto, mostramos emojis
-      title={
-        item.mood === 'Mal'
-          ? '😞'
-          : item.mood === 'Regular'
-          ? '🙂'
-          : item.mood === 'Bien'
-          ? '😊'
-          : '😃' // Puedes añadir más casos si tienes más estados de ánimo
-      }
-              textOne={item.date}   
+        <FlatList
+          data={moods.slice(0, 5)}
+          numColumns={1}
+          renderItem={({ item }) => (
+            <CustomButton
+              buttonStyle={{
+                backgroundColor:
+                  item.mood === 'Mal'
+                    ? '#f7d8e3'
+                    : item.mood === 'Regular'
+                      ? '#d8eef7'
+                      : item.mood === 'Bien'
+                        ? '#d8f7ea'
+                        : '#f7e7d8',
+              }}
+              textStyle={{
+                color:
+                  item.mood === 'Mal'
+                    ? '#d85a77'
+                    : item.mood === 'Regular'
+                      ? '#238bdf'
+                      : item.mood === 'Bien'
+                        ? '#109f5c'
+                        : '#af7b56',
+              }}
+              // En lugar de mostrar texto, mostramos emojis
+              title={
+                item.mood === 'Mal'
+                  ? '😞'
+                  : item.mood === 'Regular'
+                    ? '🙂'
+                    : item.mood === 'Bien'
+                      ? '😊'
+                      : '😃' // Puedes añadir más casos si tienes más estados de ánimo
+              }
+              textOne={item.date}
               textTwo={item.time}
               onLongPress={() => (
                 setModalVisible(true), setSelectedId(item.id) // set id as the document id
