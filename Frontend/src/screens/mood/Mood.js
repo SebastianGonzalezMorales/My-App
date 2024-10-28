@@ -140,7 +140,7 @@ const Mood = ({ navigation }) => {
       const token = await AsyncStorage.getItem('token');
 
       if (token) {
-        const response = await axios.get(`${API_URL}/tips/get-random-tips`, {
+        const response = await axios.get(`${API_URL}/phraseOfTheDay/get-random-phraseOfTheDay`, {
           headers: {
             'Authorization': `Bearer ${token}`  // Usa el token recuperado
           }

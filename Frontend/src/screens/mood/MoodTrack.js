@@ -285,7 +285,7 @@ const MoodTrack = ({ route, navigation }) => {
                         <View style={FormStyle.inputContainer}>
                             <Text style={FormStyle.text}>Titulo</Text>
                             <InputButton
-                                placeholder="Escribe un título..."
+                                placeholder="Escribe un título... (Opcional)"
                                 onChangeText={(title) => {
                                     setTitle(title);
                                 }}
@@ -294,7 +294,7 @@ const MoodTrack = ({ route, navigation }) => {
 
                             <Text style={FormStyle.text}>Nota</Text>
                             <InputButton
-                                placeholder="Escribe una nota..."
+                                placeholder="Escribe una nota... (Opcional)"
                                 onChangeText={(quickNote) => {
                                     setQuickNote(quickNote);
                                 }}
