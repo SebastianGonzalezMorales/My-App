@@ -1,13 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { getTips, postTips, getRandomTips } = require('../controllers/tips');
-const authJwt = require('../middlewares/jwt');
-const { isAdmin } = require('../middlewares/authorization');
+const { getTips, postTips } = require('../controllers/tips');
 
-
-// Rutas asociadas a cada controlador
-router.get('/get-tips', authJwt, getTips);
-router.post('/post-tips', authJwt, isAdmin, postTips);
-router.get('/get-random-tips', getRandomTips);
+// Ruta para obtener un consejo basado en el estado de ánimo del usuario
+router.get('/get-tips', getTips);
+router.post('/post-tips', postTips);
 
 module.exports = router;

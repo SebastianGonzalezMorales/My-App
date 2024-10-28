@@ -14,10 +14,10 @@ const authJwt = jwt({
                 }).unless({
                     path:[
                             //{url: /\/api\/v1\/moodState(.*)/ , methods: ['POST', 'OPTIONS'] },
-                            //Con la línea de abajo "solo" permito que los usuarios puedan obtener los tips, 
+                            //Con la línea de abajo "solo" permito que los usuarios puedan obtener los phraseOfTheDay, 
                             //logiarse y registrarse, forgot-passowrd
-                            //Por ejemplo: para poder publicar tips tendrían que estar registrados como administrador.
-                            //{url: /\/api\/v1\/tips(.*)/ , methods: ['GET', 'OPTIONS'] },
+                            //Por ejemplo: para poder publicar phraseOfTheDay tendrían que estar registrados como administrador.
+                            //{url: /\/api\/v1\/phraseOfTheDay(.*)/ , methods: ['GET', 'OPTIONS'] },
                           //  {url: /\/api\/v1\/users\/get-random-user(.*)/ , methods: ['GET', 'OPTIONS'] },
 
 
@@ -32,7 +32,7 @@ const authJwt = jwt({
                             `${api}/users/decodetoken`,
 
                             `${api}/users/verificar`,
-                            `${api}/tips`,
+                            `${api}/phraseOfTheDay`,
                             `${api}/users/login`,
                             `${api}/users/register`,    
                             { url: new RegExp(`${api}/users/[^/]+/accept-policy`), methods: ['POST', 'OPTIONS'] },

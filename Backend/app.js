@@ -23,17 +23,19 @@ app.use(authJwt);
 app.use(errorHandler);
 
 //Routers
-const tipsRoutes = require('./routes/tips');
+const phraseOfTheDayRoutes = require('./routes/phraseOfTheDay');
 const moodStateRoutes = require('./routes/moodState');
 const usersRoutes = require('./routes/users');
 const questionRoutes = require('./routes/questions');
 const resultsTestsRoutes = require('./routes/resultsTests');
+const tipsRoutes = require('./routes/tips');
 
 //const authJwt = require('./helpers/jwt');
 
 const api = process.env.API_URL;
 
 app.use(`${api}/tips`, tipsRoutes);
+app.use(`${api}/phraseOfTheDay`, phraseOfTheDayRoutes);
 app.use(`${api}/users`, usersRoutes);
 app.use(`${api}/moodState`, moodStateRoutes);
 app.use(`${api}/questions`, questionRoutes);
