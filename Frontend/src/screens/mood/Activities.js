@@ -1,65 +1,84 @@
-// array of activities
 const Activity = [
-    {
-      id: 1,
-      activity: 'Viendo el clima',
-      selected: false,
-    },
-    {
-      id: 2,
-      activity: 'Durmiendo',
-      selected: false,
-    },
-    {
-      id: 3,
-      activity: 'De compras',
-      selected: false,
-    },
-    {
-      id: 4,
-      activity: 'En la Universidad',
-      selected: false,
-    },
-    {
-      id: 5,
-      activity: 'En el gimnasio',
-      selected: false,
-    },
-    {
-      id: 6,
-      activity: 'Jugando videojuegos',
-      selected: false,
-    },
-    {
-      id: 7,
-      activity: 'Con la familia',
-      selected: false,
-    },
-    {
-      id: 8,
-      activity: 'Trabajando',
-      selected: false,
-    },
-    {
-      id: 9,
-      activity: 'Leyendo',
-      selected: false,
-    },
-    {
-      id: 10,
-      activity: 'Cocinando',
-      selected: false,
-    },
-    {
-      id: 11,
-      activity: 'Viendo una película',
-      selected: false,
-    },
-    {
-      id: 12,
-      activity: 'Otra cosa',
-      selected: false,
-    },
-  ];
-  
-  export default Activity;
+  {
+    id: 1,
+    activity: 'Sobrepensando las cosas',
+    selected: false,
+  },
+  {
+    id: 2,
+    activity: 'Estudiando con ansiedad',
+    selected: false,
+  },
+  {
+    id: 3,
+    activity: 'Socializando con amigos',
+    selected: false,
+  },
+  {
+    id: 4,
+    activity: 'Sintiendo soledad',
+    selected: false,
+  },
+  {
+    id: 5,
+    activity: 'Preparándome para un examen',
+    selected: false,
+  },
+  {
+    id: 6,
+    activity: 'Tomando un descanso',
+    selected: false,
+  },
+  {
+    id: 7,
+    activity: 'Asistiendo a clases',
+    selected: false,
+  },
+  {
+    id: 8,
+    activity: 'Haciendo ejercicio',
+    selected: false,
+  },
+  {
+    id: 9,
+    activity: 'Trabajando en un proyecto',
+    selected: false,
+  },
+  {
+    id: 10,
+    activity: 'Preocupándome por el futuro',
+    selected: false,
+  },
+  {
+    id: 11,
+    activity: 'Aprendiendo algo nuevo',
+    selected: false,
+  },
+  {
+    id: 12,
+    activity: 'Descansando en casa',
+    selected: false,
+  },
+  {
+    id: 13,
+    activity: 'Sintiéndome motivado',
+    selected: false,
+  },
+  {
+    id: 14,
+    activity: 'Tratando de cumplir con todo',
+    selected: false,
+  },
+  {
+    id: 15,
+    activity: 'Disfrutando algo que me gusta',
+    selected: false,
+  },
+  {
+    id: 16,
+    activity: 'Otra cosa',
+    selected: false,
+  },
+];
+
+export default Activity;

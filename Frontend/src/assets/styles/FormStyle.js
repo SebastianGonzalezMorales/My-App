@@ -36,7 +36,8 @@ export default StyleSheet.create({
     marginTop: 30,
   },
   flatListContainer: {
-    height: 200,
+    height: 250,
+    paddingVertical: 20,
   },
   activitiesContainer: {
     marginLeft: 6,
@@ -46,9 +47,9 @@ export default StyleSheet.create({
   activityContainer: {
     alignItems: 'center',
     borderRadius: 10,
-    height: 70,
+    height: 90,
     justifyContent: 'center',
-    width: 60,
+    width: 80,
   },
   activityIcon: {
     marginBottom: 10,
@@ -56,7 +57,7 @@ export default StyleSheet.create({
   activityText: {
     color: '#f2f2f2',
     fontFamily: 'DoppioOne',
-    fontSize: 10,
+    fontSize: 12,
   },
   seeMoreText: {
     color: '#f2f2f2',

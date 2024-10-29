@@ -186,66 +186,55 @@ const MoodTrack = ({ route, navigation }) => {
                                 // set icons based on activity id
                                 switch (item.id) {
                                     case 1:
-                                        item.selected
-                                            ? (iconName = 'weather-sunny')
-                                            : (iconName = 'weather-sunny');
+                                        iconName = 'thought-bubble';
                                         break;
                                     case 2:
-                                        item.selected
-                                            ? (iconName = 'power-sleep')
-                                            : (iconName = 'power-sleep');
+                                        iconName = 'emoticon-confused';
                                         break;
                                     case 3:
-                                        item.selected
-                                            ? (iconName = 'cart')
-                                            : (iconName = 'cart-outline');
+                                        iconName = 'account-group';
                                         break;
                                     case 4:
-                                        item.selected
-                                            ? (iconName = 'school')
-                                            : (iconName = 'school-outline');
+                                        iconName = 'emoticon-sad';
                                         break;
                                     case 5:
-                                        item.selected
-                                            ? (iconName = 'dumbbell')
-                                            : (iconName = 'dumbbell');
+                                        iconName = 'book-check';
                                         break;
                                     case 6:
-                                        item.selected
-                                            ? (iconName = 'controller-classic')
-                                            : (iconName = 'controller-classic-outline');
+                                        iconName = 'tea';
                                         break;
                                     case 7:
-                                        item.selected
-                                            ? (iconName = 'home')
-                                            : (iconName = 'home-outline');
+                                        iconName = 'school';
                                         break;
                                     case 8:
-                                        item.selected
-                                            ? (iconName = 'briefcase')
-                                            : (iconName = 'briefcase-outline');
+                                        iconName = 'run';
                                         break;
                                     case 9:
-                                        item.selected
-                                            ? (iconName = 'book-open')
-                                            : (iconName = 'book-open-outline');
+                                        iconName = 'briefcase-check';
                                         break;
                                     case 10:
-                                        item.selected
-                                            ? (iconName = 'chef-hat')
-                                            : (iconName = 'chef-hat');
+                                        iconName = 'calendar-clock';
                                         break;
                                     case 11:
-                                        item.selected
-                                            ? (iconName = 'movie')
-                                            : (iconName = 'movie-outline');
+                                        iconName = 'lightbulb-on';
                                         break;
                                     case 12:
-                                        item.selected
-                                            ? (iconName = 'dots-horizontal-circle')
-                                            : (iconName = 'dots-horizontal-circle-outline');
+                                        iconName = 'home-heart';
+                                        break;
+                                    case 13:
+                                        iconName = 'emoticon-happy';
+                                        break;
+                                    case 14:
+                                        iconName = 'arm-flex';
+                                        break;
+                                    case 15:
+                                        iconName = 'heart';
+                                        break;
+                                    case 16:
+                                        iconName = 'dots-horizontal';
                                         break;
                                 }
+
 
                                 return (
                                     <View style={FormStyle.activitiesContainer}>
