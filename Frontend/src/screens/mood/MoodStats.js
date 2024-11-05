@@ -141,7 +141,7 @@ const MoodStats = ({ navigation }) => {
     <SafeAreaView style={[FormStyle.container, GlobalStyle.androidSafeArea]}>
       <View style={FormStyle.flexContainer}>
         <BackButton onPress={() => navigation.goBack()} />
-        <Text style={FormStyle.title}>Estadísticas de Estado de Ánimo</Text>
+        <Text style={[FormStyle.title, {left:15}]}>Estadísticas de Estado de Ánimo</Text>
       </View>
 
       <View style={{ paddingHorizontal: 30, marginVertical: 20 }}>
