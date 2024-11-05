@@ -26,6 +26,7 @@ import Register from './src/screens/authentication/Register';
 import ForgotPassword from './src/screens/authentication/ForgotPassword';
 import ChangePassword from './src/screens/authentication/ChangePassword';
 import Mood from './src/screens/mood/Mood';
+import MoodStats from './src/screens/mood/MoodStats';
 
 import Questionnaire from './src/screens/SaludMental/Questionnaire';
 
@@ -198,6 +199,8 @@ const AppNavigator = () => {
             <Stack.Screen name="QuestionnaireStats" component={QuestionnaireStats} />
 
             <Stack.Screen name="MoodTrack" component={MoodTrack} />
+            <Stack.Screen name="MoodStats" component={MoodStats} />
+            
           </>
         )}
       </Stack.Navigator>
