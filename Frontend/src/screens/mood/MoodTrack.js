@@ -105,50 +105,55 @@ const MoodTrack = ({ route, navigation }) => {
     // Guardar el estado de ánimo en MongoDB a través del backend
     const saveMoodTrack = async () => {
         try {
-            // Obtener el token del usuario
-            const token = await AsyncStorage.getItem('token');
-
-            if (token) {
-                // Crear array con actividades seleccionadas
-                const selectedActivities = activities.filter((activity) => activity.selected);
-
-                // Enviar datos al backend
-                const response = await axios.post(
-                    `${API_URL}/moodState/post-moodState`, // Asegúrate de que esta ruta esté configurada en tu backend
-                    {
-                        mood_state: mood,   // Estado de ánimo seleccionado en la pantalla anterior
-                        intensidad: value,  // Intensidad seleccionada en la pantalla anterior
-                        comentarios: quickNote,  // Nota rápida introducida por el usuario
-                        Activities: selectedActivities.map((activity) => activity.activity), // Actividades seleccionadas
-                        title: title,       // Título introducido por el usuario
-
-                    },
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${token}`, // Enviar token en los headers
-                        },
-                    }
-                );
-                console.log('Estado de ánimo guardado:', response.data);
-                console.log("hola ")
-                console.log(" ")
-
-                console.log(consejo)
-
-                // Mostrar el consejo al usuario con una alerta
-                Alert.alert('Consejo para ti', consejo, [
-                    // Navegar de regreso a la pantalla principal después de guardar
-                    { text: 'OK', onPress: () => navigation.navigate('Mood') },
-                ]);
-
-            } else {
-                console.log('No se encontró el token. Por favor, inicia sesión.');
-            }
+          const token = await AsyncStorage.getItem('token');
+      
+          if (token) {
+            // Crear array con actividades seleccionadas
+            const selectedActivities = activities
+              .filter((activity) => activity.selected)
+              .map((activity) => activity.activity); // Solo los nombres de actividades
+      
+            // Construir parámetros para la solicitud del consejo
+            const params = {
+              estado: mood, // Estado de ánimo
+              actividades: selectedActivities.length > 0 ? selectedActivities.join(',') : null // Solo si hay actividades seleccionadas
+            };
+      
+            // Obtener el consejo del backend
+            const response = await axios.get(`${API_URL}/tips/get-tips`, {
+              headers: { 'Authorization': `Bearer ${token}` },
+              params
+            });
+      
+            const consejo = response.data.consejo;
+      
+            // Guardar el estado de ánimo en la base de datos
+            await axios.post(
+              `${API_URL}/moodState/post-moodState`,
+              {
+                mood_state: mood,
+                intensidad: value,
+                comentarios: quickNote,
+                Activities: selectedActivities,
+                title: title,
+              },
+              {
+                headers: { 'Authorization': `Bearer ${token}` },
+              }
+            );
+      
+            // Mostrar el consejo al usuario con una alerta
+            Alert.alert('Consejo para ti', consejo, [
+              { text: 'OK', onPress: () => navigation.navigate('Mood') },
+            ]);
+          } else {
+            console.log('No se encontró el token. Por favor, inicia sesión.');
+          }
         } catch (error) {
-            console.error('Error al guardar el estado de ánimo:', error);
+          console.error('Error al guardar el estado de ánimo:', error);
         }
-    };
-
+      };
+      
     // keyboard offset
     const keyboardVerticalOffset = Platform.OS === 'ios' ? 80 : 0;
 

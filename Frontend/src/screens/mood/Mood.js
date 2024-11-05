@@ -52,52 +52,13 @@ const Mood = ({ navigation }) => {
     Linking.openURL(url);
   };
 
-  const startTracking = async (mood, value) => {
-    try {
-      // Utilizar la función genérica para obtener el consejo
-      const response = await fetchWithToken('/tips/get-tips', 'GET', null, { estado: mood });
-
-      // Guardar el consejo recibido
-      const consejo = response.consejo;
-      console.log(" ")
-      console.log(" ")
-
-      // Navega a la pantalla `MoodTrack` pasando el estado de ánimo y el valor
-      navigation.navigate('MoodTrack', {
-        mood: mood,   // Estado de ánimo seleccionado
-        value: value,  // Valor de la intensidad del estado de ánimo
-        consejo: consejo  // Consejo obtenido del backend
-      });
-
-      // Simulación de retraso 
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      console.log('Navegando a MoodTrack con mood:', mood, 'y valor:', value, 'y consejo:', consejo);
-
-    } catch (error) {
-      // Mostrar un mensaje al usuario si hay un error
-      Alert.alert(
-        'Error',
-        'Ocurrió un problema al iniciar el seguimiento del estado de ánimo. Por favor, inténtalo nuevamente más tarde.'
-      );
-
-      console.error('Error al iniciar el tracking del estado de ánimo:', error);
-    }
+  const startTracking = (mood, value) => {
+    // Navegar a la pantalla `MoodTrack` pasando el estado de ánimo y la intensidad
+    navigation.navigate('MoodTrack', {
+      mood: mood,   // Estado de ánimo seleccionado
+      value: value  // Valor de la intensidad del estado de ánimo
+    });
   };
-
-
-  // hook to fetch user's data
-  /*  useEffect(() => {
-     const fetchName = async () => {
-       userRef.onSnapshot((snapshot) => {
-         const { fullName } = snapshot.data();
-         const firstName = fullName.split(' ')[0];
-         setName(firstName);
-       });
-     };
-     fetchName();
-   }, []);
-  */
-  // hook to fetch all documents
 
   const fetchData = async () => {
     try {
