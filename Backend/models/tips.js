@@ -7,13 +7,25 @@ const tipsSchema = new mongoose.Schema({
     enum: ['Mal', 'Regular', 'Bien', 'Excelente'],
     required: true,
   },
-  mensaje: {
-    type: String,
-    required: true,
+  consejosActividades: [
+    {
+      consejo: {
+        type: String,
+        required: true,
+      },
+      actividades: {
+        type: [String],
+        required: true,
+      },
+    },
+  ],
+  consejosGenerales: {
+    type: [String], // Consejos generales para el estado, no asociados a actividades específicas
+    default: [],
   },
   fechaCreacion: {
     type: Date,
-    default: Date.now, // Este campo puede ser opcional en el uso actual
+    default: Date.now,
   },
 });
 
