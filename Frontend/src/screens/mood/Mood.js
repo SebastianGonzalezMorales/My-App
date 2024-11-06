@@ -218,10 +218,10 @@ const Mood = ({ navigation }) => {
               />
             </View>
             <Text style={ModalStyle.smallModalText}>
-              1. Tap on a mood to start tracking!
+              1. 
             </Text>
             <Text style={ModalStyle.smallModalTextTwo}>
-              2. Tap and hold to delete an entry
+              2. 
             </Text>
           </View>
         </View>

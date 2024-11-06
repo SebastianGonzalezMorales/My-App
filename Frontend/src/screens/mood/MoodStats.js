@@ -46,12 +46,17 @@ const MoodStats = ({ navigation }) => {
         const currentMonthAbbr = currentMonth.slice(0, 3);
         moodData.data.forEach((moodEntry) => {
           const { mood_state, intensidad, date } = moodEntry;
+
+          // Asegúrate de que mood_state e intensidad sean valores primitivos
+          const moodStateValue = typeof mood_state === 'object' ? mood_state.value || mood_state.label : mood_state;
+          const intensidadValue = typeof intensidad === 'object' ? intensidad.value || intensidad.label : intensidad;
+
           const month = new Date(date).toLocaleString('default', { month: 'short' });
           if (month === currentMonthAbbr) {
             x.push('');
-            y.push(intensidad);
+            y.push(Number(intensidadValue));
 
-            switch (mood_state) {
+            switch (moodStateValue) {
               case 'Mal':
                 mal++;
                 break;
@@ -63,6 +68,8 @@ const MoodStats = ({ navigation }) => {
                 break;
               case 'Excelente':
                 excelente++;
+                break;
+              default:
                 break;
             }
           }
@@ -86,7 +93,9 @@ const MoodStats = ({ navigation }) => {
   }, []);
 
   const handleMonthSelected = async (item) => {
-    setSelectedMonth(item.value);
+    // Asegúrate de que selectedMonth sea un string
+    const selectedMonthValue = typeof item.value === 'object' ? item.value.value || item.value.label : item.value;
+    setSelectedMonth(selectedMonthValue);
 
     try {
       const moodData = await fetchWithToken('/moodState/get-MoodStatesByUserId');
@@ -100,14 +109,19 @@ const MoodStats = ({ navigation }) => {
 
       moodData.data.forEach((moodEntry) => {
         const { mood_state, intensidad, date } = moodEntry;
+
+        // Asegúrate de que mood_state e intensidad sean valores primitivos
+        const moodStateValue = typeof mood_state === 'object' ? mood_state.value || mood_state.label : mood_state;
+        const intensidadValue = typeof intensidad === 'object' ? intensidad.value || intensidad.label : intensidad;
+
         const month = getMonthName(new Date(date).getMonth());
 
-        if (item.value === month) {
+        if (selectedMonthValue === month) {
           x.push('');
-          y.push(intensidad);
+          y.push(Number(intensidadValue));
           setMonthChart(month);
 
-          switch (mood_state) {
+          switch (moodStateValue) {
             case 'Mal':
               mal++;
               break;
@@ -119,6 +133,8 @@ const MoodStats = ({ navigation }) => {
               break;
             case 'Excelente':
               excelente++;
+              break;
+            default:
               break;
           }
         }
@@ -141,7 +157,7 @@ const MoodStats = ({ navigation }) => {
     <SafeAreaView style={[FormStyle.container, GlobalStyle.androidSafeArea]}>
       <View style={FormStyle.flexContainer}>
         <BackButton onPress={() => navigation.goBack()} />
-        <Text style={[FormStyle.title, {left:15}]}>Estadísticas de Estado de Ánimo</Text>
+        <Text style={[FormStyle.title, { left: 15 }]}>Estadísticas de Estado de Ánimo</Text>
       </View>
 
       <View style={{ paddingHorizontal: 30, marginVertical: 20 }}>
@@ -178,7 +194,16 @@ const MoodStats = ({ navigation }) => {
             bezier
             yAxisInterval={4}
           />
-          <Text style={{ position: 'absolute', alignSelf: 'center', bottom: '3%', paddingLeft: 30, color: '#666a72', fontFamily: 'DoppioOne' }}>
+          <Text
+            style={{
+              position: 'absolute',
+              alignSelf: 'center',
+              bottom: '3%',
+              paddingLeft: 30,
+              color: '#666a72',
+              fontFamily: 'DoppioOne',
+            }}
+          >
             {monthChart}
           </Text>
         </View>
