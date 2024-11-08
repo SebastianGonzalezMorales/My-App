@@ -69,25 +69,26 @@ const Mood = ({ navigation }) => {
             'Authorization': `Bearer ${token}`,
           },
         });
-
+  
         if (response.data.data.length === 0) {
-          // Si la lista está vacía, puedes mostrar un mensaje en la UI
           console.log('No se encontraron estados de ánimo para este usuario.');
         } else {
-          // Mapear los datos obtenidos
-          const moodsData = response.data.data.map((item) => {
-            const date = new Date(item.date).toLocaleDateString();
-            const time = new Date(item.date).toLocaleTimeString();
-
-            return {
-              id: item._id,
-              mood: item.mood_state,
-              date,
-              time,
-            };
-          });
-
-          // Actualizar el estado con los estados de ánimo formateados
+          // Ordenar los datos obtenidos por fecha en orden descendente
+          const moodsData = response.data.data
+            .sort((a, b) => new Date(b.date) - new Date(a.date)) // Orden descendente
+            .map((item) => {
+              const date = new Date(item.date).toLocaleDateString();
+              const time = new Date(item.date).toLocaleTimeString();
+  
+              return {
+                id: item._id,
+                mood: item.mood_state,
+                date,
+                time,
+              };
+            });
+  
+          // Actualizar el estado con los estados de ánimo formateados y ordenados
           setMoods(moodsData);
         }
       } else {
@@ -97,7 +98,7 @@ const Mood = ({ navigation }) => {
       console.error('Error al obtener los estados de ánimo:', error);
     }
   };
-
+  
   useEffect(() => {
     fetchData();
   }, []);
