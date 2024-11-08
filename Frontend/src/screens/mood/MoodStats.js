@@ -92,35 +92,33 @@ const MoodStats = ({ navigation }) => {
     fetchData();
   }, []);
 
-  const handleMonthSelected = async (item) => {
-    // Asegúrate de que selectedMonth sea un string
-    const selectedMonthValue = typeof item.value === 'object' ? item.value.value || item.value.label : item.value;
-    setSelectedMonth(selectedMonthValue);
-
+  const handleMonthSelected = async (label) => {
+    setSelectedMonth(label);
+  
     try {
       const moodData = await fetchWithToken('/moodState/get-MoodStatesByUserId');
       const x = [];
       const y = [];
-
+  
       let mal = 0;
       let regular = 0;
       let bien = 0;
       let excelente = 0;
-
+  
       moodData.data.forEach((moodEntry) => {
         const { mood_state, intensidad, date } = moodEntry;
-
+  
         // Asegúrate de que mood_state e intensidad sean valores primitivos
         const moodStateValue = typeof mood_state === 'object' ? mood_state.value || mood_state.label : mood_state;
         const intensidadValue = typeof intensidad === 'object' ? intensidad.value || intensidad.label : intensidad;
-
+  
         const month = getMonthName(new Date(date).getMonth());
-
-        if (selectedMonthValue === month) {
+  
+        if (label === month) {
           x.push('');
           y.push(Number(intensidadValue));
           setMonthChart(month);
-
+  
           switch (moodStateValue) {
             case 'Mal':
               mal++;
@@ -139,11 +137,11 @@ const MoodStats = ({ navigation }) => {
           }
         }
       });
-
+  
       y.unshift(0);
       setX(x);
       setY(y);
-
+  
       setMalCount(mal);
       setRegularCount(regular);
       setBienCount(bien);
@@ -152,6 +150,7 @@ const MoodStats = ({ navigation }) => {
       console.error('Error al obtener los estados de ánimo:', error);
     }
   };
+  
 
   return (
     <SafeAreaView style={[FormStyle.container, GlobalStyle.androidSafeArea]}>
@@ -168,12 +167,13 @@ const MoodStats = ({ navigation }) => {
           itemTextStyle={{ color: '#666a72', fontFamily: 'DoppioOne' }}
           iconStyle={{ tintColor: '#fff' }}
           placeholder={currentMonth}
-          data={months.map((month) => ({ label: month, value: month }))}
+          data={months.map((month) => ({ label: month.label, value: month.label }))} // Asegúrate de que value sea solo el nombre del mes
           value={selectedMonth}
-          onChange={(item) => handleMonthSelected(item)}
+          onChange={(item) => handleMonthSelected(item.label)} // Pasa solo el nombre del mes
           labelField="label"
           valueField="value"
         />
+
       </View>
 
       {y.length > 0 ? (
