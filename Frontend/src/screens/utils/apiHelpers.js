@@ -21,8 +21,11 @@ export const fetchWithToken = async (endpoint, method = 'GET', data = null, para
       ...(data && { data }),     // Agregar body si existe
     };
 
+        // Log para verificar qué devuelve la API
+        console.log('Respuesta completa de la API:', response);
     // Realizar la solicitud
     const response = await axios(config);
+    
 
     // Devolver la respuesta
     return response.data;

@@ -34,6 +34,7 @@ export default StyleSheet.create({
     color: '#666a72',
     fontFamily: 'DoppioOne',
     fontSize: 20,
+    marginTop: 20, // Añadido para dar más espacio superior
   },
   flatlistWrapper: {
     paddingHorizontal: 30,
