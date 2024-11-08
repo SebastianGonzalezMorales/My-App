@@ -182,6 +182,7 @@ const MoodStats = ({ navigation }) => {
             data={{ labels: x, datasets: [{ data: y }] }}
             width={Dimensions.get('window').width * 0.85}
             height={200}
+            
             chartConfig={{
               backgroundGradientFrom: '#f2f2f2',
               backgroundGradientTo: '#f2f2f2',
@@ -192,7 +193,10 @@ const MoodStats = ({ navigation }) => {
             }}
             style={ChartStyle.chartStyle}
             bezier
-            yAxisInterval={4}
+            fromNumber={4} 
+            yAxisMax={4} // Fija el valor máximo del eje Y en 4
+            fromZero={true} // Asegura que el eje Y comience desde 0
+            
           />
           <Text
             style={{
