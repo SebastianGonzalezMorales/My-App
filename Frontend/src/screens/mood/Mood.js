@@ -52,6 +52,17 @@ const Mood = ({ navigation }) => {
     Linking.openURL(url);
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    
+    return `${day}/${month}/${year}`; // Formato: DD/MM/YYYY
+  };
+  
+
   const startTracking = (mood, value) => {
     // Navegar a la pantalla `MoodTrack` pasando el estado de ánimo y la intensidad
     navigation.navigate('MoodTrack', {
@@ -77,7 +88,7 @@ const Mood = ({ navigation }) => {
           const moodsData = response.data.data
             .sort((a, b) => new Date(b.date) - new Date(a.date)) // Orden descendente
             .map((item) => {
-              const date = new Date(item.date).toLocaleDateString();
+              const date = formatDate(item.date);
               const time = new Date(item.date).toLocaleTimeString();
   
               return {

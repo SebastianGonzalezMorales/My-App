@@ -51,6 +51,17 @@ function Questionnaire({ navigation }) {
    * *******************
    */
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    
+    return `${day}/${month}/${year}`; // Formato: DD/MM/YYYY
+  };
+  
+
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
@@ -61,13 +72,15 @@ function Questionnaire({ navigation }) {
             return;
           }
 
-          const userResponse = await axios.post(`${API_URL}/users/userid`, {
-            token: `${token}`
-          }, {
-            headers: {
-              Authorization: `Bearer ${token}`
+          const userResponse = await axios.post(
+            `${API_URL}/users/userid`,
+            { token: `${token}` },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
-          });
+          );
 
           const userId = userResponse.data.userId;
           if (!userId) {
@@ -75,28 +88,36 @@ function Questionnaire({ navigation }) {
             return;
           }
 
-          const response = await axios.post(`${API_URL}/resultsTests/get-resultsTestUser/${userId}`, {
-            token: `${token}`
-          }, {
-            headers: {
-              Authorization: `Bearer ${token}`
+          const response = await axios.post(
+            `${API_URL}/resultsTests/get-resultsTestUser/${userId}`,
+            { token: `${token}` },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
-          });
+          );
 
-          const responseData = response.data;
+          let responseData = response.data;
+
+          // Ordenar los resultados por fecha en orden descendente
+          responseData.sort((a, b) => new Date(b.created) - new Date(a.created));
+
           const results = responseData.map((doc) => {
-            const { severity, date, total } = doc;
+            const { severity, created, total } = doc;
             return {
               id: doc._id,
               severity,
-              dateData: date,
+              dateData: formatDate(created),
               totalScore: `${total}/27`,
             };
           });
 
-            // Contar cuántos resultados tienen severidad "Grave"
-            const graveResults = results.filter(result => result.severity === 'Grave');
-            setGraveCount(graveResults.length);  // Guardar el número de resultados graves
+          // Contar cuántos resultados tienen severidad "Grave"
+          const graveResults = results.filter(
+            (result) => result.severity === 'Grave'
+          );
+          setGraveCount(graveResults.length);
 
           setResults(results);
 
@@ -104,13 +125,17 @@ function Questionnaire({ navigation }) {
             setLastTest(results[0].dateData);
           }
         } catch (error) {
-          console.error('Error al obtener los resultados:', error.response ? error.response.data : error.message);
+          console.error(
+            'Error al obtener los resultados:',
+            error.response ? error.response.data : error.message
+          );
         }
       };
 
       fetchData();
     }, []) // Se ejecuta cada vez que la pantalla tiene foco
   );
+
 
   // delete document function
   const deleteItem = () => {
