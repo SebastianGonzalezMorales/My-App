@@ -103,10 +103,10 @@ const Test = ({ navigation }) => {
     if (total >= 0 && total <= 4) {
       severity = 'Normal';
     } else if (total > 4 && total < 10) {
-      severity = 'leve';
+      severity = 'Leve';
     } else if (total >= 10 && total < 15) {
       severity = 'Moderado';
-    } else if (total >= 15 && total < 20) {
+    } else if (total >= 15 && total < 20) {xx
       severity = 'Moderadamente grave';
     } else {
       severity = 'Grave';

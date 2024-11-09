@@ -141,7 +141,7 @@ function Questionnaire({ navigation }) {
 {/* Mostrar alerta si tiene 4 o más resultados graves */}
 {/* Mostrar alerta si tiene 4 o más resultados graves */}
 {/* Mostrar alerta si tiene 4 o más resultados graves */}
-{graveCount >= 2 && (
+{graveCount >= 20 && (
   <View style={{ 
     padding: 15, 
     backgroundColor: '#fff3e0',  // Fondo claro
