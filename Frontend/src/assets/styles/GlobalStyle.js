@@ -42,6 +42,15 @@ export default StyleSheet.create({
     textAlign: 'left',  // Alineación a la izquierda
   },
 
+  titleWhitee: {
+    color: '#fff',
+    fontFamily: 'DoppioOne',
+    fontSize: 20,
+    paddingTop: 20,
+    paddingBottom: 10,  // Espacio entre el título y la siguiente sección
+    textAlign: 'left',  // Alineación a la izquierda
+  },
+
   subtitleBlack: {
     color: '#5c6169',
     fontFamily: 'DoppioOne',
@@ -103,7 +112,21 @@ export default StyleSheet.create({
     fontFamily: 'DoppioOne',
     fontSize: 16,
     paddingLeft: 30,
+    paddingRight: 30,
     paddingTop: 30,
+    textAlign: 'justify',
+    
+  },
+
+  subtitleMenu: {
+    color: '#f2f2fc',
+    fontFamily: 'DoppioOne',
+    fontSize: 15,
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 30,
+    textAlign: 'justify',
+    
   },
   text: {
     color: '#f2f2fc',

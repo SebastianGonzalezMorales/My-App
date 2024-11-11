@@ -27,6 +27,7 @@ import ForgotPassword from './src/screens/authentication/ForgotPassword';
 import ChangePassword from './src/screens/authentication/ChangePassword';
 import Mood from './src/screens/mood/Mood';
 import MoodStats from './src/screens/mood/MoodStats';
+import RedesSociales from './src/screens/InformacionUv/RedesSociales';
 
 import Questionnaire from './src/screens/SaludMental/Questionnaire';
 
@@ -38,7 +39,7 @@ import { onAuthStateChanged } from './src/screens/utils/auth';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import M2 from './src/screens/M2/M2';
+import InformacionUv from './src/screens/InformacionUv/InformacionUv';
 import SaludMental from './src/screens/SaludMental/SaludMental';
 import Tests from './src/screens/SaludMental/Tests';
 import Test from './src/screens/SaludMental/Test';
@@ -69,7 +70,7 @@ function Home() {
             iconName = focused ? 'brain' : 'brain';
             size = 30;
             color = focused ? '#000C7B' : '#999';
-          } else if (route.name === 'M2') {
+          } else if (route.name === 'InformacionUv') {
             iconName = focused ? 'file-document' : 'file-document-outline';
             size = 30;
             color = focused ? '#000C7B' : '#999';
@@ -98,8 +99,8 @@ function Home() {
 
         <Tab.Screen
         options={{ headerShown: false, gestureEnabled: false }}
-        name={'M2'}
-        component={M2}
+        name={'InformacionUv'}
+        component={InformacionUv}
       />
       
 
@@ -204,6 +205,10 @@ const AppNavigator = () => {
             <Stack.Screen name="MoodTrack" component={MoodTrack} />
             <Stack.Screen name="MoodStats" component={MoodStats} />
             <Stack.Screen name="MoodHistory" component={MoodHistory} />
+
+            <Stack.Screen name="InformacionUv" component={InformacionUv} />
+            <Stack.Screen name="RedesSociales" component={RedesSociales} />
+
             
           </>
         )}
