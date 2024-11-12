@@ -39,7 +39,9 @@ import { onAuthStateChanged } from './src/screens/utils/auth';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MenuUv from './src/screens/InformacionUv/MenuUv';
 import InformacionUv from './src/screens/InformacionUv/InformacionUv';
+import AprendeSobreSaludMental from './src/screens/SaludMental/AprendeSobreSaludMental';
 import SaludMental from './src/screens/SaludMental/SaludMental';
 import Tests from './src/screens/SaludMental/Tests';
 import Test from './src/screens/SaludMental/Test';
@@ -70,7 +72,7 @@ function Home() {
             iconName = focused ? 'brain' : 'brain';
             size = 30;
             color = focused ? '#000C7B' : '#999';
-          } else if (route.name === 'InformacionUv') {
+          } else if (route.name === 'MenuUv') {
             iconName = focused ? 'file-document' : 'file-document-outline';
             size = 30;
             color = focused ? '#000C7B' : '#999';
@@ -99,8 +101,8 @@ function Home() {
 
         <Tab.Screen
         options={{ headerShown: false, gestureEnabled: false }}
-        name={'InformacionUv'}
-        component={InformacionUv}
+        name={'MenuUv'}
+        component={MenuUv}
       />
       
 
@@ -206,8 +208,10 @@ const AppNavigator = () => {
             <Stack.Screen name="MoodStats" component={MoodStats} />
             <Stack.Screen name="MoodHistory" component={MoodHistory} />
 
-            <Stack.Screen name="InformacionUv" component={InformacionUv} />
+            <Stack.Screen name="MenuUv" component={MenuUv} />
+            <Stack.Screen name="AprendeSobreSaludMental" component={AprendeSobreSaludMental} />
             <Stack.Screen name="RedesSociales" component={RedesSociales} />
+            <Stack.Screen name="InformacionUv" component={InformacionUv} />
 
             
           </>

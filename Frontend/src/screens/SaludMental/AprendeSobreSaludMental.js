@@ -14,9 +14,10 @@ import {
   //Components
   import CustomButton from '../../components/buttons/CustomButton';
   import SettingsButton from '../../components/buttons/SettingsButton';
+  import BackButton from '../../components/buttons/BackButton';
 
   
-  function SaludMental({ navigation }) {
+  function AprendeSobreSaludMental({ navigation }) {
     return (
       <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       
@@ -29,11 +30,11 @@ import {
      
          */}
         <View style={{ height: 210 }}>
+           <BackButton onPress={() => navigation.goBack()} />
           <Text style={GlobalStyle.welcomeText}>Salud Mental </Text>
           <Text style={[GlobalStyle.subtitleMenu, { color: '#B0B0B0' }]}>
-  Descubre recursos y consejos para fortalecer tu bienestar mental, con información sobre diversos aspectos de la salud emocional. Evalúa tu bienestar a través de tests disponibles en esta sección.
+  Aprende sobre Salud Mental
 </Text>
-
         
         
         </View>
@@ -51,16 +52,18 @@ import {
        */}
       <View style={GlobalStyle.rowTwo}>
         <View style={GlobalStyle.statsContainer}>
+     
+
           
         </View>
         <ScrollView>
           <View style={{ marginTop: 10 }}>
              <SettingsButton
-              text="Aprende sobre Salud Mental"
+              text="Información"
               onPress={() => navigation.navigate('AprendeSobreSaludMental')}
             />
             <SettingsButton
-              text="Test"
+              text="Consejos"
               onPress={() => navigation.navigate('Tests')}
             /> 
            
@@ -78,5 +81,5 @@ import {
     );
   }
   
-  export default SaludMental;
+  export default AprendeSobreSaludMental;
   

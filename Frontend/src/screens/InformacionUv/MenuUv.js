@@ -11,19 +11,21 @@ import {
 import GlobalStyle from '../../assets/styles/GlobalStyle';
 
 // Components
-import BackButton from '../../components/buttons/BackButton';
 import CustomButton from '../../components/buttons/CustomButton';
 import SettingsButton from '../../components/buttons/SettingsButton';
 
-function InformacionUv({ navigation }) {
+function MenuUv({ navigation }) {
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
- <BackButton onPress={() => navigation.goBack()} />
+
 {/* Sección superior azul con título y subtítulo */}
 <View style={{ height: 210 }}>
   <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
   <Text style={[GlobalStyle.subtitleMenu, { color: '#B0B0B0' }]}>
-    Información 
+    Descubre{' '}
+    <Text style={{ fontWeight: 'bold' }}>novedades</Text>,{' '}
+    <Text style={{ fontWeight: 'bold' }}>eventos</Text> y toda la información sobre{' '}
+    <Text style={{ fontWeight: 'bold' }}>salud mental</Text> de la Universidad de Valparaíso.
   </Text>
 </View>
 
@@ -37,12 +39,12 @@ function InformacionUv({ navigation }) {
         <ScrollView contentContainerStyle={{ padding: 20 }}>
           <View style={{ marginTop: 10 }}>
             <SettingsButton
-              text="DaeUV"
+              text="Novedades"
               onPress={() => navigation.navigate('RedesSociales')}
             />
             <SettingsButton
-              text="AppaUv"
-              onPress={() => navigation.navigate('InformacionUV')}
+              text="Información"
+              onPress={() => navigation.navigate('InformacionUv')}
             />
           </View>
         </ScrollView>
@@ -51,4 +53,4 @@ function InformacionUv({ navigation }) {
   );
 }
 
-export default InformacionUv;
+export default MenuUv ;
