@@ -39,12 +39,12 @@ function MenuUv({ navigation }) {
         <ScrollView contentContainerStyle={{ padding: 20 }}>
           <View style={{ marginTop: 10 }}>
             <SettingsButton
-              text="Novedades"
-              onPress={() => navigation.navigate('RedesSociales')}
-            />
-            <SettingsButton
               text="Información"
               onPress={() => navigation.navigate('InformacionUv')}
+            />
+            <SettingsButton
+              text="Novedades"
+              onPress={() => navigation.navigate('RedesSociales')}
             />
           </View>
         </ScrollView>
