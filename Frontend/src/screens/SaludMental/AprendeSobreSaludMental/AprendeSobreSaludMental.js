@@ -1,94 +1,79 @@
-// react imports
+// React imports
+import React from 'react';
 import {
-    SafeAreaView,
-    Text,
-    ScrollView,
-  
-    View,
-  } from 'react-native';
-  
-  // customisation
-  import GlobalStyle from '../../../assets/styles/GlobalStyle';
+  SafeAreaView,
+  Text,
+  ScrollView,
+  View,
+  Image,
+  Dimensions
+} from 'react-native';
 
+// Custom styles
+import GlobalStyle from '../../../assets/styles/GlobalStyle';
 
-  //Components
-  import CustomButton from '../../../components/buttons/CustomButton';
-  import SettingsButton from '../../../components/buttons/SettingsButton';
-  import BackButton from '../../../components/buttons/BackButton';
+// Components
+import BackButton from '../../../components/buttons/BackButton';
+import SettingsButton from '../../../components/buttons/SettingsButton';
 
-  
-  function AprendeSobreSaludMental({ navigation }) {
-    return (
-      <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
+const { width, height } = Dimensions.get('window'); // Obtener las dimensiones de la pantalla
+
+function AprendeSobreSaludMental({ navigation }) {
+  return (
+    <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       
-              {/*
-       * *********************
-       * ***** Section 1 *****
-       * *********************
-       */}
-        {/*
-     
-         */}
-        <View style={{ height: 210 }}>
-           <BackButton onPress={() => navigation.goBack()} />
-          <Text style={GlobalStyle.welcomeText}>Salud Mental </Text>
-          <Text style={[GlobalStyle.subtitleMenu, { color: '#B0B0B0' }]}>
-  Aprende sobre Salud Mental
-  </Text>
-          <Text style={GlobalStyle.welcomeText}>¡ NO HAY SALUD SIN SALUD MENTAL ! </Text>
+      {/* Sección Azul del Encabezado */}
+      <View style={{ height: height * 0.45, padding: 15 }}>
+         {/* Altura ajustada al 40% del tamaño de la pantalla */}
+        <BackButton onPress={() => navigation.goBack()} />
+        <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF' }]}>Salud Mental</Text>
+        <Text style={[GlobalStyle.subtitleMenu, { color: '#B0B0B0' }]}>
+          Aprende sobre Salud Mental
+        </Text>
+        
+        {/* Imagen con altura ajustada */}
+        <Image
+          source={require('../../../../assets/Menu/salud_Mental.png')}
+          style={{
+            width: '100%',
+            height: height * 0.2, // Ajustar la altura de la imagen al 20% de la pantalla
+            resizeMode: 'contain', // Cambiar a 'contain' para evitar recortes
+            marginTop: 5
+          }}
+        />
+        
+{/* Texto adicional */}
+{/*          <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF', fontSize: 16, textAlign: 'center', marginTop: 10 }]}>
+          ¡ NO HAY SALUD SIN SALUD MENTAL !
+        </Text>  */}
+      </View>
 
-        
-        
-        </View>
-
-        
-  
-        {
-         }
-       
-             {/*
-        {/*
-       * *********************
-       * ***** Section 2 *****
-       * *********************
-       */}
+      {/* Sección de Botones de Navegación */}
       <View style={GlobalStyle.rowTwo}>
-        <View style={GlobalStyle.statsContainer}>
-     
-
-          
-        </View>
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ paddingHorizontal: 15, paddingVertical: 20 }}>
           <View style={{ marginTop: 10 }}>
-             <SettingsButton
+            <SettingsButton
               text="Información"
               onPress={() => navigation.navigate('Informacion')}
             />
             <SettingsButton
               text="Consejos"
               onPress={() => navigation.navigate('Consejos')}
-            /> 
+            />
             <SettingsButton
               text="Consejos de estudiantes"
               onPress={() => navigation.navigate('ConsejosDeEstudiantes')}
-            /> 
-                        <SettingsButton
+            />
+            <SettingsButton
               text="Redes de apoyo"
               onPress={() => navigation.navigate('RedesDeApoyo')}
-            /> 
-            {/* <SettingsButton text="Notifications" onPress={() => navigation.navigate('Counselling')} /> */}
-           {/*  <SettingsButton
-              text="Privacy policy"
-               onPress={() => navigation.navigate('Notification')}
-            /> */}
-
+            />
           </View>
         </ScrollView>
       </View>
       
-      </SafeAreaView>
-    );
-  }
-  
-  export default AprendeSobreSaludMental;
-  
+    </SafeAreaView>
+  );
+}
+
+export default AprendeSobreSaludMental;

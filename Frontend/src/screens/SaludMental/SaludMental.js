@@ -3,7 +3,7 @@ import {
     SafeAreaView,
     Text,
     ScrollView,
-  
+    Image,
     View,
   } from 'react-native';
   
@@ -28,18 +28,20 @@ import {
         {/*
      
          */}
-        <View style={{ height: 210 }}>
-          <Text style={GlobalStyle.welcomeText}>Salud Mental </Text>
-          <Text style={[GlobalStyle.subtitleMenu, { color: '#B0B0B0' }]}>
-  Descubre recursos y consejos para fortalecer tu bienestar mental, con información sobre diversos aspectos de la salud emocional. Evalúa tu bienestar a través de tests disponibles en esta sección.
-</Text>
-
-        
-        
-        </View>
-
-        
+            {/* Section 1 */}
+            <View style={{ height: 400 }}>
+                <Text style={GlobalStyle.welcomeText}>Salud Mental</Text>
+                <Text style={[GlobalStyle.subtitleMenu, { color: '#B0B0B0' }]}>
+                    Descubre recursos y consejos para fortalecer tu bienestar mental, con información sobre diversos aspectos de la salud emocional. Evalúa tu bienestar a través de tests disponibles en esta sección.
+                </Text>
+                {/* Aquí agregamos la imagen */}
+{/*                 <Image
+                     source={require('../../../assets/Menu/salud_Mental.png')} // Reemplaza con la ruta de tu imagen
+                    style={{ width: '100%', height: 200, resizeMode: 'cover', marginTop: 10 }}
+                /> */}
+            </View>
   
+            
         {
          }
        
