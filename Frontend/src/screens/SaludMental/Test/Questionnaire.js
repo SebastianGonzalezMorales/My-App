@@ -9,18 +9,18 @@ import { useFocusEffect } from '@react-navigation/native'; // Importar useFocusE
 import { API_URL } from '@env';
 
 // components
-import CustomButton from '../../components/buttons/CustomButton';
-import FormButton from '../../components/buttons/FormButton';
-import HistoryButton from '../../components/buttons/HistoryButton';
-import StatsButton from '../../components/buttons/StatsButton';
-import CircularButton from '../../components/buttons/CircularButton';
-import BackButton from '../../components/buttons/BackButton';
+import CustomButton from '../../../components/buttons/CustomButton';
+import FormButton from '../../../components/buttons/FormButton';
+import HistoryButton from '../../../components/buttons/HistoryButton';
+import StatsButton from '../../../components/buttons/StatsButton';
+import CircularButton from '../../../components/buttons/CircularButton';
+import BackButton from '../../../components/buttons/BackButton';
 
 // customisation
 import GestureRecognizer from 'react-native-swipe-gestures';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import GlobalStyle from '../../assets/styles/GlobalStyle';
-import ModalStyle from '../../assets/styles/ModalStyle';
+import GlobalStyle from '../../../assets/styles/GlobalStyle';
+import ModalStyle from '../../../assets/styles/ModalStyle';
 
 function Questionnaire({ navigation }) {
 /*   // references

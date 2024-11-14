@@ -29,7 +29,7 @@ import Mood from './src/screens/mood/Mood';
 import MoodStats from './src/screens/mood/MoodStats';
 import RedesSociales from './src/screens/InformacionUv/RedesSociales';
 
-import Questionnaire from './src/screens/SaludMental/Questionnaire';
+import Questionnaire from './src/screens/SaludMental/Test/Questionnaire';
 
 import Settings from './src/screens/settings/Settings';
 
@@ -41,14 +41,18 @@ import * as SplashScreen from 'expo-splash-screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MenuUv from './src/screens/InformacionUv/MenuUv';
 import InformacionUv from './src/screens/InformacionUv/InformacionUv';
-import AprendeSobreSaludMental from './src/screens/SaludMental/AprendeSobreSaludMental';
+import Informacion from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion';
+import AprendeSobreSaludMental from './src/screens/SaludMental/AprendeSobreSaludMental/AprendeSobreSaludMental';
+import Consejos from './src/screens/SaludMental/AprendeSobreSaludMental/Consejos';
+import ConsejosDeEstudiantes from './src/screens/SaludMental/AprendeSobreSaludMental/ConsejosDeEstudiantes';
+import RedesDeApoyo from './src/screens/SaludMental/AprendeSobreSaludMental/RedesDeApoyo';
 import SaludMental from './src/screens/SaludMental/SaludMental';
-import Tests from './src/screens/SaludMental/Tests';
-import Test from './src/screens/SaludMental/Test';
+import Tests from './src/screens/SaludMental/Test/Tests';
+import Test from './src/screens/SaludMental/Test/Test';
 import MoodTrack from './src/screens/mood/MoodTrack';
-import QuestionnaireStats from './src/screens/SaludMental/QuestionnaireStats';
+import QuestionnaireStats from './src/screens/SaludMental/Test/QuestionnaireStats';
 import MoodHistory from './src/screens/mood/MoodHistory';
-import QuestionnaireHistory from './src/screens/SaludMental/QuestionnaireHistory';
+import QuestionnaireHistory from './src/screens/SaludMental/Test/QuestionnaireHistory';
 
 const Tab = createBottomTabNavigator(); // create tab navigator method
 const Stack = createNativeStackNavigator(); // create stack navigator method
@@ -209,7 +213,12 @@ const AppNavigator = () => {
             <Stack.Screen name="MoodHistory" component={MoodHistory} />
 
             <Stack.Screen name="MenuUv" component={MenuUv} />
+            <Stack.Screen name="Informacion" component={Informacion} />
             <Stack.Screen name="AprendeSobreSaludMental" component={AprendeSobreSaludMental} />
+            <Stack.Screen name="Consejos" component={Consejos} />
+            <Stack.Screen name="ConsejosDeEstudiantes" component={ConsejosDeEstudiantes} />
+            <Stack.Screen name="RedesDeApoyo" component={RedesDeApoyo} />
+            
             <Stack.Screen name="RedesSociales" component={RedesSociales} />
             <Stack.Screen name="InformacionUv" component={InformacionUv} />
 

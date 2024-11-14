@@ -7,16 +7,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '@env';
 
 // components
-import BackButton from '../../components/buttons/BackButton';
+import BackButton from '../../../components/buttons/BackButton';
 import { Dropdown } from 'react-native-element-dropdown';
 
 // get functions
-import { getMonth, getMonths, getMonthName } from '../utils/getMonths';
+import { getMonth, getMonths, getMonthName } from '../../utils/getMonths';
 
 // customisation
-import ChartStyle from '../../assets/styles/ChartStyle';
-import GlobalStyle from '../../assets/styles/GlobalStyle';
-import FormStyle from '../../assets/styles/FormStyle';
+import ChartStyle from '../../../assets/styles/ChartStyle';
+import GlobalStyle from '../../../assets/styles/GlobalStyle';
+import FormStyle from '../../../assets/styles/FormStyle';
 
 const QuestionnaireStats = ({ navigation }) => {
 

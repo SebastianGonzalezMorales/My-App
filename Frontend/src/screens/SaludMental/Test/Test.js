@@ -12,14 +12,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '@env';
 
 // components
-import BackButton from '../../components/buttons/BackButton';
-import FormButton from '../../components/buttons/FormButton';
-import OptionButton from '../../components/buttons/OptionButton';
-import SmallFormButton from '../../components/buttons/SmallFormButton';
+import BackButton from '../../../components/buttons/BackButton';
+import FormButton from '../../../components/buttons/FormButton';
+import OptionButton from '../../../components/buttons/OptionButton';
+import SmallFormButton from '../../../components/buttons/SmallFormButton';
 
 // customisation
-import FormStyle from '../../assets/styles/FormStyle';
-import GlobalStyle from '../../assets/styles/GlobalStyle';
+import FormStyle from '../../../assets/styles/FormStyle';
+import GlobalStyle from '../../../assets/styles/GlobalStyle';
 
 const Test = ({ navigation }) => {
   // references
