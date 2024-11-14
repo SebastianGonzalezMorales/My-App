@@ -14,6 +14,7 @@ import {
   //Components
   import CustomButton from '../../../components/buttons/CustomButton';
   import SettingsButton from '../../../components/buttons/SettingsButton';
+  import BackButton from '../../../components/buttons/BackButton';
 
   
   function Informacion({ navigation }) {
@@ -29,6 +30,7 @@ import {
      
          */}
         <View style={{ height: 210 }}>
+        <BackButton onPress={() => navigation.goBack()} />
           <Text style={GlobalStyle.welcomeText}>Salud Mental </Text>
           <Text style={[GlobalStyle.subtitleMenu, { color: '#B0B0B0' }]}>
 Información

@@ -34,7 +34,9 @@ import {
           <Text style={GlobalStyle.welcomeText}>Salud Mental </Text>
           <Text style={[GlobalStyle.subtitleMenu, { color: '#B0B0B0' }]}>
   Aprende sobre Salud Mental
-</Text>
+  </Text>
+          <Text style={GlobalStyle.welcomeText}>¡ NO HAY SALUD SIN SALUD MENTAL ! </Text>
+
         
         
         </View>

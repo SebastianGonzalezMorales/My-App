@@ -14,6 +14,7 @@ import {
   //Components
   import CustomButton from '../../../components/buttons/CustomButton';
   import SettingsButton from '../../../components/buttons/SettingsButton';
+  import BackButton from '../../../components/buttons/BackButton';
 
   
   function RedesDeApoyo({ navigation }) {
@@ -49,6 +50,7 @@ import {
        * *********************
        */}
       <View style={GlobalStyle.rowTwo}>
+      <BackButton onPress={() => navigation.goBack()} />
         <View style={GlobalStyle.statsContainer}>
           
         </View>
