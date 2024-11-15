@@ -64,7 +64,7 @@ function Consejos({ navigation }) {
           <ScrollView
             horizontal
             pagingEnabled
-            showsHorizontalScrollIndicator={true}
+            showsHorizontalScrollIndicator={false}
             onScroll={handleScroll}
             scrollEventThrottle={16}
             contentContainerStyle={styles.carouselContainer}

@@ -59,11 +59,11 @@ import {
           <View style={{ marginTop: 10 }}>
             <SettingsButton
               text="Depresión"
-              onPress={() => navigation.navigate('Questionnaire')}
+              onPress={() => navigation.navigate('TestDeDepresion')}
             /> 
             <SettingsButton
               text="Ansiedad"
-              onPress={() => navigation.navigate('Counselling')}
+              onPress={() => navigation.navigate('TestDeAnsiedad')}
             />
             {/* <SettingsButton text="Notifications" onPress={() => navigation.navigate('Counselling')} /> */}
            {/*  <SettingsButton

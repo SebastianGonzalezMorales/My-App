@@ -21,7 +21,7 @@ import SmallFormButton from '../../../components/buttons/SmallFormButton';
 import FormStyle from '../../../assets/styles/FormStyle';
 import GlobalStyle from '../../../assets/styles/GlobalStyle';
 
-const Test = ({ navigation }) => {
+const TestDepresion = ({ navigation }) => {
   // references
   /*   const userRef = firebase
       .firestore()
@@ -233,7 +233,7 @@ const Test = ({ navigation }) => {
 
         <View style={[FormStyle.buttonContainer, FormStyle.buttonPosition]}>
           <FormButton
-            onPress={() => navigation.navigate('Questionnaire')}
+            onPress={() => navigation.navigate('TestDeDepresion')}
             text="Volver atrás"
             buttonStyle={{
               backgroundColor: '#f2f2f2',
@@ -320,4 +320,4 @@ const Test = ({ navigation }) => {
   );
 };
 
-export default Test;
+export default TestDepresion;

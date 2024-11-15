@@ -22,19 +22,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import GlobalStyle from '../../../assets/styles/GlobalStyle';
 import ModalStyle from '../../../assets/styles/ModalStyle';
 
-function Questionnaire({ navigation }) {
-/*   // references
-  const userRef = firebase
-    .firestore()
-    .collection('users')
-    .doc(firebase.auth().currentUser.uid);
+function TestDeDepresion({ navigation }) {
 
-  const questionnaireRef = firebase
-    .firestore()
-    .collection('users')
-    .doc(firebase.auth().currentUser.uid)
-    .collection('questionnaire');
- */
   // states
   const [results, setResults] = useState([]);
   const [lastTest, setLastTest] = useState();
@@ -331,13 +320,13 @@ function Questionnaire({ navigation }) {
         <View style={GlobalStyle.statsContainer}>
           <Text style={GlobalStyle.statsTitle}>Estadísticas</Text>
           <StatsButton
-            onPress={() => navigation.navigate('QuestionnaireStats')}
+            onPress={() => navigation.navigate('TestDepresionEstadisticas')}
           />
         </View>
 
         <HistoryButton
           // onPress={() => setSeeAllModalVisible(true)}
-          onPress={() => navigation.navigate('QuestionnaireHistory')}
+          onPress={() => navigation.navigate('TestDepresionHistorial')}
           textLeft="Resultados"
           textRight="Ver todos"
         />
@@ -377,7 +366,7 @@ function Questionnaire({ navigation }) {
         {/* button */}
         <View style={GlobalStyle.circularButtonContainer}>
           <CircularButton
-            onPress={() => navigation.navigate('Test')}
+            onPress={() => navigation.navigate('TestDepresion')}
             setVisble={false}
           />
         </View>
@@ -386,4 +375,4 @@ function Questionnaire({ navigation }) {
   );
 }
 
-export default Questionnaire;
+export default TestDeDepresion;

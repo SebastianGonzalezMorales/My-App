@@ -29,7 +29,7 @@ import Mood from './src/screens/mood/Mood';
 import MoodStats from './src/screens/mood/MoodStats';
 import RedesSociales from './src/screens/InformacionUv/RedesSociales';
 
-import Questionnaire from './src/screens/SaludMental/Test/Questionnaire';
+import TestDeDepresion from './src/screens/SaludMental/Test/TestDeDepresion';
 
 import Settings from './src/screens/settings/Settings';
 
@@ -48,11 +48,13 @@ import ConsejosDeEstudiantes from './src/screens/SaludMental/AprendeSobreSaludMe
 import RedesDeApoyo from './src/screens/SaludMental/AprendeSobreSaludMental/RedesDeApoyo';
 import SaludMental from './src/screens/SaludMental/SaludMental';
 import Tests from './src/screens/SaludMental/Test/Tests';
-import Test from './src/screens/SaludMental/Test/Test';
+import TestDepresion from './src/screens/SaludMental/Test/TestDepresion';
+import TestDeAnsiedad from './src/screens/SaludMental/Test/TestDeAnsiedad';
 import MoodTrack from './src/screens/mood/MoodTrack';
-import QuestionnaireStats from './src/screens/SaludMental/Test/QuestionnaireStats';
+import TestDepresionHistorial from './src/screens/SaludMental/Test/TestDepresionHistorial';
 import MoodHistory from './src/screens/mood/MoodHistory';
-import QuestionnaireHistory from './src/screens/SaludMental/Test/QuestionnaireHistory';
+import TestAnsiedadEstadisticas from './src/screens/SaludMental/Test/TestAnsiedadEstadisticas';
+import TestDepresionEstadisticas from './src/screens/SaludMental/Test/TestDepresionEstadisticas';
 
 const Tab = createBottomTabNavigator(); // create tab navigator method
 const Stack = createNativeStackNavigator(); // create stack navigator method
@@ -202,11 +204,13 @@ const AppNavigator = () => {
           <>
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Tests" component={Tests} />
-            <Stack.Screen name="Test" component={Test} />
+            <Stack.Screen name="TestDepresion" component={TestDepresion} />
+            <Stack.Screen name="TestDeAnsiedad" component={TestDeAnsiedad} />
 
-            <Stack.Screen name="Questionnaire" component={Questionnaire} />
-            <Stack.Screen name="QuestionnaireStats" component={QuestionnaireStats} />
-            <Stack.Screen name="QuestionnaireHistory" component={QuestionnaireHistory} />
+            <Stack.Screen name="TestDeDepresion" component={TestDeDepresion} />
+            <Stack.Screen name="TestDepresionHistorial" component={TestDepresionHistorial} />
+            <Stack.Screen name="TestAnsiedadEstadisticas" component={TestAnsiedadEstadisticas} />
+            <Stack.Screen name="TestDepresionEstadisticas" component={TestDepresionEstadisticas} />
 
             <Stack.Screen name="MoodTrack" component={MoodTrack} />
             <Stack.Screen name="MoodStats" component={MoodStats} />

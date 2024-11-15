@@ -62,7 +62,7 @@ function SaludMental({ navigation }) {
               onPress={() => navigation.navigate('AprendeSobreSaludMental')}
             />
             <SettingsButton
-              text="Test"
+              text="Tests"
               onPress={() => navigation.navigate('Tests')}
             />
 
