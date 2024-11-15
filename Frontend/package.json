@@ -17,6 +17,7 @@
     "axios": "^1.7.7",
     "expo": "^51.0.0",
     "expo-dev-client": "~4.0.29",
+    "expo-font": "~12.0.10",
     "expo-splash-screen": "~0.27.7",
     "expo-status-bar": "~1.12.1",
     "jwt-decode": "^4.0.0",
@@ -33,7 +34,9 @@
     "react-native-screens": "3.31.1",
     "react-native-svg": "15.2.0",
     "react-native-swipe-gestures": "^1.0.5",
-    "expo-font": "~12.0.10"
+    "react-native-video": "^6.7.0",
+    "react-native-webview": "^13.12.3",
+    "react-native-youtube-iframe": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2"

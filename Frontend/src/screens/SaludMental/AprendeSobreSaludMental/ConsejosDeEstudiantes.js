@@ -1,77 +1,174 @@
-// react imports
+// React imports
+import React, { useState, useRef } from 'react';
 import {
-    SafeAreaView,
-    Text,
-    ScrollView,
-  
-    View,
-  } from 'react-native';
-  
-  // customisation
-  import GlobalStyle from '../../../assets/styles/GlobalStyle';
+  SafeAreaView,
+  Text,
+  Animated,
+  View,
+  Dimensions,
+  StyleSheet
+} from 'react-native';
+import YoutubePlayer from 'react-native-youtube-iframe';
 
+// Custom styles
+import GlobalStyle from '../../../assets/styles/GlobalStyle';
+import BackButton from '../../../components/buttons/BackButton';
 
-  //Components
-  import CustomButton from '../../../components/buttons/CustomButton';
-  import SettingsButton from '../../../components/buttons/SettingsButton';
-  import BackButton from '../../../components/buttons/BackButton';
+// Obtener dimensiones de la pantalla
+const { width, height } = Dimensions.get('window');
 
-  
-  function SaludMental({ navigation }) {
-    return (
-      <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
+// Datos de los videos de los estudiantes
+const studentVideos = [
+  { id: 1, videoId: 'wxOigZE8ADs', title: 'Preocupaciones y ansiedad' },
+  { id: 2, videoId: 'VKHqSbcW674', title: 'Vida Universitaria' },
+  { id: 3, videoId: 'yqzZljKwTzU', title: 'Vida Universitaria' },
+];
+
+function ConsejosEstudiantes({ navigation }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const [playingIndex, setPlayingIndex] = useState(null);
+
+  // Manejar la reproducción del video
+  const onVideoPlay = (index) => {
+    setPlayingIndex(index);
+  };
+
+  return (
+    <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       
-              {/*
-       * *********************
-       * ***** Section 1 *****
-       * *********************
-       */}
-        {/*
-     
-         */}
-        <View style={{ height: 210 }}>
+      {/* Sección Azul del Encabezado */}
+      <View style={{ height: 260., padding: 15 }}>
         <BackButton onPress={() => navigation.goBack()} />
-          <Text style={GlobalStyle.welcomeText}>Salud Mental </Text>
-          <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
-  Consejos de estudiantes
-</Text>
+        <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF' }]}>Salud Mental</Text>
+        <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
+          Consejos de estudiantes
+        </Text>
+        
+        {/* Descripción debajo del título */}
+        <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
+        A continuación, encontrarás videos con consejos de estudiantes para cuidar tu bienestar emocional durante tu período en la Universidad de Valparaíso. Estos videos provienen de la Red de Salud Digital de las Universidades del Estado (RSDUE).
+        </Text>
+      </View>
 
-        
-        
+      {/* Contenedor para el Carrusel de Videos */}
+      <View style={[GlobalStyle.rowTwo, styles.centeredContainer]}>
+        <View style={styles.scrollContainer}>
+          <Animated.ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+              { useNativeDriver: false }
+            )}
+            scrollEventThrottle={16}
+            contentContainerStyle={styles.carouselContainer}
+            onMomentumScrollEnd={(event) => {
+              const slideIndex = Math.round(event.nativeEvent.contentOffset.x / (width * 0.8));
+              setCurrentIndex(slideIndex);
+            }}
+          >
+            {studentVideos.map((video, index) => (
+              <View key={video.id} style={styles.slide}>
+                <Text style={styles.videoTitle}>{video.title}</Text>
+                <YoutubePlayer
+                  height={height * 0.3}
+                  width={width * 0.8}
+                  play={playingIndex === index}
+                  videoId={video.videoId}
+                  onChangeState={(state) => {
+                    if (state === 'playing') {
+                      onVideoPlay(index);
+                    } else if (state === 'ended' || state === 'paused') {
+                      setPlayingIndex(null);
+                    }
+                  }}
+                />
+              </View>
+            ))}
+          </Animated.ScrollView>
         </View>
 
-        
-  
-        {
-         }
-       
-             {/*
-        {/*
-       * *********************
-       * ***** Section 2 *****
-       * *********************
-       */}
-      <View style={GlobalStyle.rowTwo}>
-        <View style={GlobalStyle.statsContainer}>
-          
+        {/* Puntos de Paginación fijos debajo del carrusel */}
+        <View style={styles.pagination}>
+          {studentVideos.map((_, index) => {
+            const opacity = scrollX.interpolate({
+              inputRange: [
+                (index - 1) * width * 0.8,
+                index * width * 0.8,
+                (index + 1) * width * 0.8
+              ],
+              outputRange: [0.3, 1, 0.3],
+              extrapolate: 'clamp',
+            });
+            return (
+              <Animated.View
+                key={index}
+                style={[
+                  styles.dot,
+                  {
+                    opacity,
+                    backgroundColor: index === currentIndex ? '#000C7B' : '#D1D5DB'
+                  }
+                ]}
+              />
+            );
+          })}
         </View>
-        <ScrollView>
-          <View style={{ marginTop: 10 }}>
-            
-           
-            {/* <SettingsButton text="Notifications" onPress={() => navigation.navigate('Counselling')} /> */}
-           {/*  <SettingsButton
-              text="Privacy policy"
-               onPress={() => navigation.navigate('Notification')}
-            /> */}
-
-          </View>
-        </ScrollView>
       </View>
       
-      </SafeAreaView>
-    );
-  }
-  
-  export default SaludMental;
-  
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  centeredContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    marginTop: 20,
+  },
+  scrollContainer: {
+    width: width * 0.8,
+    height: height * 0.5,
+  },
+  carouselContainer: {
+    alignItems: 'center',
+  },
+  slide: {
+    width: width * 0.8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    padding: 10,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  videoTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#5c6169',
+    marginBottom: 5,
+    textAlign: 'center',
+  },
+  pagination: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginHorizontal: 4,
+  },
+});
+
+export default ConsejosEstudiantes;
