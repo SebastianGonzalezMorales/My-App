@@ -279,7 +279,7 @@ const Mood = ({ navigation }) => {
        * *********************
        */}
       {/* Espacio hasta la frase del día  */}
-      <View style={{ height: 301 }}>
+      <View style={{ height: 310 }}>
         <Text style={GlobalStyle.welcomeText}>Hola, {name}  !</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={[GlobalStyle.subtitle, { textAlign: 'left' }]}> Cómo te sientes ahora mismo ?</Text>
