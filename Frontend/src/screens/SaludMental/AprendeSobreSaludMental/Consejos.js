@@ -45,7 +45,7 @@ function Consejos({ navigation }) {
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       
       {/* Sección Azul del Encabezado */}
-      <View style={{ height: 240, padding: 15 }}>
+      <View style={{ height: 260, padding: 15 }}>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF' }]}>Salud Mental</Text>
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
@@ -64,7 +64,7 @@ function Consejos({ navigation }) {
           <ScrollView
             horizontal
             pagingEnabled
-            showsHorizontalScrollIndicator={false}
+            showsHorizontalScrollIndicator={true}
             onScroll={handleScroll}
             scrollEventThrottle={16}
             contentContainerStyle={styles.carouselContainer}
@@ -133,10 +133,11 @@ const styles = StyleSheet.create({
     marginTop: 30, // Espacio justo debajo de la imagen
   },
   dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
     marginHorizontal: 4,
+    backgroundColor: '#D1D5DB',
   },
 });
 

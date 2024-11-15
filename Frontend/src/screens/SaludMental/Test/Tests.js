@@ -34,7 +34,7 @@ import {
           <Text style={GlobalStyle.welcomeText}>Salud Mental </Text>
           <Text style={GlobalStyle.subtitle}>Tests psicológicos</Text>
         <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>
-          A continuación podrás realizar diferentes test psicologicos para medir tu bienestar emocional
+          A continuación, podrás realizar diferentes test psicologicos para medir tu bienestar emocional
         </Text>
   
         

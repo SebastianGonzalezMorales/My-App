@@ -19,13 +19,10 @@ function MenuUv({ navigation }) {
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
 
 {/* Sección superior azul con título y subtítulo */}
-<View style={{ height: 210 }}>
+<View style={{ height: 180 }}>
   <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
-  <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
-    Descubre{' '}
-    <Text style={{ fontWeight: 'bold' }}>novedades</Text>,{' '}
-    <Text style={{ fontWeight: 'bold' }}>eventos</Text> y toda la información sobre{' '}
-    <Text style={{ fontWeight: 'bold' }}>salud mental</Text> de la Universidad de Valparaíso.
+  <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
+    Descubre novedades eventos y toda la información sobre salud mental de la Universidad de Valparaíso.
   </Text>
 </View>
 
