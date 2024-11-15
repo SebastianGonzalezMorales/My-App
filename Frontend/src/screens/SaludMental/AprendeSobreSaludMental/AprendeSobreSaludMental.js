@@ -23,8 +23,8 @@ function AprendeSobreSaludMental({ navigation }) {
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       
       {/* Sección Azul del Encabezado */}
-      <View style={{ height: height * 0.45, padding: 15 }}>
-         {/* Altura ajustada al 40% del tamaño de la pantalla */}
+      <View style={{ height: height * 0.5, padding: 15 }}>
+         {/* Altura ajustada al 50% del tamaño de la pantalla */}
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF' }]}>Salud Mental</Text>
         <Text style={[GlobalStyle.subtitleMenu, { color: '#B0B0B0' }]}>
@@ -36,7 +36,7 @@ function AprendeSobreSaludMental({ navigation }) {
           source={require('../../../../assets/Menu/salud_Mental.png')}
           style={{
             width: '100%',
-            height: height * 0.2, // Ajustar la altura de la imagen al 20% de la pantalla
+            height: height * 0.23, // Ajustar la altura de la imagen al 20% de la pantalla
             resizeMode: 'contain', // Cambiar a 'contain' para evitar recortes
             marginTop: 5
           }}
@@ -50,7 +50,7 @@ function AprendeSobreSaludMental({ navigation }) {
 
       {/* Sección de Botones de Navegación */}
       <View style={GlobalStyle.rowTwo}>
-        <ScrollView contentContainerStyle={{ paddingHorizontal: 15, paddingVertical: 20 }}>
+        <ScrollView contentContainerStyle>
           <View style={{ marginTop: 10 }}>
             <SettingsButton
               text="Información"

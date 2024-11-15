@@ -29,7 +29,7 @@ import {
      
          */}
             {/* Section 1 */}
-            <View style={{ height: 400 }}>
+            <View style={{ height: 210 }}>
                 <Text style={GlobalStyle.welcomeText}>Salud Mental</Text>
                 <Text style={[GlobalStyle.subtitleMenu, { color: '#B0B0B0' }]}>
                     Descubre recursos y consejos para fortalecer tu bienestar mental, con información sobre diversos aspectos de la salud emocional. Evalúa tu bienestar a través de tests disponibles en esta sección.
