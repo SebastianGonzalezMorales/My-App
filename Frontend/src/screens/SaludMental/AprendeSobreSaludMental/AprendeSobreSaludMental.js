@@ -27,7 +27,7 @@ function AprendeSobreSaludMental({ navigation }) {
          {/* Altura ajustada al 50% del tamaño de la pantalla */}
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF' }]}>Salud Mental</Text>
-        <Text style={[GlobalStyle.subtitleMenu, { color: '#B0B0B0' }]}>
+        <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
           Aprende sobre Salud Mental
         </Text>
         

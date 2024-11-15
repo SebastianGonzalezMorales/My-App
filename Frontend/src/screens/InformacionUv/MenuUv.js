@@ -21,7 +21,7 @@ function MenuUv({ navigation }) {
 {/* Sección superior azul con título y subtítulo */}
 <View style={{ height: 210 }}>
   <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
-  <Text style={[GlobalStyle.subtitleMenu, { color: '#B0B0B0' }]}>
+  <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
     Descubre{' '}
     <Text style={{ fontWeight: 'bold' }}>novedades</Text>,{' '}
     <Text style={{ fontWeight: 'bold' }}>eventos</Text> y toda la información sobre{' '}

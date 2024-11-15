@@ -32,7 +32,7 @@ import {
         <View style={{ height: 210 }}>
         <BackButton onPress={() => navigation.goBack()} />
           <Text style={GlobalStyle.welcomeText}>Salud Mental </Text>
-          <Text style={[GlobalStyle.subtitleMenu, { color: '#B0B0B0' }]}>
+          <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
 Información
 </Text>
 
