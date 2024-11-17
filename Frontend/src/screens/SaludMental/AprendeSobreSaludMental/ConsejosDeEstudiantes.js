@@ -47,7 +47,7 @@ function ConsejosEstudiantes({ navigation }) {
         
         {/* Descripción debajo del título */}
         <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
-          A continuación, encontrarás videos con consejos de estudiantes para cuidar tu bienestar emocional durante tu período en la Universidad de Valparaíso. Estos videos provienen de la Red de Salud Digital de las Universidades del Estado (RSDUE).
+          A continuación, encontrarás videos con consejos de estudiantes para cuidar tu bienestar emocional durante tu etapa en la Universidad de Valparaíso. Estos videos provienen de la Red de Salud Digital de las Universidades del Estado (RSDUE).
         </Text>
       </View>
 

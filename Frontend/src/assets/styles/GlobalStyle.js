@@ -212,5 +212,29 @@ export default StyleSheet.create({
     fontSize: 16,
     fontStyle: 'italic',
     color: '#f2f2fc',
-  }
+  },
+
+  responseBox: {
+    backgroundColor: '#F0F4F8', // Fondo claro para destacar el recuadro
+    borderRadius: 8,
+    padding: 15,
+    marginVertical: 5,
+    borderWidth: 1,
+    borderColor: '#B0BEC5', // Color de borde para definir el recuadro
+  },
+  buttonIcon: {
+    fontSize: 18,
+    color: '#00796B', // Color de la flecha para que sea visible
+  },
+  sectionContent: {
+    textAlign: 'justify', // Para justificar el texto
+    color: '#424242', // Color del texto
+    fontSize: 14, // Tamaño de la fuente
+    lineHeight: 20, // Espaciado entre líneas para mejor legibilidad
+    paddingHorizontal: 1, // Espaciado horizontal dentro del recuadro
+    paddingVertical: 5, // Espaciado vertical dentro del recuadro
+  },
+  
+
+
 });
