@@ -27,7 +27,7 @@ function RedesDeApoyo({ navigation }) {
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={GlobalStyle.welcomeText}>Salud Mental</Text>
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>Redes de apoyo</Text>
-        <Text style={{ color: '#FFFFFF', marginVertical: 10, paddingHorizontal: 20 }}>
+        <Text style={{ color: '#FFFFFF', marginVertical: 10, paddingHorizontal: 20, textAlign: 'justify' }}>
           Conecta con los recursos y contactos disponibles para apoyarte en momentos difíciles.
         </Text>
       </View>
