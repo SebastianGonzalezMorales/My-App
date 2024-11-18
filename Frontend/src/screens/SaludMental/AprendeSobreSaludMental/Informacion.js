@@ -4,12 +4,12 @@ import GlobalStyle from '../../../assets/styles/GlobalStyle';
 import BackButton from '../../../components/buttons/BackButton';
 import SettingsButton from '../../../components/buttons/SettingsButton';
 
-function Informacion({ navigation }) {
+function RedesDeApoyo({ navigation }) {
   // Estado para controlar qué secciones están desplegadas
   const [expandedSections, setExpandedSections] = useState({
-    depression: false,
-    stress: false,
-    universityChallenges: false,
+    counseling: false,
+    peerSupport: false,
+    communityResources: false,
   });
 
   // Función para alternar el estado de cada sección
@@ -24,52 +24,52 @@ function Informacion({ navigation }) {
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       <BackButton onPress={() => navigation.goBack()} />
       <Text style={GlobalStyle.welcomeText}>Salud Mental</Text>
-      <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>Información</Text>
+      <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>Redes de apoyo</Text>
       <Text style={{ color: '#FFFFFF', marginVertical: 10, paddingHorizontal: 20 }}>
-        Conoce más sobre temas de salud mental que pueden afectar a los estudiantes universitarios, como la depresión, el estrés y cómo afrontar momentos difíciles. 
+        Conecta con los recursos y contactos disponibles para apoyarte en momentos difíciles. Explora las opciones de consejería, apoyo entre pares y recursos comunitarios.
       </Text>
 
       {/* Contenedor para las secciones */}
       <View style={GlobalStyle.rowTwo}>
         <ScrollView>
-          {/* Botón para Depresión */}
+          {/* Botón para Consejería */}
           <SettingsButton
-            text="¿Qué es la Depresión?"
-            onPress={() => toggleSection('depression')}
-            icon={expandedSections.depression ? '▼' : '▶'}
+            text="Consejería universitaria"
+            onPress={() => toggleSection('counseling')}
+            icon={expandedSections.counseling ? '▼' : '▶'}
           />
-          {expandedSections.depression && (
+          {expandedSections.counseling && (
             <View style={GlobalStyle.responseBox}>
               <Text style={GlobalStyle.sectionContent}>
-                La depresión es un trastorno que afecta el estado de ánimo, generando sentimientos de tristeza profunda y pérdida de interés en actividades.
+                La universidad ofrece servicios de consejería donde puedes recibir orientación profesional en temas emocionales, académicos y personales.
               </Text>
             </View>
           )}
 
-          {/* Botón para Estrés */}
+          {/* Botón para Apoyo entre pares */}
           <SettingsButton
-            text="¿Qué es el Estrés?"
-            onPress={() => toggleSection('stress')}
-            icon={expandedSections.stress ? '▼' : '▶'}
+            text="Apoyo entre pares"
+            onPress={() => toggleSection('peerSupport')}
+            icon={expandedSections.peerSupport ? '▼' : '▶'}
           />
-          {expandedSections.stress && (
+          {expandedSections.peerSupport && (
             <View style={GlobalStyle.responseBox}>
               <Text style={GlobalStyle.sectionContent}>
-                El estrés es una reacción del cuerpo ante situaciones desafiantes o amenazantes. Puede afectar la salud física y mental.
+                Conecta con grupos de estudiantes que comparten experiencias similares. A menudo, hablar con tus pares puede ser una gran fuente de apoyo.
               </Text>
             </View>
           )}
 
-          {/* Botón para Momentos difíciles en la universidad */}
+          {/* Botón para Recursos comunitarios */}
           <SettingsButton
-            text="Momentos Difíciles en la Universidad"
-            onPress={() => toggleSection('universityChallenges')}
-            icon={expandedSections.universityChallenges ? '▼' : '▶'}
+            text="Recursos comunitarios"
+            onPress={() => toggleSection('communityResources')}
+            icon={expandedSections.communityResources ? '▼' : '▶'}
           />
-          {expandedSections.universityChallenges && (
+          {expandedSections.communityResources && (
             <View style={GlobalStyle.responseBox}>
               <Text style={GlobalStyle.sectionContent}>
-                La vida universitaria puede ser desafiante, con presión académica, adaptación social y momentos de soledad. Estos son sentimientos normales en esta etapa.
+                Encuentra líneas de ayuda, servicios comunitarios y organizaciones locales que están disponibles para brindarte apoyo.
               </Text>
             </View>
           )}
@@ -79,4 +79,4 @@ function Informacion({ navigation }) {
   );
 }
 
-export default Informacion;
+export default RedesDeApoyo;
