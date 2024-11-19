@@ -22,13 +22,13 @@ function Informacion({ navigation }) {
 
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
-        <View style={{ height: 260, padding: 15 }}>
-      <BackButton onPress={() => navigation.goBack()} />
-      <Text style={GlobalStyle.welcomeText}>Aprende sobre Salud Mental</Text>
-      <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>Información</Text>
-      <Text style={{ color: '#FFFFFF', marginVertical: 10, paddingHorizontal: 20 }}>
-       A continuacón se presentarán algunos consejos sobre Aprende Sobre Salud  en estudiantes Universitarios
-      </Text>
+      <View style={{ height: 260, padding: 15 }}>
+        <BackButton onPress={() => navigation.goBack()} />
+        <Text style={GlobalStyle.welcomeText}>Aprende sobre Salud Mental</Text>
+        <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>Información</Text>
+        <Text style={{ color: '#FFFFFF', marginVertical: 10, paddingHorizontal: 20 }}>
+          A continuacón se presentarán algunos consejos sobre Aprende Sobre Salud  en estudiantes Universitarios
+        </Text>
       </View>
 
 
@@ -40,41 +40,38 @@ function Informacion({ navigation }) {
             text="Burnout Académico"
             onPress={() => navigation.navigate('Burnout')}
           />
-          {expandedSections.counseling && (
-            <View style={GlobalStyle.responseBox}>
-              <Text style={GlobalStyle.sectionContent}>
-                La universidad ofrece servicios de consejería donde puedes recibir orientación profesional en temas emocionales, académicos y personales.
-              </Text>
-            </View>
-          )}
 
           {/* Botón para Apoyo entre pares */}
           <SettingsButton
-            text="Apoyo entre pares"
-            onPress={() => toggleSection('peerSupport')}
-            icon={expandedSections.peerSupport ? '▼' : '▶'}
+            text="Depresión"
+            onPress={() => navigation.navigate('Depresion')}
           />
-          {expandedSections.peerSupport && (
-            <View style={GlobalStyle.responseBox}>
-              <Text style={GlobalStyle.sectionContent}>
-                Conecta con grupos de estudiantes que comparten experiencias similares. A menudo, hablar con tus pares puede ser una gran fuente de apoyo.
-              </Text>
-            </View>
-          )}
+
 
           {/* Botón para Recursos comunitarios */}
           <SettingsButton
-            text="Recursos comunitarios"
-            onPress={() => toggleSection('communityResources')}
-            icon={expandedSections.communityResources ? '▼' : '▶'}
+            text="Ansiedad"
+            onPress={() => navigation.navigate('Ansiedad')}
           />
-          {expandedSections.communityResources && (
-            <View style={GlobalStyle.responseBox}>
-              <Text style={GlobalStyle.sectionContent}>
-                Encuentra líneas de ayuda, servicios comunitarios y organizaciones locales que están disponibles para brindarte apoyo.
-              </Text>
-            </View>
-          )}
+
+          {/* Botón para Recursos comunitarios */}
+          <SettingsButton
+            text="Que es una crisis ?"
+            onPress={() => navigation.navigate('Crisis')}
+          />
+
+          {/* Botón para Recursos comunitarios */}
+          <SettingsButton
+            text="Salud Mental"
+            onPress={() => navigation.navigate('InfoSaludMental')}
+          />
+
+          {/* Botón para Recursos comunitarios */}
+          <SettingsButton
+            text="Como enfrentar una evaluación ?"
+            onPress={() => navigation.navigate('Evaluacion')}
+          />
+
         </ScrollView>
       </View>
     </SafeAreaView>

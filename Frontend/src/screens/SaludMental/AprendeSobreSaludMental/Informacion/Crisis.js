@@ -19,13 +19,14 @@ const { width, height } = Dimensions.get('window');
 
 // Datos de los consejos (solo las imágenes)
 const adviceImages = [
-  require('../../../../../assets/Informacion/Burnout/1.jpg'),
-  require('../../../../../assets/Informacion/Burnout/2.jpg'),
-  require('../../../../../assets/Informacion/Burnout/3.jpg'),
-  require('../../../../../assets/Informacion/Burnout/4.jpg'),
+  require('../../../../../assets/Informacion/Crisis/1.jpg'),
+  require('../../../../../assets/Informacion/Crisis/2.jpg'),
+  require('../../../../../assets/Informacion/Crisis/3.jpg'),
+  require('../../../../../assets/Informacion/Crisis/4.jpg'),
+  require('../../../../../assets/Informacion/Crisis/5.jpg'),
 ];
 
-function Burnout({ navigation }) {
+function Crisis({ navigation }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Función para manejar el cambio de página en el carrusel
@@ -47,7 +48,7 @@ function Burnout({ navigation }) {
         
         {/* Descripción debajo del título */}
         <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>
-          Burnout Académico
+          Que es una crisis ?
         </Text>
       </View>
 
@@ -136,4 +137,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Burnout;
+export default Crisis;

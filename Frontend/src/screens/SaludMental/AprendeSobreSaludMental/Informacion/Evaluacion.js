@@ -7,25 +7,29 @@ import {
   View,
   Image,
   Dimensions,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 
 // Custom styles
 import GlobalStyle from '../../../../assets/styles/GlobalStyle';
 import BackButton from '../../../../components/buttons/BackButton';
 
+// Importa ImageZoom
+import ImageZoom from 'react-native-image-pan-zoom';
+
 // Obtener dimensiones de la pantalla
 const { width, height } = Dimensions.get('window');
 
 // Datos de los consejos (solo las imágenes)
 const adviceImages = [
-  require('../../../../../assets/Informacion/Burnout/1.jpg'),
-  require('../../../../../assets/Informacion/Burnout/2.jpg'),
-  require('../../../../../assets/Informacion/Burnout/3.jpg'),
-  require('../../../../../assets/Informacion/Burnout/4.jpg'),
+  require('../../../../../assets/Informacion/Evaluacion/1.jpg'),
+  require('../../../../../assets/Informacion/Evaluacion/2.jpg'),
+  require('../../../../../assets/Informacion/Evaluacion/3.jpg'),
+  require('../../../../../assets/Informacion/Evaluacion/4.jpg'),
+  require('../../../../../assets/Informacion/Evaluacion/5.jpg'),
 ];
 
-function Burnout({ navigation }) {
+function Evaluacion({ navigation }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Función para manejar el cambio de página en el carrusel
@@ -36,18 +40,19 @@ function Burnout({ navigation }) {
 
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
-      
       {/* Sección Azul del Encabezado */}
       <View style={{ height: 200, padding: 15 }}>
         <BackButton onPress={() => navigation.goBack()} />
-        <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF' }]}>Aprende sobre Salud Mental</Text>
-        <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
-          Información 
+        <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF' }]}>
+          Aprende sobre Salud Mental
         </Text>
-        
+        <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
+          Información
+        </Text>
+
         {/* Descripción debajo del título */}
         <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>
-          Burnout Académico
+          Evaluación
         </Text>
       </View>
 
@@ -66,7 +71,20 @@ function Burnout({ navigation }) {
           >
             {adviceImages.map((image, index) => (
               <View key={index} style={styles.slide}>
-                <Image source={image} style={styles.image} />
+                {/* Utiliza ImageZoom para habilitar zoom y desplazamiento */}
+                <ImageZoom
+                  cropWidth={width}
+                  cropHeight={height * 0.45}
+                  imageWidth={width * 0.95}
+                  imageHeight={height * 0.47}
+                  panToMove={true}
+                  pinchToZoom={true}
+                  enableDoubleClickZoom={true}
+                  minScale={1}
+                  maxScale={3}
+                >
+                  <Image source={image} style={styles.image} />
+                </ImageZoom>
               </View>
             ))}
           </ScrollView>
@@ -79,13 +97,12 @@ function Burnout({ navigation }) {
               key={index}
               style={[
                 styles.dot,
-                { backgroundColor: index === currentIndex ? '#000C7B' : '#D1D5DB' }
+                { backgroundColor: index === currentIndex ? '#000C7B' : '#D1D5DB' },
               ]}
             />
           ))}
         </View>
       </View>
-      
     </SafeAreaView>
   );
 }
@@ -95,20 +112,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'left',
     marginTop: 10,
-    marginHorizontal: 15, 
+    marginHorizontal: 15,
   },
   centeredContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    marginTop: 20, 
+    marginTop: 20,
   },
   scrollContainer: {
     width: width,
     height: height * 0.45,
-  },
-  carouselContainer: {
-    alignItems: 'center',
   },
   slide: {
     width: width, // Cada slide ocupa el 100% del ancho de la pantalla
@@ -116,16 +130,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: width * 0.95, // Tamaño original de las imágenes
-    height: height * 0.47, // Tamaño original de las imágenes
+    width: width * 0.95,
+    height: height * 0.47,
     resizeMode: 'contain',
-    borderRadius: 30,
   },
   pagination: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20, 
+    marginTop: 20,
   },
   dot: {
     width: 10,
@@ -136,4 +149,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Burnout;
+export default Evaluacion;

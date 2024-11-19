@@ -19,13 +19,17 @@ const { width, height } = Dimensions.get('window');
 
 // Datos de los consejos (solo las imágenes)
 const adviceImages = [
-  require('../../../../../assets/Informacion/Burnout/1.jpg'),
-  require('../../../../../assets/Informacion/Burnout/2.jpg'),
-  require('../../../../../assets/Informacion/Burnout/3.jpg'),
-  require('../../../../../assets/Informacion/Burnout/4.jpg'),
+  require('../../../../../assets/Informacion/Ansiedad/1.jpg'),
+  require('../../../../../assets/Informacion/Ansiedad/2.jpg'),
+  require('../../../../../assets/Informacion/Ansiedad/3.jpg'),
+  require('../../../../../assets/Informacion/Ansiedad/4.jpg'),
+  require('../../../../../assets/Informacion/Ansiedad/5.jpg'),
+  require('../../../../../assets/Informacion/Ansiedad/6.jpg'),
+  require('../../../../../assets/Informacion/Ansiedad/7.jpg'),
+  require('../../../../../assets/Informacion/Ansiedad/8.jpg'),
 ];
 
-function Burnout({ navigation }) {
+function Ansiedad({ navigation }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Función para manejar el cambio de página en el carrusel
@@ -47,7 +51,7 @@ function Burnout({ navigation }) {
         
         {/* Descripción debajo del título */}
         <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>
-          Burnout Académico
+          Ansiedad
         </Text>
       </View>
 
@@ -116,10 +120,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: width * 0.95, // Tamaño original de las imágenes
-    height: height * 0.47, // Tamaño original de las imágenes
+    width: width * 0.90, // Tamaño original de las imágenes
+    height: height * 0.45, // Tamaño original de las imágenes
     resizeMode: 'contain',
-    borderRadius: 30,
+    borderRadius: 10,
   },
   pagination: {
     flexDirection: 'row',
@@ -136,4 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Burnout;
+export default Ansiedad;

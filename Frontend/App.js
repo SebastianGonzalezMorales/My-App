@@ -56,6 +56,11 @@ import MoodHistory from './src/screens/mood/MoodHistory';
 import TestAnsiedadEstadisticas from './src/screens/SaludMental/Test/TestAnsiedadEstadisticas';
 import TestDepresionEstadisticas from './src/screens/SaludMental/Test/TestDepresionEstadisticas';
 import Burnout from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion/Burnout';
+import Ansiedad from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion/Ansiedad';
+import Depresion from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion/Depresion';
+import InfoSaludMental from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion/InfoSaludMental';
+import Crisis from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion/Crisis';
+import Evaluacion from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion/Evaluacion';
 
 const Tab = createBottomTabNavigator(); // create tab navigator method
 const Stack = createNativeStackNavigator(); // create stack navigator method
@@ -221,6 +226,11 @@ const AppNavigator = () => {
             <Stack.Screen name="Informacion" component={Informacion} />
 
             <Stack.Screen name="Burnout" component={Burnout} />
+            <Stack.Screen name="Ansiedad" component={Ansiedad} />
+            <Stack.Screen name="Depresion" component={Depresion} />
+            <Stack.Screen name="Crisis" component={Crisis} />
+            <Stack.Screen name="InfoSaludMental" component={InfoSaludMental} />
+            <Stack.Screen name="Evaluacion" component={Evaluacion} />
 
 
             <Stack.Screen name="AprendeSobreSaludMental" component={AprendeSobreSaludMental} />

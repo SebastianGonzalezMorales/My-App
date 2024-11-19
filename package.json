@@ -3,7 +3,9 @@
     "version": "1.0.0",
     "description": "Root package for Heroku deployment",
     "scripts": {
-      "start": "cd Backend && npm install && npm start"
+        "start": "cd Backend && npm install && npm start"
+    },
+    "dependencies": {
+        "react-native-image-pan-zoom": "^2.1.12"
     }
-  }
-  
+}
