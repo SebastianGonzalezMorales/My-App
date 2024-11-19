@@ -14,9 +14,6 @@ import {
 import GlobalStyle from '../../../../assets/styles/GlobalStyle';
 import BackButton from '../../../../components/buttons/BackButton';
 
-// Importa ImageZoom
-import ImageZoom from 'react-native-image-pan-zoom';
-
 // Obtener dimensiones de la pantalla
 const { width, height } = Dimensions.get('window');
 
@@ -71,20 +68,16 @@ function Evaluacion({ navigation }) {
           >
             {adviceImages.map((image, index) => (
               <View key={index} style={styles.slide}>
-                {/* Utiliza ImageZoom para habilitar zoom y desplazamiento */}
-                <ImageZoom
-                  cropWidth={width}
-                  cropHeight={height * 0.45}
-                  imageWidth={width * 0.95}
-                  imageHeight={height * 0.47}
-                  panToMove={true}
-                  pinchToZoom={true}
-                  enableDoubleClickZoom={true}
-                  minScale={1}
-                  maxScale={3}
+                {/* ScrollView para permitir zoom en la imagen */}
+                <ScrollView
+                  maximumZoomScale={3}
+                  minimumZoomScale={1}
+                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={styles.zoomContainer}
                 >
                   <Image source={image} style={styles.image} />
-                </ImageZoom>
+                </ScrollView>
               </View>
             ))}
           </ScrollView>
@@ -129,9 +122,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  image: {
+  zoomContainer: {
     width: width * 0.95,
     height: height * 0.47,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    width: '100%', // La imagen ocupa el 100% del ancho del contenedor
+    height: '100%', // La imagen ocupa el 100% de la altura del contenedor
     resizeMode: 'contain',
   },
   pagination: {
