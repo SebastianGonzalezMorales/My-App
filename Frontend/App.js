@@ -55,6 +55,7 @@ import TestDepresionHistorial from './src/screens/SaludMental/Test/TestDepresion
 import MoodHistory from './src/screens/mood/MoodHistory';
 import TestAnsiedadEstadisticas from './src/screens/SaludMental/Test/TestAnsiedadEstadisticas';
 import TestDepresionEstadisticas from './src/screens/SaludMental/Test/TestDepresionEstadisticas';
+import Burnout from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion/Burnout';
 
 const Tab = createBottomTabNavigator(); // create tab navigator method
 const Stack = createNativeStackNavigator(); // create stack navigator method
@@ -218,6 +219,10 @@ const AppNavigator = () => {
 
             <Stack.Screen name="MenuUv" component={MenuUv} />
             <Stack.Screen name="Informacion" component={Informacion} />
+
+            <Stack.Screen name="Burnout" component={Burnout} />
+
+
             <Stack.Screen name="AprendeSobreSaludMental" component={AprendeSobreSaludMental} />
             <Stack.Screen name="Consejos" component={Consejos} />
             <Stack.Screen name="ConsejosDeEstudiantes" component={ConsejosDeEstudiantes} />

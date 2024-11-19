@@ -4,7 +4,7 @@ import GlobalStyle from '../../../assets/styles/GlobalStyle';
 import BackButton from '../../../components/buttons/BackButton';
 import SettingsButton from '../../../components/buttons/SettingsButton';
 
-function RedesDeApoyo({ navigation }) {
+function Informacion({ navigation }) {
   // Estado para controlar qué secciones están desplegadas
   const [expandedSections, setExpandedSections] = useState({
     counseling: false,
@@ -22,21 +22,23 @@ function RedesDeApoyo({ navigation }) {
 
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
+        <View style={{ height: 260, padding: 15 }}>
       <BackButton onPress={() => navigation.goBack()} />
-      <Text style={GlobalStyle.welcomeText}>Salud Mental</Text>
-      <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>Redes de apoyo</Text>
+      <Text style={GlobalStyle.welcomeText}>Aprende sobre Salud Mental</Text>
+      <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>Información</Text>
       <Text style={{ color: '#FFFFFF', marginVertical: 10, paddingHorizontal: 20 }}>
-        Conecta con los recursos y contactos disponibles para apoyarte en momentos difíciles. Explora las opciones de consejería, apoyo entre pares y recursos comunitarios.
+       A continuacón se presentarán algunos consejos sobre Aprende Sobre Salud  en estudiantes Universitarios
       </Text>
+      </View>
+
 
       {/* Contenedor para las secciones */}
       <View style={GlobalStyle.rowTwo}>
         <ScrollView>
           {/* Botón para Consejería */}
           <SettingsButton
-            text="Consejería universitaria"
-            onPress={() => toggleSection('counseling')}
-            icon={expandedSections.counseling ? '▼' : '▶'}
+            text="Burnout Académico"
+            onPress={() => navigation.navigate('Burnout')}
           />
           {expandedSections.counseling && (
             <View style={GlobalStyle.responseBox}>
@@ -79,4 +81,4 @@ function RedesDeApoyo({ navigation }) {
   );
 }
 
-export default RedesDeApoyo;
+export default Informacion;

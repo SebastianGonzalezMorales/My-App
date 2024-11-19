@@ -11,33 +11,26 @@ import {
 } from 'react-native';
 
 // Custom styles
-import GlobalStyle from '../../../assets/styles/GlobalStyle';
-import BackButton from '../../../components/buttons/BackButton';
+import GlobalStyle from '../../../../assets/styles/GlobalStyle';
+import BackButton from '../../../../components/buttons/BackButton';
 
 // Obtener dimensiones de la pantalla
 const { width, height } = Dimensions.get('window');
 
 // Datos de los consejos (solo las imágenes)
 const adviceImages = [
-  require('../../../../assets/Consejos/1.png'),
-  require('../../../../assets/Consejos/2.png'),
-  require('../../../../assets/Consejos/3.png'),
-  require('../../../../assets/Consejos/4.png'),
-  require('../../../../assets/Consejos/5.png'),
-  require('../../../../assets/Consejos/6.png'),
-  require('../../../../assets/Consejos/7.png'),
-  require('../../../../assets/Consejos/8.png'),
-  require('../../../../assets/Consejos/9.png'),
-  require('../../../../assets/Consejos/10.png'),
-  // Añade más imágenes según sea necesario
+  require('../../../../../assets/Informacion/Burnout/1.jpg'),
+  require('../../../../../assets/Informacion/Burnout/2.jpg'),
+  require('../../../../../assets/Informacion/Burnout/3.jpg'),
+  require('../../../../../assets/Informacion/Burnout/4.jpg'),
 ];
 
-function Consejos({ navigation }) {
+function Burnout({ navigation }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Función para manejar el cambio de página en el carrusel
   const handleScroll = (event) => {
-    const slideIndex = Math.round(event.nativeEvent.contentOffset.x / (width * 0.8));
+    const slideIndex = Math.round(event.nativeEvent.contentOffset.x / width);
     setCurrentIndex(slideIndex);
   };
 
@@ -45,16 +38,16 @@ function Consejos({ navigation }) {
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       
       {/* Sección Azul del Encabezado */}
-      <View style={{ height: 260, padding: 15 }}>
+      <View style={{ height: 200, padding: 15 }}>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF' }]}>Aprende sobre Salud Mental</Text>
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
-          Consejos
+          Información 
         </Text>
         
         {/* Descripción debajo del título */}
         <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>
-        A continuación, te ofrecemos algunos consejos extraídos de la Red de Salud Digital de las Universidades del Estado (RSDUE) para apoyar tu bienestar emocional y salud mental.
+          Burnout Académico
         </Text>
       </View>
 
@@ -67,7 +60,9 @@ function Consejos({ navigation }) {
             showsHorizontalScrollIndicator={false}
             onScroll={handleScroll}
             scrollEventThrottle={16}
-            contentContainerStyle={styles.carouselContainer}
+            contentContainerStyle={{
+              paddingEnd: width * 0.1, // Espacio extra al final para el último slide
+            }}
           >
             {adviceImages.map((image, index) => (
               <View key={index} style={styles.slide}>
@@ -100,37 +95,37 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'left',
     marginTop: 10,
-    marginHorizontal: 15, // Margen horizontal para evitar que el texto toque los bordes
+    marginHorizontal: 15, 
   },
   centeredContainer: {
-    justifyContent: 'center', // Centra verticalmente el contenedor
+    justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    marginTop: 20, // Ajuste para bajar todo el contenedor del carrusel
+    marginTop: 20, 
   },
   scrollContainer: {
-    width: width * 0.8, // Limita el ancho del ScrollView al 80% de la pantalla
-    height: height * 0.4, // Fija la altura para mantener la barra de desplazamiento cerca de la imagen
+    width: width,
+    height: height * 0.45,
   },
   carouselContainer: {
     alignItems: 'center',
   },
   slide: {
-    width: width * 0.8, // Cada slide ocupa el 80% del ancho de la pantalla
+    width: width, // Cada slide ocupa el 100% del ancho de la pantalla
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
-    width: '100%', // La imagen ocupa el 100% del ancho del slide
-    height: '100%', // La imagen ocupa el 100% de la altura del contenedor scrollContainer
+    width: width * 0.95, // Tamaño original de las imágenes
+    height: height * 0.5, // Tamaño original de las imágenes
     resizeMode: 'contain',
-    borderRadius: 30,
+    borderRadius: 10,
   },
   pagination: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30, // Espacio justo debajo de la imagen
+    marginTop: 20, 
   },
   dot: {
     width: 10,
@@ -141,4 +136,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Consejos;
+export default Burnout;

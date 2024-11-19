@@ -40,7 +40,7 @@ function ConsejosEstudiantes({ navigation }) {
       {/* Sección Azul del Encabezado */}
       <View style={{ height: 280, padding: 15 }}>
         <BackButton onPress={() => navigation.goBack()} />
-        <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF' }]}>Salud Mental</Text>
+        <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF' }]}>Aprende sobre Salud Mental</Text>
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
           Consejos de estudiantes
         </Text>
