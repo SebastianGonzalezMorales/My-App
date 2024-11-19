@@ -30,7 +30,7 @@ function Burnout({ navigation }) {
 
   // Función para manejar el cambio de página en el carrusel
   const handleScroll = (event) => {
-    const slideIndex = Math.round(event.nativeEvent.contentOffset.x / width);
+    const slideIndex = Math.round(event.nativeEvent.contentOffset.x / width);<
     setCurrentIndex(slideIndex);
   };
 
