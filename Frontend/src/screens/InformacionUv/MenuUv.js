@@ -5,6 +5,7 @@ import {
   ScrollView,
   View,
   Image,
+  Dimensions
 } from 'react-native';
 
 // customisation
@@ -14,16 +15,30 @@ import GlobalStyle from '../../assets/styles/GlobalStyle';
 import CustomButton from '../../components/buttons/CustomButton';
 import SettingsButton from '../../components/buttons/SettingsButton';
 
+const { width, height } = Dimensions.get('window'); // Obtener las dimensiones de la pantalla
+
+
 function MenuUv({ navigation }) {
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
 
 {/* Sección superior azul con título y subtítulo */}
-<View style={{ height: 180 }}>
+<View style={{ height: height * 0.45, padding: 10 }}>
   <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
   <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
     Descubre novedades eventos y toda la información sobre salud mental de la Universidad de Valparaíso.
   </Text>
+
+        {/* Imagen con altura ajustada */}
+        <Image
+          source={require('../../../assets/uv_logo_act.png')}
+          style={{
+            width: '100%',
+            height: height * 0.15, // Ajustar la altura de la imagen al 20% de la pantalla
+            resizeMode: 'contain', // Cambiar a 'contain' para evitar recortes
+            marginTop: 40
+          }}
+        />
 </View>
 
 

@@ -49,7 +49,7 @@ function InfoSaludMental({ navigation }) {
         </Text>
         
         {/* Descripción debajo del título */}
-        <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>
+        <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
           Salud Mental
         </Text>
       </View>

@@ -49,7 +49,7 @@ function Evaluacion({ navigation }) {
 
         {/* Descripción debajo del título */}
         <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>
-          Evaluación
+          Como enfrentar una evaluación ?
         </Text>
       </View>
 

@@ -26,7 +26,7 @@ export default [
       title: 'Información UV',
       description:
         'Descubre los recursos y servicios que ofrece la Universidad para apoyar tu bienestar emocional y psicológico.',
-        image: require('../../../assets/Salud-mental-UV-removebg.png'),
+        image: require('../../../assets/Logo-SM-UV.png'),
     },
     {
       id: '5',

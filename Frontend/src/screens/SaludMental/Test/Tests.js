@@ -3,8 +3,9 @@ import {
     SafeAreaView,
     Text,
     ScrollView,
-  
+    Image,
     View,
+    Dimensions
   } from 'react-native';
   
   // customisation
@@ -16,6 +17,7 @@ import {
   import CustomButton from '../../../components/buttons/CustomButton';
   import SettingsButton from '../../../components/buttons/SettingsButton';
 
+  const { width, height } = Dimensions.get('window'); // Obtener las dimensiones de la pantalla
   
   function SaludMental({ navigation }) {
     return (
@@ -30,13 +32,23 @@ import {
         {/*
      
          */}
-      <View style={{ height: 210 }}>
+     <View style={{ height: height * 0.5, padding: 10 }}>
           <Text style={GlobalStyle.welcomeText}>Salud Mental </Text>
           <Text style={GlobalStyle.subtitle}>Tests psicológicos</Text>
         <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>
           A continuación, podrás realizar diferentes test psicologicos para medir tu bienestar emocional
         </Text>
-  
+          
+                  {/* Imagen con altura ajustada */}
+        <Image
+          source={require('../../../../assets/test.png')}
+          style={{
+            width: '100%',
+            height: height * 0.20, // Ajustar la altura de la imagen al 20% de la pantalla
+            resizeMode: 'contain', // Cambiar a 'contain' para evitar recortes
+            marginTop: 11
+          }}
+        />
         
         </View>
 

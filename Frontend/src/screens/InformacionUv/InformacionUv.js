@@ -5,6 +5,7 @@ import {
   ScrollView,
   View,
   Image,
+  Dimensions
 } from 'react-native';
 
 // customisation
@@ -15,16 +16,32 @@ import BackButton from '../../components/buttons/BackButton';
 import CustomButton from '../../components/buttons/CustomButton';
 import SettingsButton from '../../components/buttons/SettingsButton';
 
+const { width, height } = Dimensions.get('window'); // Obtener las dimensiones de la pantalla
+
+
 function InformacionUv({ navigation }) {
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
  <BackButton onPress={() => navigation.goBack()} />
 {/* Sección superior azul con título y subtítulo */}
-<View style={{ height: 210 }}>
+<View style={{ height: height * 0.5, padding: 10 }}>
   <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
   <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
     Información 
   </Text>
+
+        {/* Imagen con altura ajustada */}
+        <Image
+          source={require('../../../assets/Logo-SM-UV.png')}
+          style={{
+            width: '100%',
+            height: height * 0.35, // Ajustar la altura de la imagen al 20% de la pantalla
+            resizeMode: 'contain', // Cambiar a 'contain' para evitar recortes
+            marginTop: -20
+          }}
+        />
+
+
 </View>
 
 

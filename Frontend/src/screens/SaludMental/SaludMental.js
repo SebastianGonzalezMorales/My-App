@@ -5,6 +5,7 @@ import {
   ScrollView,
   Image,
   View,
+  Dimensions
 } from 'react-native';
 
 // customisation
@@ -14,6 +15,8 @@ import GlobalStyle from '../../assets/styles/GlobalStyle';
 //Components
 import CustomButton from '../../components/buttons/CustomButton';
 import SettingsButton from '../../components/buttons/SettingsButton';
+
+const { width, height } = Dimensions.get('window'); // Obtener las dimensiones de la pantalla
 
 
 function SaludMental({ navigation }) {
@@ -29,21 +32,25 @@ function SaludMental({ navigation }) {
      
          */}
       {/* Section 1 */}
-      <View style={{ height: 180 }}>
+      <View style={{ height: height * 0.5, padding: 10 }}>
         <Text style={GlobalStyle.welcomeText}>Salud Mental</Text>
         <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }, ]}>
           Descubre recursos y consejos para fortalecer tu bienestar mental, con información sobre diversos aspectos de la salud emocional. Evalúa tu bienestar a través de tests disponibles en esta sección.
-        </Text>
-        {/* Aquí agregamos la imagen */}
-        {/*                 <Image
-                     source={require('../../../assets/Menu/salud_Mental.png')} // Reemplaza con la ruta de tu imagen
-                    style={{ width: '100%', height: 200, resizeMode: 'cover', marginTop: 10 }}
-                /> */}
+      </Text>
+
+        {/* Imagen con altura ajustada */}
+        <Image
+          source={require('../../../assets/icon-copia-removebg.png')}
+          style={{
+            width: '100%',
+            height: height * 0.3, // Ajustar la altura de la imagen al 20% de la pantalla
+            resizeMode: 'contain', // Cambiar a 'contain' para evitar recortes
+            marginTop: -15
+          }}
+        />
       </View>
 
-
-      {
-      }
+   
 
       {/*
         {/*
