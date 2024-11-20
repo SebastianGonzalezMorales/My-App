@@ -179,9 +179,9 @@ function Settings({ navigation }) {
             onPress={handleSignOut}
             text="Cerrar sesión"
             iconName="log-out-outline"
-            iconColor="#d85a77"
-            buttonStyle={{ backgroundColor: '#f7d8e3' }}  // Color personalizado para cerrar sesión
-            textStyle={{ color: '#d85a77' }}  // Personaliza el color del texto
+            iconColor="#388E3C"
+            buttonStyle={{ backgroundColor: '#A5D6A7' }}  // Color personalizado para cerrar sesión
+            textStyle={{ color: '#388E3C' }}  // Personaliza el color del texto
           />
 
         </View>

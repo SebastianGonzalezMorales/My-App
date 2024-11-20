@@ -64,17 +64,14 @@ function MenuUv({ navigation }) {
                 textAlign: 'left', // Alinear texto a la izquierda
               }}
             />
-
             <SettingsButton
               text="Contactarse con recursos UV"
               onPress={() => navigation.navigate('UV')}
-              backgroundColor="#f7d8e3" // Cambia el color de fondo
-              textColor="#d85a77"       // Cambia el color del texto
-              iconColor="#d85a77"       // Cambia el color del icono
+              backgroundColor="#fbcdd1" // Un rojo más presente y vibrante en el fondo
+              textColor="#c62828"       // Un rojo más oscuro para el texto
+              iconColor="#c62828"       // El mismo rojo oscuro para el icono
             />
-
-
-
+            
           </View>
         </ScrollView>
       </View>

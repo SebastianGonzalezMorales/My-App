@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#fff', // Color predeterminado del texto que puede ser sobrescrito
     fontFamily: 'DoppioOne',
-    fontSize: 20,
+    fontSize: 18,
     marginLeft: 20, // Espacio entre el ícono y el texto
   },
   icon: {

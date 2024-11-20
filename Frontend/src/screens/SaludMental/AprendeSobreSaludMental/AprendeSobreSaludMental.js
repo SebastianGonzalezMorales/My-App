@@ -21,29 +21,29 @@ const { width, height } = Dimensions.get('window'); // Obtener las dimensiones d
 function AprendeSobreSaludMental({ navigation }) {
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
-      
+
       {/* Sección Azul del Encabezado */}
-      <View style={{ height: height * 0.5, padding: 15 }}>
-         {/* Altura ajustada al 50% del tamaño de la pantalla */}
+      <View style={{ height: height * 0.45, padding: 15 }}>
+        {/* Altura ajustada al 50% del tamaño de la pantalla */}
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF' }]}>Salud Mental</Text>
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
           Aprende sobre Salud Mental
         </Text>
-        
+
         {/* Imagen con altura ajustada */}
         <Image
           source={require('../../../../assets/Menu/salud_Mental.png')}
           style={{
             width: '100%',
-            height: height * 0.23, // Ajustar la altura de la imagen al 20% de la pantalla
+            height: height * 0.21, // Ajustar la altura de la imagen al 20% de la pantalla
             resizeMode: 'contain', // Cambiar a 'contain' para evitar recortes
             marginTop: 5
           }}
         />
-        
-{/* Texto adicional */}
-{/*          <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF', fontSize: 16, textAlign: 'center', marginTop: 10 }]}>
+
+        {/* Texto adicional */}
+        {/*          <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF', fontSize: 16, textAlign: 'center', marginTop: 10 }]}>
           ¡ NO HAY SALUD SIN SALUD MENTAL !
         </Text>  */}
       </View>
@@ -65,17 +65,26 @@ function AprendeSobreSaludMental({ navigation }) {
               onPress={() => navigation.navigate('ConsejosDeEstudiantes')}
             />
             <SettingsButton
-              text="Redes de apoyo"
+              text="Redes de Apoyo"
               onPress={() => navigation.navigate('RedesDeApoyo')}
-              backgroundColor="#f7d8e3" // Cambia el color de fondo
-              textColor="#d85a77"       // Cambia el color del texto
-              iconColor="#d85a77"       // Cambia el color del icono
+              backgroundColor="#FFE0B2" // Naranja claro y cálido
+              textColor="#E65100"       // Naranja oscuro para texto
+              iconColor="#E65100"       // Naranja oscuro para icono
             />
+            <SettingsButton
+              text="Contactarse con recursos UV"
+              onPress={() => navigation.navigate('UV')}
+              backgroundColor="#fbcdd1" // Un rojo más presente y vibrante en el fondo
+              textColor="#c62828"       // Un rojo más oscuro para el texto
+              iconColor="#c62828"       // El mismo rojo oscuro para el icono
+            />
+
+
 
           </View>
         </ScrollView>
       </View>
-      
+
     </SafeAreaView>
   );
 }
