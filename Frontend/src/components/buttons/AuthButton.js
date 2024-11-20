@@ -13,6 +13,7 @@ export default function AuthButton(props) {
       <View style={styles.buttonContent}>
         <Icon name={props.iconName} size={30} color={props.iconColor || "#fff"} style={styles.icon} />
         <Text style={[styles.text, props.textStyle]}>{props.text}</Text>
+        
          {/* Asegura que props.textStyle también se aplique */}
       </View>
     </TouchableOpacity>

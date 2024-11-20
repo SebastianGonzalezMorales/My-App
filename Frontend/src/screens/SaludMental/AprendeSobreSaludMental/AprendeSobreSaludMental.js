@@ -67,7 +67,11 @@ function AprendeSobreSaludMental({ navigation }) {
             <SettingsButton
               text="Redes de apoyo"
               onPress={() => navigation.navigate('RedesDeApoyo')}
+              backgroundColor="#f7d8e3" // Cambia el color de fondo
+              textColor="#d85a77"       // Cambia el color del texto
+              iconColor="#d85a77"       // Cambia el color del icono
             />
+
           </View>
         </ScrollView>
       </View>

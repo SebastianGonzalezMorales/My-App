@@ -7,13 +7,20 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 export default function SettingsButton(props) {
   return (
-    <TouchableOpacity onPress={props.onPress} style={styles.button}>
-      <Text style={styles.text}>{props.text}</Text>
+    <TouchableOpacity
+      onPress={props.onPress}
+      style={[styles.button, { backgroundColor: props.backgroundColor || '#d8eef7' }]}
+    >
+      <Text
+        style={[styles.text, { color: props.textColor || '#238bdf' }]}
+      >
+        {props.text}
+      </Text>
       <MaterialCommunityIcons
         style={styles.icon}
         name="chevron-right"
         size={28}
-        color="#238bdf"
+        color={props.iconColor || '#238bdf'}
       />
     </TouchableOpacity>
   );

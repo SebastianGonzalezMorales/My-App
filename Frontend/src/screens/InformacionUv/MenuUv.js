@@ -14,6 +14,7 @@ import GlobalStyle from '../../assets/styles/GlobalStyle';
 // Components
 import CustomButton from '../../components/buttons/CustomButton';
 import SettingsButton from '../../components/buttons/SettingsButton';
+import AuthButton from '../../components/buttons/AuthButton';
 
 const { width, height } = Dimensions.get('window'); // Obtener las dimensiones de la pantalla
 
@@ -22,12 +23,12 @@ function MenuUv({ navigation }) {
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
 
-{/* Sección superior azul con título y subtítulo */}
-<View style={{ height: height * 0.45, padding: 10 }}>
-  <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
-  <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
-    Descubre novedades eventos y toda la información sobre salud mental de la Universidad de Valparaíso.
-  </Text>
+      {/* Sección superior azul con título y subtítulo */}
+      <View style={{ height: height * 0.45, padding: 10 }}>
+        <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
+        <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
+          Descubre novedades eventos y toda la información sobre salud mental de la Universidad de Valparaíso.
+        </Text>
 
         {/* Imagen con altura ajustada */}
         <Image
@@ -39,7 +40,7 @@ function MenuUv({ navigation }) {
             marginTop: 40
           }}
         />
-</View>
+      </View>
 
 
       {/* Contenedor de la segunda sección con fondo blanco y bordes redondeados */}
@@ -57,7 +58,23 @@ function MenuUv({ navigation }) {
             <SettingsButton
               text="Novedades"
               onPress={() => navigation.navigate('RedesSociales')}
+              textStyle={{
+                color: '#d85a77', // Personaliza el color del texto
+                fontSize: 16, // Disminuir tamaño de la letra
+                textAlign: 'left', // Alinear texto a la izquierda
+              }}
             />
+
+            <SettingsButton
+              text="Contactarse con recursos UV"
+              onPress={() => navigation.navigate('UV')}
+              backgroundColor="#f7d8e3" // Cambia el color de fondo
+              textColor="#d85a77"       // Cambia el color del texto
+              iconColor="#d85a77"       // Cambia el color del icono
+            />
+
+
+
           </View>
         </ScrollView>
       </View>
@@ -65,4 +82,4 @@ function MenuUv({ navigation }) {
   );
 }
 
-export default MenuUv ;
+export default MenuUv;
