@@ -1,0 +1,67 @@
+{
+    "Facultad de Arquitectura": [
+        "Arquitectura",
+        "Cine",
+        "Diseño",
+        "Gestión en Turismo y Cultura",
+        "Teatro"
+    ],
+    "Facultad de Ciencias": [
+        "Ecología",
+        "Ingeniería en Estadística y Ciencia de Datos",
+        "Licenciatura en Ciencias",
+        "Licenciatura en Física",
+        "Pedagogía en Matemáticas"
+    ],
+    "Facultad de Ciencias Económicas y Administrativas": [
+        "Administración Hotelera y Gastronómica",
+        "Administración Pública",
+        "Auditoría",
+        "Ingeniería Comercial",
+        "Ingeniería en Información y Control de Gestión",
+        "Ingeniería en Negocios Internacionales"
+    ],
+    "Facultad de Ciencias Sociales": [
+        "Psicología",
+        "Sociología",
+        "Trabajo Social"
+    ],
+    "Facultad de Derecho": [
+        "Derecho"
+    ],
+    "Facultad de Farmacia": [
+        "Nutrición y Dietética",
+        "Química y Farmacia"
+    ],
+    "Facultad de Humanidades y Educación": [
+        "Pedagogía en Filosofía",
+        "Pedagogía en Historia y Ciencias Sociales",
+        "Pedagogía en Lengua y Literatura",
+        "Pedagogía en Música"
+    ],
+    "Facultad de Ingeniería": [
+        "Ingeniería - Plan Común",
+        "Ingeniería Ambiental",
+        "Ingeniería Civil",
+        "Ingeniería Civil Ambiental",
+        "Ingeniería Civil Biomédica",
+        "Ingeniería Civil Industrial",
+        "Ingeniería Civil Informática",
+        "Ingeniería Civil Matemática",
+        "Ingeniería Civil Oceánica",
+        "Ingeniería en Construcción",
+        "Ingeniería en Informática"
+    ],
+    "Facultad de Medicina": [
+        "Educación Parvularia",
+        "Enfermería",
+        "Fonoaudiología",
+        "Kinesiología",
+        "Medicina",
+        "Obstetricia y Puericultura",
+        "Tecnología Médica"
+    ],
+    "Facultad de Odontología": [
+        "Odontología"
+    ]
+}

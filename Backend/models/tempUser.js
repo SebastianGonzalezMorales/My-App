@@ -5,6 +5,7 @@ const tempUserSchema = new mongoose.Schema({
     email: String,
     rut: String,
     birthdate: String,
+    facultad: String,
     carrera: String,
     passwordHash: String,
     verificationToken: String, // Token para verificar el correo

@@ -23,6 +23,10 @@ const usersSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
+    facultad: { // Nuevo campo
+        type: String,
+        required: true, // Esto asegura que siempre se registre una facultad
+    },
     carrera: {
         type: String,
         required: true,

@@ -1,5 +1,6 @@
 // react imports
 import { Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
 import Svg, { Circle } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -18,6 +19,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AuthStyle from '../../assets/styles/AuthStyle';
 
+import facultadesData from '../utils/facultades.json'; // Importamos el archivo JSON con las facultades y carreras
+
 const Register = ({ navigation }) => {
 
   // states
@@ -26,11 +29,13 @@ const Register = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); 
-  const [birthdate, setBirthdate] = useState(''); 
-  const [carrera, setCarrera] = useState(''); 
+  const [showPassword, setShowPassword] = useState(false);
+  const [birthdate, setBirthdate] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [policyAccepted, setPolicyAccepted] = useState(false);
+  const [facultad, setFacultad] = useState('');
+  const [carrera, setCarrera] = useState('');
+  const [carrerasDisponibles, setCarrerasDisponibles] = useState([]);
 
   /*
    * *******************
@@ -38,20 +43,27 @@ const Register = ({ navigation }) => {
    * *******************
    */
 
-   /*
-   * ***********************
-   * **** Recuperación de AsyncStorage ****
-   * ***********************
-   */
+  // Función para manejar el cambio de facultad
+  const handleFacultadChange = (selectedFacultad) => {
+    setFacultad(selectedFacultad);
+    setCarrerasDisponibles(facultadesData[selectedFacultad] || []); // Actualiza las carreras según la facultad seleccionada
+    setCarrera(''); // Resetea la carrera al cambiar facultad
+  };
+
+  /*
+  * ***********************
+  * **** Recuperación de AsyncStorage ****
+  * ***********************
+  */
 
   const handleBirthdateChange = (text) => {
     // Permitir solo números y guiones
     const validText = text.replace(/[^0-9\-]/g, '');
-  
+
     // Aplicar formato YYYY-MM-DD de forma dinámica
     let formattedDate = '';
     const numbersOnly = validText.replace(/-/g, ''); // Eliminar guiones para contar caracteres
-  
+
     if (numbersOnly.length > 0) {
       formattedDate += numbersOnly.substring(0, 4); // Añadir año
     }
@@ -61,53 +73,53 @@ const Register = ({ navigation }) => {
     if (numbersOnly.length >= 7) {
       formattedDate += '-' + numbersOnly.substring(6, 8); // Añadir día
     }
-  
+
     // Actualizar el estado con el formato actual
     setBirthdate(formattedDate);
-  
+
     // Solo hacer la validación cuando se haya ingresado una fecha completa
     if (formattedDate.length === 10) {
       const [year, month, day] = formattedDate.split('-').map(Number);
-  
+
       // Validar el año (por ejemplo, debe ser un valor razonable)
       if (year < 1900 || year > new Date().getFullYear()) {
         console.log('Año inválido');
         return;
       }
-  
+
       // Validar el mes (1 a 12)
       if (month < 1 || month > 12) {
         console.log('Mes inválido');
         return;
       }
-  
+
       // Validar el día en función del mes y si el año es bisiesto
       const daysInMonth = [31, (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  
+
       if (day < 1 || day > daysInMonth[month - 1]) {
         console.log('Día inválido');
         return;
       }
-  
+
       // La fecha es válida
       console.log('Fecha válida');
     }
   };
-  
+
 
 
   const validateRut = (rut) => {
-    
+
     // Remover puntos y guiones
     rut = rut.replace(/[^0-9kK]/g, '');
     if (rut.length < 2) {
       return false;
     }
-    
+
     // Separar número y dígito verificador
     const rutBody = rut.slice(0, -1);
     let dv = rut.slice(-1).toUpperCase();
-    
+
     // Calcular el dígito verificador
     let sum = 0;
     let multiplier = 2;
@@ -117,12 +129,12 @@ const Register = ({ navigation }) => {
     }
 
     const calculatedDv = 11 - (sum % 11);
-   
+
     // Convertir el dígito verificador calculado
     if (calculatedDv === 11) dv = '0';
     else if (calculatedDv === 10) dv = 'K';
     else dv = calculatedDv.toString();
-  
+
     return dv === rut.slice(-1).toUpperCase();
   };
 
@@ -130,7 +142,7 @@ const Register = ({ navigation }) => {
   const formatRut = (rut) => {
     // Elimina cualquier carácter que no sea un número, punto o guion
     let cleanRut = rut.replace(/[^0-9kK.-]/g, '');
-  
+
     // Añade puntos y guion si no están presentes
     if (cleanRut.length > 1) {
       if (cleanRut.length > 2 && cleanRut[2] !== '.') {
@@ -143,7 +155,7 @@ const Register = ({ navigation }) => {
         cleanRut = cleanRut.slice(0, 10) + '-' + cleanRut.slice(10);
       }
     }
-  
+
     return cleanRut.toUpperCase(); // Devuelve el RUT formateado
   };
 
@@ -158,9 +170,9 @@ const Register = ({ navigation }) => {
     }
   };
 
-    
+
   const validateEmail = (email) => {
-    const uvEmailPattern = /^[a-zA-Z]+\.[a-zA-Z]+@alumnos\.uv\.cl$/;                    
+    const uvEmailPattern = /^[a-zA-Z]+\.[a-zA-Z]+@alumnos\.uv\.cl$/;
     return uvEmailPattern.test(email);
   };
 
@@ -168,19 +180,19 @@ const Register = ({ navigation }) => {
   const isStrongPassword = (password) => {
     // Verificar longitud mínima
     if (password.length < 8) return false;
-  
+
     // Verificar si contiene al menos una letra mayúscula
     if (!/[A-Z]/.test(password)) return false;
-  
+
     // Verificar si contiene al menos una letra minúscula
     if (!/[a-z]/.test(password)) return false;
-  
+
     // Verificar si contiene al menos un número
     if (!/[0-9]/.test(password)) return false;
-  
+
     // Verificar si contiene al menos un símbolo
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return false;
-  
+
     return true;
   };
 
@@ -196,49 +208,54 @@ const Register = ({ navigation }) => {
 
 
   // sign up function
-  const handleSignUp = async (fullName, rut, email, password, confirmPassword, birthdate, carrera ) => {
+  const handleSignUp = async (fullName, rut, email, password, confirmPassword, birthdate, facultad, carrera) => {
     try {
-        console.log(fullName)
-        console.log(rut)
-        console.log(email)
-        console.log(password)
-        console.log(confirmPassword)
-        console.log(birthdate)
-        console.log(carrera)
-   
+      console.log(fullName)
+      console.log(rut)
+      console.log(email)
+      console.log(password)
+      console.log(confirmPassword)
+      console.log(birthdate)
+      console.log('Facultad:', facultad);
+      console.log(carrera)
 
-         // Verifica si se aceptó la política
-    const accepted = await AsyncStorage.getItem('policyAccepted');
-    console.log('Policy Accepted:', accepted); // Verificar en consola
+      if (!facultad || !carrera) {
+        alert('Por favor, selecciona una facultad y una carrera.');
+        return;
+      }
 
-    if (accepted !== 'true') {
-      alert('Debes aceptar la política de privacidad para continuar.');
-      return; // Detenemos el registro si no se aceptó la política
-    }
+      // Verifica si se aceptó la política
+      const accepted = await AsyncStorage.getItem('policyAccepted');
+      console.log('Policy Accepted:', accepted); // Verificar en consola
+
+      if (accepted !== 'true') {
+        alert('Debes aceptar la política de privacidad para continuar.');
+        return; // Detenemos el registro si no se aceptó la política
+      }
 
       // Validar el RUT 
-    if (!validateRut(rut)) {
+      if (!validateRut(rut)) {
         alert('RUT inválido. Por favor, verifica el RUT ingresado.');
         return;
-    }
+      }
 
-       // Validar el email
-    if (!validateEmail(email)) {
-      alert('Correo electrónico inválido. Debe seguir el formato nombre.apellido@alumnos.uv.cl.');
-      return;
-    }
-   
-    if (!isStrongPassword(password)) {
-      alert('La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un símbolo.');
-      return;
-    }
+      // Validar el email
+      if (!validateEmail(email)) {
+        alert('Correo electrónico inválido. Debe seguir el formato nombre.apellido@alumnos.uv.cl.');
+        return;
+      }
+
+      if (!isStrongPassword(password)) {
+        alert('La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un símbolo.');
+        return;
+      }
 
       if (password !== confirmPassword) {
         alert("Passwords don't match.");
         return;
       }
 
-    // Datos a enviar al backend
+      // Datos a enviar al backend
       const userData = {
         name: fullName,
         rut: rut,
@@ -250,32 +267,32 @@ const Register = ({ navigation }) => {
         policyAccepted: accepted,
       };
 
-       // Realizar la solicitud POST al backend
-    const response = await axios.post(`${API_URL}/users/register`, userData);
-   
-    // Verificar la respuesta del servidor
-    if (response.status === 201) {
-      alert('Registro existoso, verifica tu cuenta ingresando a tu correo electrónico!');
-      navigation.navigate('Login');
-    } else {
-      alert(`Registro fallido: ${response.data}`);
+      // Realizar la solicitud POST al backend
+      const response = await axios.post(`${API_URL}/users/register`, userData);
+
+      // Verificar la respuesta del servidor
+      if (response.status === 201) {
+        alert('Registro existoso, verifica tu cuenta ingresando a tu correo electrónico!');
+        navigation.navigate('Login');
+      } else {
+        alert(`Registro fallido: ${response.data}`);
+      }
+    } catch (error) {
+      // Manejo de errores
+      if (error.response) {
+        // La solicitud se realizó y el servidor respondió con un estado de error
+        alert(`Error en el registro: ${error.response.data}`);
+      } else if (error.request) {
+        // La solicitud se realizó pero no se recibió respuesta
+        alert('No hay respuesta del servidor..');
+      } else {
+        // Algo salió mal al configurar la solicitud
+        alert(`Error: ${error.message}`);
+      }
     }
-  } catch (error) {
-    // Manejo de errores
-    if (error.response) {
-      // La solicitud se realizó y el servidor respondió con un estado de error
-      alert(`Error en el registro: ${error.response.data}`);
-    } else if (error.request) {
-      // La solicitud se realizó pero no se recibió respuesta
-      alert('No hay respuesta del servidor..');
-    } else {
-      // Algo salió mal al configurar la solicitud
-      alert(`Error: ${error.message}`);
-    }
-  }
-};
- 
-    
+  };
+
+
   /*
    * ****************
    * **** Screen ****
@@ -323,7 +340,7 @@ const Register = ({ navigation }) => {
             <Image
               style={{ width: 100, height: 100 }}
               source={require('./../../../assets/salud-mental.png')}
-                                
+
             />
           </SafeAreaView>
         </View>
@@ -361,7 +378,7 @@ const Register = ({ navigation }) => {
               maxLength={12} // Máxima longitud del RUT formateado
             />
           </View>
-          
+
           <View style={AuthStyle.inputContainer}>
             <MaterialCommunityIcons
               name="email-outline"
@@ -378,20 +395,34 @@ const Register = ({ navigation }) => {
               style={AuthStyle.input}
             />
           </View>
- 
+
+          {/* Dropdown para Facultad */}
           <View style={AuthStyle.inputContainer}>
-            <MaterialCommunityIcons
-              name="school-outline"
-              size={24}
-              style={AuthStyle.icon}
-            />
-            <TextInput
-              onChangeText={(text) => setCarrera(text)} // every time the text changes, we can set the email to that text (callback function)
-              placeholder="Carrera"
-              placeholderTextColor="#92959f"
-              selectionColor="#5da5a9"
+            <Picker
+              selectedValue={facultad}
+              onValueChange={(itemValue) => handleFacultadChange(itemValue)}
               style={AuthStyle.input}
-            />
+            >
+              <Picker.Item label="Selecciona una facultad" value="" />
+              {Object.keys(facultadesData).map((fac) => (
+                <Picker.Item key={fac} label={fac} value={fac} />
+              ))}
+            </Picker>
+          </View>
+
+          {/* Dropdown para Carrera */}
+          <View style={AuthStyle.inputContainer}>
+            <Picker
+              selectedValue={carrera}
+              onValueChange={(itemValue) => setCarrera(itemValue)}
+              style={AuthStyle.input}
+              enabled={carrerasDisponibles.length > 0} // Solo habilitado si hay carreras disponibles
+            >
+              <Picker.Item label="Selecciona una carrera" value="" />
+              {carrerasDisponibles.map((car) => (
+                <Picker.Item key={car} label={car} value={car} />
+              ))}
+            </Picker>
           </View>
 
           <View style={AuthStyle.inputContainer}>
@@ -400,15 +431,15 @@ const Register = ({ navigation }) => {
               size={24}
               style={AuthStyle.icon}
             />
-          <TextInput
-            value={birthdate}
-            onChangeText={handleBirthdateChange}
-            placeholder="Fecha de nacimiento (Año, mes, día)"
-            placeholderTextColor="#92959f"
-            selectionColor="#5da5a9"
-            style={AuthStyle.input}
-            keyboardType="default" // Solo números en el teclado
-          />
+            <TextInput
+              value={birthdate}
+              onChangeText={handleBirthdateChange}
+              placeholder="Fecha de nacimiento (Año, mes, día)"
+              placeholderTextColor="#92959f"
+              selectionColor="#5da5a9"
+              style={AuthStyle.input}
+              keyboardType="default" // Solo números en el teclado
+            />
           </View>
 
           <View style={AuthStyle.inputContainer}>
@@ -454,7 +485,7 @@ const Register = ({ navigation }) => {
               selectionColor="#5da5a9"
               style={AuthStyle.input}
             />
-                       {/*  Botón para mostrar/ocultar contraseña  */}
+            {/*  Botón para mostrar/ocultar contraseña  */}
             <TouchableOpacity
               onPress={() => setShowPassword(!showPassword)}
               style={AuthStyle.showPasswordButton}

@@ -102,11 +102,11 @@ const isStrongPassword = (password) => {
 
 const registerUser = async (req, res) => {
     try {
-        const { name, email, rut, birthdate, carrera, password, confirmPassword, policyAccepted } = req.body;
+        const { name, email, rut, birthdate, facultad, carrera, password, confirmPassword, policyAccepted } = req.body;
         // Convertir el email a minúsculas antes de guardarlo
         const normalizedEmail = email.toLowerCase();
 
-        if (!name || !normalizedEmail || !rut || !birthdate || !carrera || !password || !confirmPassword) {
+        if (!name || !normalizedEmail || !rut || !birthdate || !facultad || !carrera || !password || !confirmPassword) {
             return res.status(400).send('Todos los campos son obligatorios.');
         }
 
@@ -166,6 +166,7 @@ const registerUser = async (req, res) => {
             email: normalizedEmail,
             rut,
             birthdate,
+            facultad,
             carrera,
             passwordHash: bcrypt.hashSync(password, 8),
             verificationToken,
@@ -233,6 +234,7 @@ const verifyEmail = async (req, res) => {
             email: tempUser.email,
             rut: tempUser.rut,
             birthdate: tempUser.birthdate,
+            facultad: tempUser.facultad,
             carrera: tempUser.carrera,
             passwordHash: tempUser.passwordHash,
             verified: true,
