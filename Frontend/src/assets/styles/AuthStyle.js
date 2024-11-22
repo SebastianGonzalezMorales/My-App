@@ -60,12 +60,13 @@ export default StyleSheet.create({
     width: '10%',
   },
   input: {
-    color: '#333943',
-    fontFamily: 'DoppioOne',
-    fontSize: 12,
+    color: '#92959f', // Color más claro igual al texto de facultad
+    fontFamily: 'System', // Fuente del sistema para que se vea más ligera
+    fontSize: 15,
     marginLeft: 10,
     width: '70%',
   },
+  
 
   // other
   changeScreenContainer: {
@@ -79,4 +80,15 @@ export default StyleSheet.create({
     right: 5,
     paddingBottom: 20
   },
+    pickerInput: {
+   
+        color: '#92959f',
+        fontFamily: 'DoppioOne',
+        fontSize: 15,
+        marginLeft: -7,
+        width: '70%',
+
+  },
+
+  
 });

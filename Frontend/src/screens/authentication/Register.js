@@ -6,6 +6,8 @@ import Svg, { Circle } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNPickerSelect from 'react-native-picker-select';
+
 
 // Import the API URL from environment variables
 import { API_URL } from '@env';
@@ -17,6 +19,7 @@ import SmallAuthButton from '../../components/buttons/SmallAuthButton';
 // customisation
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import AuthStyle from '../../assets/styles/AuthStyle';
 
 import facultadesData from '../utils/facultades.json'; // Importamos el archivo JSON con las facultades y carreras
@@ -396,34 +399,69 @@ const Register = ({ navigation }) => {
             />
           </View>
 
-          {/* Dropdown para Facultad */}
-          <View style={AuthStyle.inputContainer}>
-            <Picker
-              selectedValue={facultad}
-              onValueChange={(itemValue) => handleFacultadChange(itemValue)}
-              style={AuthStyle.input}
-            >
-              <Picker.Item label="Selecciona una facultad" value="" />
-              {Object.keys(facultadesData).map((fac) => (
-                <Picker.Item key={fac} label={fac} value={fac} />
-              ))}
-            </Picker>
-          </View>
+{/* Dropdown para Facultad */}
+<View style={[AuthStyle.inputContainer, { position: 'relative' }]}>
+  <MaterialCommunityIcons
+    name="domain"
+    size={24}
+    color="#5da5a9"
+    style={AuthStyle.icon}
+  />
+  <Picker
+    selectedValue={facultad}
+    onValueChange={(itemValue) => handleFacultadChange(itemValue)}
+    style={[
+      AuthStyle.input,
+      {
+        backgroundColor: 'transparent',
+        width: '87%', // Asegura que el Picker ocupe todo el espacio disponible
+        right: 16 // Ajusta este valor
+      },
+    ]}
+    enabled={Object.keys(facultadesData).length > 0}
+    dropdownIconColor="#92959f"
+  >
+    <Picker.Item label="Selecciona una facultad" value="" />
+    {Object.keys(facultadesData).map((fac) => (
+      <Picker.Item key={fac} label={fac} value={fac} />
+    ))}
+  </Picker>
+</View>
 
-          {/* Dropdown para Carrera */}
-          <View style={AuthStyle.inputContainer}>
-            <Picker
-              selectedValue={carrera}
-              onValueChange={(itemValue) => setCarrera(itemValue)}
-              style={AuthStyle.input}
-              enabled={carrerasDisponibles.length > 0} // Solo habilitado si hay carreras disponibles
-            >
-              <Picker.Item label="Selecciona una carrera" value="" />
-              {carrerasDisponibles.map((car) => (
-                <Picker.Item key={car} label={car} value={car} />
-              ))}
-            </Picker>
-          </View>
+
+
+
+{/* Dropdown para Carrera */}
+<View style={[AuthStyle.inputContainer, { position: 'relative' }]}>
+  <MaterialCommunityIcons
+    name="school-outline" // Ícono para Carrera
+    size={24}
+    color="#5da5a9" // Color celeste igual al resto
+    style={AuthStyle.icon} // Usa el mismo estilo que los otros íconos
+  />
+  <Picker
+    selectedValue={carrera}
+    onValueChange={(itemValue) => setCarrera(itemValue)}
+    style={[
+      AuthStyle.input,
+      {
+        backgroundColor: 'transparent',
+        width: '87%', // Asegura que el Picker ocupe todo el espacio disponible
+        right: 16, // Ajusta este valor
+      },
+    ]}
+    enabled={carrerasDisponibles.length > 0} // Solo habilitado si hay carreras disponibles
+    dropdownIconColor="#92959f" // Color de la flecha predeterminada
+  >
+    <Picker.Item label="Selecciona una carrera" value="" />
+    {carrerasDisponibles.map((car) => (
+      <Picker.Item key={car} label={car} value={car} />
+    ))}
+  </Picker>
+</View>
+
+
+
 
           <View style={AuthStyle.inputContainer}>
             <MaterialCommunityIcons
