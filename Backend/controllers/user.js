@@ -183,7 +183,7 @@ const registerUser = async (req, res) => {
         // Obtener BASE_URL para producción
         const baseUrl = process.env.BASE_URL;
         
-        const verificationLink = `http://${baseUrl}:${PORT}/api/v1/users/verificar?token=${verificationToken}`;
+        const verificationLink = `${baseUrl}:${PORT}/api/v1/users/verificar?token=${verificationToken}`;
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',

@@ -40,6 +40,7 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MenuUv from './src/screens/InformacionUv/MenuUv';
+import ContactarseConRecursosUV from './src/screens/InformacionUv/ContactarseConRecursosUv';
 import InformacionUv from './src/screens/InformacionUv/InformacionUv';
 import Informacion from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion';
 import AprendeSobreSaludMental from './src/screens/SaludMental/AprendeSobreSaludMental/AprendeSobreSaludMental';
@@ -238,8 +239,11 @@ const AppNavigator = () => {
             <Stack.Screen name="ConsejosDeEstudiantes" component={ConsejosDeEstudiantes} />
             <Stack.Screen name="RedesDeApoyo" component={RedesDeApoyo} />
             
+           
+            
             <Stack.Screen name="RedesSociales" component={RedesSociales} />
             <Stack.Screen name="InformacionUv" component={InformacionUv} />
+            <Stack.Screen name="ContactarseConRecursosUV" component={ContactarseConRecursosUV} />
 
             
           </>

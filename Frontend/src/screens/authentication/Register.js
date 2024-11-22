@@ -49,10 +49,10 @@ const Register = ({ navigation }) => {
   // Función para manejar el cambio de facultad
   const handleFacultadChange = (selectedFacultad) => {
     setFacultad(selectedFacultad);
-    setCarrerasDisponibles(facultadesData[selectedFacultad] || []); // Actualiza las carreras según la facultad seleccionada
-    setCarrera(''); // Resetea la carrera al cambiar facultad
+    setCarrerasDisponibles(facultadesData[selectedFacultad] || []);
+    setCarrera(''); // Resetea carrera si cambia la facultad
   };
-
+  
   /*
   * ***********************
   * **** Recuperación de AsyncStorage ****
@@ -212,15 +212,18 @@ const Register = ({ navigation }) => {
 
   // sign up function
   const handleSignUp = async (fullName, rut, email, password, confirmPassword, birthdate, facultad, carrera) => {
+
     try {
+      console.log(" ")
       console.log(fullName)
       console.log(rut)
       console.log(email)
       console.log(password)
       console.log(confirmPassword)
       console.log(birthdate)
-      console.log('Facultad:', facultad);
+      console.log(facultad);
       console.log(carrera)
+      console.log(" ")
 
       if (!facultad || !carrera) {
         alert('Por favor, selecciona una facultad y una carrera.');
@@ -254,7 +257,7 @@ const Register = ({ navigation }) => {
       }
 
       if (password !== confirmPassword) {
-        alert("Passwords don't match.");
+        alert("Contraseñas no coinciden");
         return;
       }
 
@@ -267,11 +270,14 @@ const Register = ({ navigation }) => {
         confirmPassword: confirmPassword,
         birthdate: birthdate,
         carrera: carrera,
+        facultad: facultad,
         policyAccepted: accepted,
       };
 
       // Realizar la solicitud POST al backend
       const response = await axios.post(`${API_URL}/users/register`, userData);
+      console.log('Datos enviados al backend:', userData);
+
 
       // Verificar la respuesta del servidor
       if (response.status === 201) {
@@ -539,7 +545,7 @@ const Register = ({ navigation }) => {
 
           <AuthButton
             text="Finalizar"
-            onPress={() => handleSignUp(fullName, rut, email, password, confirmPassword, birthdate, carrera)}
+            onPress={() => handleSignUp(fullName, rut, email, password, confirmPassword, birthdate, facultad, carrera)}
           />
 
           <View style={AuthStyle.changeScreenContainer}>

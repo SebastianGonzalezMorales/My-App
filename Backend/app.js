@@ -29,11 +29,13 @@ const usersRoutes = require('./routes/users');
 const questionRoutes = require('./routes/questions');
 const resultsTestsRoutes = require('./routes/resultsTests');
 const tipsRoutes = require('./routes/tips');
+const assistantRoutes = require('./routes/assistant');
 
 //const authJwt = require('./helpers/jwt');
 
 const api = process.env.API_URL;
 
+app.use(`${api}/assistants`, assistantRoutes);
 app.use(`${api}/tips`, tipsRoutes);
 app.use(`${api}/phraseOfTheDay`, phraseOfTheDayRoutes);
 app.use(`${api}/users`, usersRoutes);
