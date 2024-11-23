@@ -3,6 +3,7 @@ const multer = require('multer');
 const path = require('path');
 
 // Obtener asistente por carrera
+// Obtener asistente por carrera
 const getAssistantByCarrera = async (req, res) => {
     try {
         const { carrera } = req.params;
@@ -13,13 +14,24 @@ const getAssistantByCarrera = async (req, res) => {
         });
 
         if (!assistant) {
-            return res.status(404).json({ message: 'No se encontró asistente para esta carrera.' });
+            return res.status(404).json({ 
+                success: false,
+                message: 'No se encontró asistente para esta carrera.' 
+            });
         }
 
-        res.status(200).json(assistant);
+        res.status(200).json({
+            success: true,
+            message: 'Asistente encontrado con éxito.',
+            assistant
+        });
     } catch (error) {
         console.error('Error al obtener asistente:', error);
-        res.status(500).json({ message: 'Error interno del servidor.' });
+        res.status(500).json({ 
+            success: false,
+            message: 'Error interno del servidor.',
+            error: error.message // Opcional: Detallar el error en la respuesta
+        });
     }
 };
 

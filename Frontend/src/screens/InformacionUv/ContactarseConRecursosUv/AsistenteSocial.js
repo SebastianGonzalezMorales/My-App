@@ -1,84 +1,169 @@
-// react imports
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   Text,
   ScrollView,
   View,
   Image,
-  Dimensions
+  Dimensions,
+  TouchableOpacity,
+  ActivityIndicator,
+  Linking,
 } from 'react-native';
-
-// customisation
+import { fetchWithToken } from '../../utils/apiHelpers';
 import GlobalStyle from '../../../assets/styles/GlobalStyle';
-
-// Components
-import CustomButton from '../../../components/buttons/CustomButton';
-import SettingsButton from '../../../components/buttons/SettingsButton';
-import AuthButton from '../../../components/buttons/AuthButton';
 import BackButton from '../../../components/buttons/BackButton';
-const { width, height } = Dimensions.get('window'); // Obtener las dimensiones de la pantalla
 
+const { height } = Dimensions.get('window'); // Obtener dimensiones
 
 function AsistenteSocial({ navigation }) {
+  const [assistant, setAssistant] = useState(null); // Estado para almacenar los datos del asistente
+  const [loading, setLoading] = useState(true); // Estado de carga
+  const [error, setError] = useState(null); // Estado de error
+
+  // Carrera hardcodeada temporalmente
+  const carrera = 'Ingeniería Civil Informática';
+
+  // Función para obtener datos del asistente social desde el backend
+  const fetchAssistant = async () => {
+    try {
+      const response = await fetchWithToken(`/assistants/${carrera}`);
+      if (response?.assistant) {
+        setAssistant(response.assistant); // Guardar los datos del asistente en el estado
+      } else {
+        setError('No se encontró un asistente para esta carrera.');
+      }
+    } catch (err) {
+      console.error('Error al obtener el asistente:', err);
+      setError('Hubo un problema al cargar los datos.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Obtener los datos del asistente al montar el componente
+  useEffect(() => {
+    fetchAssistant();
+  }, []);
+
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
+      {/* Botón para regresar */}
       <BackButton onPress={() => navigation.goBack()} />
 
-      {/* Sección superior azul con título y subtítulo */}
-      <View style={{ height: height * 0.30, padding: 10 }}>
+      {/* Sección superior azul */}
+      <View style={{ height: height * 0.20, padding: 10, backgroundColor: '#000C7B' }}>
         <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
-        <Text style={GlobalStyle.welcomeText}>Contactarse con Recursos UV</Text>
+        
         <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
-        Asistentes sociales
+        Contactarse con Recursos UV
         </Text>
-
-        {/* Imagen con altura ajustada */}
-{/*         <Image
-          source={require('../../../assets/uv_logo_act.png')}
-          style={{
-            width: '100%',
-            height: height * 0.15, // Ajustar la altura de la imagen al 20% de la pantalla
-            resizeMode: 'contain', // Cambiar a 'contain' para evitar recortes
-            marginTop: 40
-          }}
-        /> */}
+        <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
+          Asistentes Sociales
+        </Text>
       </View>
 
-
-      {/* Contenedor de la segunda sección con fondo blanco y bordes redondeados */}
-      <View style={{ flex: 1, backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, overflow: 'hidden' }}>
-        {/* Imagen de encabezado opcional */}
-
-
-        {/* ScrollView para botones y contenido adicional */}
-        <ScrollView contentContainerStyle={{ padding: 20 }}>
-          <View style={{ marginTop: 10 }}>
-            {/* <SettingsButton
-              text="Asistente Social"
-               onPress={() => navigation.navigate('InformacionUv')} 
-            /> */}
-            {/* <SettingsButton
-              text="Conectados"
-               onPress={() => navigation.navigate('RedesSociales')} 
-              textStyle={{
-                color: '#d85a77', // Personaliza el color del texto
-                fontSize: 16, // Disminuir tamaño de la letra
-                textAlign: 'left', // Alinear texto a la izquierda
+      {/* Contenedor principal */}
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: 'white',
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+        }}
+      >
+        {loading ? (
+          <ActivityIndicator size="large" color="#000C7B" style={{ marginTop: 20 }} />
+        ) : error ? (
+          <Text style={{ color: 'red', textAlign: 'center', marginTop: 20 }}>{error}</Text>
+        ) : (
+          <ScrollView contentContainerStyle={{ padding: 20, alignItems: 'center' }}>
+            {/* Frase personalizada (opcional) */}
+            <View
+              style={{
+                padding: 20,
+                backgroundColor: '#F5F5F5',
+                borderRadius: 10,
+                marginBottom: 20,
+                width: '100%',
               }}
-            /> */}
+            >
+              <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'justify', color: '#333' }}>
+                Sebastián, te presentamos a la asistente social asignada a tu carrera. Ella es tu
+                primer contacto para recibir orientación y apoyo.
+              </Text>
+            </View>
 
+            {/* Tarjeta del asistente */}
+            <View
+              style={{
+                backgroundColor: '#F5F5F5',
+                borderRadius: 10,
+                padding: 15,
+                marginBottom: 15,
+                alignItems: 'center',
+                width: '100%',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.3,
+                shadowRadius: 4,
+                elevation: 3,
+              }}
+            >
+              <Image
+                source={{ uri: assistant.imagen }}
+                style={{
+                  width: 250, // Ajustar el ancho de la imagen
+                  height: 250, // Ajustar la altura de la imagen
+                  borderRadius: 20,
+                  marginBottom: 20,
+                }}
+              />
 
-
-{/*             <SettingsButton
-              text="Contactarse con recursos UV"
-              onPress={() => navigation.navigate('UV')}
-              backgroundColor="#fbcdd1" // Un rojo más presente y vibrante en el fondo
-              textColor="#c62828"       // Un rojo más oscuro para el texto
-              iconColor="#c62828"       // El mismo rojo oscuro para el icono
-            /> */}
-            
-          </View>
-        </ScrollView>
+              {/* Se elimina el texto redundante */}
+              {/* Botones para contactar */}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 10,
+                  width: '100%',
+                }}
+              >
+                <TouchableOpacity
+                  style={{
+                    flex: 1,
+                    backgroundColor: '#B2EBF2',
+                    padding: 15,
+                    borderRadius: 10,
+                    marginHorizontal: 5,
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    Linking.openURL(`tel:${assistant.phone}`);
+                  }}
+                >
+                  <Text style={{ color: '#00796B', fontWeight: 'bold' }}>Llamar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flex: 1,
+                    backgroundColor: '#FFCDD2',
+                    padding: 15,
+                    borderRadius: 10,
+                    marginHorizontal: 5,
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    Linking.openURL(`mailto:${assistant.email}`);
+                  }}
+                >
+                  <Text style={{ color: '#C62828', fontWeight: 'bold' }}>Correo</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
+        )}
       </View>
     </SafeAreaView>
   );
