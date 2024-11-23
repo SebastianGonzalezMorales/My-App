@@ -9,29 +9,31 @@ import {
 } from 'react-native';
 
 // customisation
-import GlobalStyle from '../../assets/styles/GlobalStyle';
+import GlobalStyle from '../../../assets/styles/GlobalStyle';
 
 // Components
-import CustomButton from '../../components/buttons/CustomButton';
-import SettingsButton from '../../components/buttons/SettingsButton';
-import AuthButton from '../../components/buttons/AuthButton';
-
+import CustomButton from '../../../components/buttons/CustomButton';
+import SettingsButton from '../../../components/buttons/SettingsButton';
+import AuthButton from '../../../components/buttons/AuthButton';
+import BackButton from '../../../components/buttons/BackButton';
 const { width, height } = Dimensions.get('window'); // Obtener las dimensiones de la pantalla
 
 
-function MenuUv({ navigation }) {
+function Conectados({ navigation }) {
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
+      <BackButton onPress={() => navigation.goBack()} />
 
       {/* Sección superior azul con título y subtítulo */}
-      <View style={{ height: height * 0.45, padding: 10 }}>
+      <View style={{ height: height * 0.30, padding: 10 }}>
         <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
+        <Text style={GlobalStyle.welcomeText}>Contactarse con Recursos UV</Text>
         <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
-          Descubre novedades eventos y toda la información sobre salud mental de la Universidad de Valparaíso.
+         Conectados
         </Text>
 
         {/* Imagen con altura ajustada */}
-        <Image
+{/*         <Image
           source={require('../../../assets/uv_logo_act.png')}
           style={{
             width: '100%',
@@ -39,7 +41,7 @@ function MenuUv({ navigation }) {
             resizeMode: 'contain', // Cambiar a 'contain' para evitar recortes
             marginTop: 40
           }}
-        />
+        /> */}
       </View>
 
 
@@ -51,26 +53,26 @@ function MenuUv({ navigation }) {
         {/* ScrollView para botones y contenido adicional */}
         <ScrollView contentContainerStyle={{ padding: 20 }}>
           <View style={{ marginTop: 10 }}>
-            <SettingsButton
-              text="Información"
+{/*             <SettingsButton
+              text="Asistente Social"
               onPress={() => navigation.navigate('InformacionUv')}
             />
             <SettingsButton
-              text="Novedades"
+              text="Conectados"
               onPress={() => navigation.navigate('RedesSociales')}
               textStyle={{
                 color: '#d85a77', // Personaliza el color del texto
                 fontSize: 16, // Disminuir tamaño de la letra
                 textAlign: 'left', // Alinear texto a la izquierda
               }}
-            />
-            <SettingsButton
+            /> */}
+{/*             <SettingsButton
               text="Contactarse con recursos UV"
-              onPress={() => navigation.navigate('ContactarseConRecursosUV')}
+              onPress={() => navigation.navigate('UV')}
               backgroundColor="#fbcdd1" // Un rojo más presente y vibrante en el fondo
               textColor="#c62828"       // Un rojo más oscuro para el texto
               iconColor="#c62828"       // El mismo rojo oscuro para el icono
-            />
+            /> */}
             
           </View>
         </ScrollView>
@@ -79,4 +81,4 @@ function MenuUv({ navigation }) {
   );
 }
 
-export default MenuUv;
+export default Conectados;

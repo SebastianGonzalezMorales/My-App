@@ -62,6 +62,8 @@ import Depresion from './src/screens/SaludMental/AprendeSobreSaludMental/Informa
 import InfoSaludMental from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion/InfoSaludMental';
 import Crisis from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion/Crisis';
 import Evaluacion from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion/Evaluacion';
+import Conectados from './src/screens/InformacionUv/ContactarseConRecursosUv/Conectados';
+import AsistenteSocial from './src/screens/InformacionUv/ContactarseConRecursosUv/AsistenteSocial';
 
 const Tab = createBottomTabNavigator(); // create tab navigator method
 const Stack = createNativeStackNavigator(); // create stack navigator method
@@ -244,6 +246,8 @@ const AppNavigator = () => {
             <Stack.Screen name="RedesSociales" component={RedesSociales} />
             <Stack.Screen name="InformacionUv" component={InformacionUv} />
             <Stack.Screen name="ContactarseConRecursosUV" component={ContactarseConRecursosUV} />
+            <Stack.Screen name="AsistenteSocial" component={AsistenteSocial} />
+            <Stack.Screen name="Conectados" component={Conectados} />
 
             
           </>
