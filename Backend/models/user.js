@@ -60,7 +60,8 @@ const usersSchema = new mongoose.Schema({
     policyAcceptedAt: { 
         type: Date, 
         default: null
-    }
+    },
+    phoneNumber: { type: String, required: true },
 });
 
 

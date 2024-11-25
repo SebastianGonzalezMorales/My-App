@@ -253,7 +253,7 @@ function AsistenteSocial({ navigation }) {
     console.log('Nombre del asistente:', assistantFirstName); // Depuración
 
     Linking.openURL(
-      `mailto:${assistant.email}?subject=[Atención salud Mental]&body=Estimada ${assistantFirstName},%0D%0A%0D%0A` +
+      `mailto:${assistant.email}?subject=[Atención salud Mental +- AppAcompañamientoUV]&body=Estimada ${assistantFirstName},%0D%0A%0D%0A` +
         `Junto con saludar y esperando que se encuentre bien, le escribo este correo para ver la posibilidad de tener acompañamiento psicológico.%0D%0A%0D%0A` +
         `Datos del estudiante:%0D%0A` +
         `- Nombre: ${firstName}%0D%0A` +

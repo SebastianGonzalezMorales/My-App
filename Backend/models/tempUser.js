@@ -9,7 +9,8 @@ const tempUserSchema = new mongoose.Schema({
     carrera: String,
     passwordHash: String,
     verificationToken: String, // Token para verificar el correo
-    createdAt: { type: Date, expires: '1h', default: Date.now } // Eliminar después de 1 hora
+    createdAt: { type: Date, expires: '1h', default: Date.now }, // Eliminar después de 1 hora
+    phoneNumber: { type: String, required: true },
 });
 
 exports.TempUser = mongoose.model('TempUser', tempUserSchema);

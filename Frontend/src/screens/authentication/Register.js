@@ -7,6 +7,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNPickerSelect from 'react-native-picker-select';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { Platform } from 'react-native';
+
 
 
 // Import the API URL from environment variables
@@ -39,6 +42,8 @@ const Register = ({ navigation }) => {
   const [facultad, setFacultad] = useState('');
   const [carrera, setCarrera] = useState('');
   const [carrerasDisponibles, setCarrerasDisponibles] = useState([]);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('+569'); // Inicializa con el prefijo
 
   /*
    * *******************
@@ -52,6 +57,47 @@ const Register = ({ navigation }) => {
     setCarrerasDisponibles(facultadesData[selectedFacultad] || []);
     setCarrera(''); // Resetea carrera si cambia la facultad
   };
+  
+  const handleDateChange = (event, selectedDate) => {
+    setShowDatePicker(false); // Oculta el selector de fecha
+  
+    if (selectedDate) {
+      // Formatear la fecha como YYYY-MM-DD
+      const formattedDate = selectedDate.toISOString().split('T')[0];
+      setBirthdate(formattedDate); // Guardar la fecha formateada
+    }
+  };
+
+  const handlePhoneFocus = () => {
+    if (!phoneNumber.startsWith('+569 ')) {
+      setPhoneNumber('+569 '); // Agrega el prefijo al enfocar
+    }
+  };
+  
+  
+  const handlePhoneNumberChange = (text) => {
+    // Si el texto es solo el prefijo, no hacemos nada
+    if (text === '+569 ') {
+      setPhoneNumber(text);
+      return;
+    }
+  
+    // Aseguramos que el prefijo se mantenga
+    if (!text.startsWith('+569 ')) {
+      text = '+569 ' + text.replace(/[^0-9]/g, '');
+    }
+  
+    // Permitir solo números después del prefijo
+    let numbersOnly = text.slice(5).replace(/[^0-9]/g, '');
+  
+    // Limitar a 8 dígitos después del prefijo
+    if (numbersOnly.length > 8) {
+      numbersOnly = numbersOnly.slice(0, 8);
+    }
+  
+    setPhoneNumber('+569 ' + numbersOnly);
+  };
+  
   
   /*
   * ***********************
@@ -211,7 +257,7 @@ const Register = ({ navigation }) => {
 
 
   // sign up function
-  const handleSignUp = async (fullName, rut, email, password, confirmPassword, birthdate, facultad, carrera) => {
+  const handleSignUp = async (fullName, rut, email, password, confirmPassword, birthdate, phoneNumber, facultad, carrera) => {
 
     try {
       console.log(" ")
@@ -223,7 +269,14 @@ const Register = ({ navigation }) => {
       console.log(birthdate)
       console.log(facultad);
       console.log(carrera)
+      console.log(phoneNumber)
       console.log(" ")
+
+      if (!/^\+569 \d{8}$/.test(phoneNumber)) {
+        alert('Por favor, ingresa un número de celular válido con el formato +569 XXXXXXXX.');
+        return;
+      }
+      
 
       if (!facultad || !carrera) {
         alert('Por favor, selecciona una facultad y una carrera.');
@@ -271,6 +324,7 @@ const Register = ({ navigation }) => {
         birthdate: birthdate,
         carrera: carrera,
         facultad: facultad,
+        phoneNumber: phoneNumber,
         policyAccepted: accepted,
       };
 
@@ -466,25 +520,56 @@ const Register = ({ navigation }) => {
   </Picker>
 </View>
 
+<TouchableOpacity 
+  onPress={() => setShowDatePicker(true)} 
+  style={AuthStyle.inputContainer} // Aplica los mismos estilos
+>
+  <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+    <MaterialCommunityIcons
+      name="calendar-outline"
+      size={24}
+      style={AuthStyle.icon}
+    />
+    <TextInput
+      value={birthdate}
+      placeholder="Selecciona tu fecha de nacimiento"
+      placeholderTextColor="#92959f"
+      style={[AuthStyle.input, { flex: 1 }]} // Asegura que ocupe el ancho restante
+      editable={false}
+      pointerEvents="none"
+    />
+  </View>
+</TouchableOpacity>
+{showDatePicker && (
+  <DateTimePicker
+    value={birthdate ? new Date(birthdate) : new Date()}
+    mode="date"
+    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+    onChange={handleDateChange}
+    maximumDate={new Date()}
+  />
+)}
+
+<View style={AuthStyle.inputContainer}>
+  <MaterialCommunityIcons
+    name="phone-outline"
+    size={24}
+    style={AuthStyle.icon}
+  />
+  <TextInput
+    value={phoneNumber}
+    placeholder="Número de teléfono"
+    placeholderTextColor="#92959f"
+    style={AuthStyle.input}
+    keyboardType="phone-pad"
+    onFocus={handlePhoneFocus} // Agrega el prefijo al enfocar
+    onChangeText={handlePhoneNumberChange}
+    maxLength={13} // "+569 " + 8 dígitos
+  />
+</View>
 
 
 
-          <View style={AuthStyle.inputContainer}>
-            <MaterialCommunityIcons
-              name="calendar-outline"
-              size={24}
-              style={AuthStyle.icon}
-            />
-            <TextInput
-              value={birthdate}
-              onChangeText={handleBirthdateChange}
-              placeholder="Fecha de nacimiento (Año, mes, día)"
-              placeholderTextColor="#92959f"
-              selectionColor="#5da5a9"
-              style={AuthStyle.input}
-              keyboardType="default" // Solo números en el teclado
-            />
-          </View>
 
           <View style={AuthStyle.inputContainer}>
             <MaterialCommunityIcons

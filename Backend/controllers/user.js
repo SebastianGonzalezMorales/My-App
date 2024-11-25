@@ -1,4 +1,4 @@
-const User  = require('../models/user');
+const User = require('../models/user');
 const { TempUser } = require('../models/tempUser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -9,7 +9,7 @@ const nodemailer = require('nodemailer'); // Para enviar correos
 
 const verifyTokenController = (req, res) => {
     res.status(200).json({ message: 'Token válido' });
-  };
+};
 
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
@@ -56,7 +56,7 @@ const getUserData = async (req, res) => {
     const { token } = req.body;
     try {
         const user = jwt.verify(token, secret);
-       // console.log(user)
+        // console.log(user)
         const useremail = user.email;
 
         User.findOne({ email: useremail }).then((data) => {
@@ -73,7 +73,7 @@ const getUserId = async (req, res) => {
     try {
         const user = jwt.verify(token, secret); // Se verifica y decodifica el token usando la clave secreta
         const userId = user.userId; // Asumiendo que el userId está guardado como 'id' en el payload del token
-       // console.log(user);
+        // console.log(user);
         // Devuelve el userId en la respuesta
         return res.send({ status: "Ok", userId: userId });
     } catch (error) {
@@ -102,31 +102,35 @@ const isStrongPassword = (password) => {
 
 const registerUser = async (req, res) => {
     try {
-        const { name, email, rut, birthdate, facultad, carrera, password, confirmPassword, policyAccepted } = req.body;
+        const { name, email, rut, birthdate, facultad, carrera, phoneNumber, password, confirmPassword, policyAccepted } = req.body;
         // Convertir el email a minúsculas antes de guardarlo
         const normalizedEmail = email.toLowerCase();
 
-        if (!name || !normalizedEmail || !rut || !birthdate || !facultad || !carrera || !password || !confirmPassword) {
+        if (!name || !normalizedEmail || !rut || !birthdate || !facultad || !carrera || !phoneNumber || !password || !confirmPassword) {
             return res.status(400).send('Todos los campos son obligatorios.');
         }
 
+        // Validar el número de celular
+        const phoneRegex = /^\+569\d{8}$/;
+        if (!phoneRegex.test(phoneNumber.replace(' ', ''))) {
+            return res.status(400).send('Número de celular inválido. Debe seguir el formato +569XXXXXXXX.');
+        }
 
-            // Verificar si la contraseña es fuerte
+        // Verificar si la contraseña es fuerte
         if (!isStrongPassword(password)) {
-        return res.status(400).send('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un símbolo.');
-    }
+            return res.status(400).send('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un símbolo.');
+        }
         if (password !== confirmPassword) {
             return res.status(400).send('Las contraseñas no coinciden.');
         }
-                // Verificar que el formato de la fecha sea correcto y que la fecha sea válida
+        // Verificar que el formato de la fecha sea correcto y que la fecha sea válida
         const birthdateRegex = /^\d{4}-\d{2}-\d{2}$/;
         if (!birthdateRegex.test(birthdate)) {
             return res.status(400).send('El formato de la fecha de nacimiento debe ser YYYY-MM-DD.');
         }
         if (!policyAccepted) {
             return res.status(400).send('Debes aceptar la política de privacidad para registrarte.');
-          }
-      
+        }
 
         // Descomponer la fecha en año, mes y día
         const [year, month, day] = birthdate.split('-').map(Number);
@@ -168,6 +172,7 @@ const registerUser = async (req, res) => {
             birthdate,
             facultad,
             carrera,
+            phoneNumber,
             passwordHash: bcrypt.hashSync(password, 8),
             verificationToken,
             policyAccepted: true,
@@ -182,7 +187,7 @@ const registerUser = async (req, res) => {
 
         // Obtener BASE_URL para producción
         const baseUrl = process.env.BASE_URL;
-        
+
         const verificationLink = `${baseUrl}:${PORT}/api/v1/users/verificar?token=${verificationToken}`;
 
         const transporter = nodemailer.createTransport({
@@ -236,6 +241,7 @@ const verifyEmail = async (req, res) => {
             birthdate: tempUser.birthdate,
             facultad: tempUser.facultad,
             carrera: tempUser.carrera,
+            phoneNumber: tempUser.phoneNumber,
             passwordHash: tempUser.passwordHash,
             verified: true,
             policyAccepted: true,
@@ -391,7 +397,7 @@ const forgotPassword = async (req, res) => {
 
         // Obtener BASE_URL para producción
         const baseUrl = process.env.BASE_URL;
-        
+
         const resetLink = `http://${baseUrl}:${PORT}/api/v1/users/verify-reset-token?token=${resetToken}`;
 
         // Configurar el transporte de nodemailer
@@ -470,7 +476,7 @@ const changePassword = async (req, res) => {
     }
 };
 
-  
+
 
 const verifyResetToken = async (req, res) => {
     const { token } = req.query;
@@ -501,7 +507,7 @@ const verifyResetToken = async (req, res) => {
         user.canResetPassword = true;
         await user.save();
 
-  
+
         // Si el token es válido, responder al frontend indicando que puede cambiar su contraseña
         res.status(200).send(`
             <html>
