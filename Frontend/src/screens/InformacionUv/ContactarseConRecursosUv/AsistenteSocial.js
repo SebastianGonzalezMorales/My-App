@@ -28,6 +28,8 @@ function AsistenteSocial({ navigation }) {
   const [assistant, setAssistant] = useState(null); // Para almacenar los datos del asistente social
   const [firstName, setFirstName] = useState(''); // Para almacenar solo el primer nombre del usuario
   const [imageData, setImageData] = useState(null); // Para almacenar los datos de la imagen en Base64
+  const [userRut, setUserRut] = useState(''); // RUT del usuario
+  const [userCareer, setUserCareer] = useState(''); // Carrera del usuario
 
   // Función para obtener los datos del usuario
   useEffect(() => {
@@ -40,9 +42,10 @@ function AsistenteSocial({ navigation }) {
             { token: `${token}` },
             { headers: { Authorization: `Bearer ${token}` } }
           );
-          const fullName = response.data.data.name;
-          const firstName = fullName.split(' ')[0]; // Tomar solo el primer nombre
-          setFirstName(firstName); // Actualizar el estado con el primer nombre
+          const userData = response.data.data;
+          setFirstName(userData.name.split(' ')[0]); // Tomar solo el primer nombre
+          setUserRut(userData.rut); // Guardar el RUT
+          setUserCareer(userData.carrera); // Guardar la carrera
         } else {
           console.log('No se encontró el token. Por favor, inicia sesión.');
         }
@@ -60,14 +63,15 @@ function AsistenteSocial({ navigation }) {
       try {
         const token = await AsyncStorage.getItem('token');
         if (token) {
-          // Obtener datos del asistente
           const response = await axios.get(
-            `${API_URL}/assistants/Ingeniería Civil Informática`,
+            `${API_URL}/assistants/${userCareer}`, // Filtrar asistente por carrera
             {
               headers: { Authorization: `Bearer ${token}` },
             }
           );
           const assistantData = response.data.assistant;
+
+          console.log('Datos del asistente:', assistantData); // Depuración
 
           // Reemplazar 'http://localhost:3001' con 'BASE_URL' en la URL de la imagen
           if (assistantData.imagen) {
@@ -79,7 +83,6 @@ function AsistenteSocial({ navigation }) {
 
           setAssistant(assistantData); // Almacenar los datos del asistente
 
-          // Obtener datos de la imagen con autenticación
           if (assistantData.imagen) {
             const imageResponse = await axios.get(assistantData.imagen, {
               headers: { Authorization: `Bearer ${token}` },
@@ -101,8 +104,10 @@ function AsistenteSocial({ navigation }) {
       }
     };
 
-    fetchAssistantData();
-  }, []);
+    if (userCareer) {
+      fetchAssistantData();
+    }
+  }, [userCareer]); // Ejecutar solo cuando la carrera esté disponible
 
   return (
     <SafeAreaView
@@ -137,17 +142,16 @@ function AsistenteSocial({ navigation }) {
         >
           Asistente Social
         </Text>
-         <Text
-                  style={[
-                    GlobalStyle.text,
-                    { textAlign: 'justify', color: '#FFFFFF' },
-                  ]}
-
-  >
-    {firstName
-      ? `${firstName}, te presentamos a la asistente social asignada a tu carrera. Ella es tu primer contacto para recibir orientación y apoyo.`
-      : 'Cargando...'}
-  </Text>
+        <Text
+          style={[
+            GlobalStyle.text,
+            { textAlign: 'justify', color: '#FFFFFF' },
+          ]}
+        >
+          {firstName
+            ? `${firstName}, te presentamos a la asistente social asignada a tu carrera. Ella es tu primer contacto para recibir orientación y apoyo.`
+            : 'Cargando...'}
+        </Text>
       </View>
 
       {/* Contenedor principal */}
@@ -159,9 +163,6 @@ function AsistenteSocial({ navigation }) {
           borderTopRightRadius: 20,
         }}
       >
-        {/* Frase personalizada */}
-
-        {/* Información del asistente */}
         {assistant ? (
           <ScrollView contentContainerStyle={{ padding: 20 }}>
             <View
@@ -181,11 +182,11 @@ function AsistenteSocial({ navigation }) {
                 <Image
                   source={{ uri: imageData }}
                   style={{
-                    width: '90%', // Reducir ligeramente el ancho
-                    height: 250, // Reducir la altura
+                    width: '90%',
+                    height: 250,
                     borderRadius: 10,
                     marginBottom: 10,
-                    alignSelf: 'center', // Centrar la imagen
+                    alignSelf: 'center',
                   }}
                   onError={(error) =>
                     console.error(
@@ -193,9 +194,8 @@ function AsistenteSocial({ navigation }) {
                       error.nativeEvent.error
                     )
                   }
-                  resizeMode="contain" // Asegurar que la imagen se adapte dentro del contenedor
+                  resizeMode="contain"
                 />
-
               ) : (
                 <Text
                   style={{
@@ -246,7 +246,22 @@ function AsistenteSocial({ navigation }) {
                     alignItems: 'center',
                   }}
                   onPress={() => {
-                    Linking.openURL(`mailto:${assistant.email}`);
+                    const assistantFirstName = assistant?.name
+                      ? assistant.name.split(' ')[0]
+                      : 'Asistente';
+
+                    console.log('Nombre del asistente:', assistantFirstName); // Depuración
+
+                    Linking.openURL(
+                      `mailto:${assistant.email}?subject=[Atención salud Mental]&body=Estimada ${assistantFirstName},%0D%0A%0D%0A` +
+                        `Junto con saludar y esperando que se encuentre bien, le escribo este correo para ver la posibilidad de tener acompañamiento psicológico.%0D%0A%0D%0A` +
+                        `Datos del estudiante:%0D%0A` +
+                        `- Nombre: ${firstName}%0D%0A` +
+                        `- Carrera: ${userCareer}%0D%0A` +
+                        `- RUT: ${userRut}%0D%0A%0D%0A` +
+                        `Quedo atento.%0D%0A%0D%0A` +
+                        `Muchas gracias.`
+                    );
                   }}
                 >
                   <Text style={{ color: 'white' }}>Correo</Text>
