@@ -114,7 +114,7 @@ function AsistenteSocial({ navigation }) {
       {/* Sección superior azul */}
       <View
         style={{
-          height: height * 0.2,
+          height: height * 0.32,
           padding: 10,
           backgroundColor: '#000C7B',
         }}
@@ -135,8 +135,19 @@ function AsistenteSocial({ navigation }) {
             { textAlign: 'justify', color: '#FFFFFF' },
           ]}
         >
-          Asistentes Sociales
+          Asistente Social
         </Text>
+         <Text
+                  style={[
+                    GlobalStyle.text,
+                    { textAlign: 'justify', color: '#FFFFFF' },
+                  ]}
+
+  >
+    {firstName
+      ? `${firstName}, te presentamos a la asistente social asignada a tu carrera. Ella es tu primer contacto para recibir orientación y apoyo.`
+      : 'Cargando...'}
+  </Text>
       </View>
 
       {/* Contenedor principal */}
@@ -149,64 +160,42 @@ function AsistenteSocial({ navigation }) {
         }}
       >
         {/* Frase personalizada */}
-        <View
-          style={{
-            padding: 20,
-            backgroundColor: '#F5F5F5',
-            borderRadius: 10,
-            marginHorizontal: 20,
-            marginBottom: 10, // Reducir el margen inferior
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: 'bold',
-              textAlign: 'justify',
-              color: '#333',
-            }}
-          >
-            {firstName
-              ? `${firstName}, te presentamos a la asistente social asignada a tu carrera. Ella es tu primer contacto para recibir orientación y apoyo.`
-              : 'Cargando...'}
-          </Text>
-        </View>
 
         {/* Información del asistente */}
         {assistant ? (
           <ScrollView contentContainerStyle={{ padding: 20 }}>
             <View
               style={{
-                backgroundColor: '#FFFFFF',
-                padding: 10,
+                backgroundColor: '#F5F5F5',
                 borderRadius: 10,
+                padding: 15,
+                marginBottom: 15,
                 shadowColor: '#000',
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.2,
                 shadowRadius: 4,
                 elevation: 3,
-                marginHorizontal: 20,
-                marginTop: -5, // Subir el recuadro para acercarlo a la frase
               }}
             >
               {imageData ? (
                 <Image
                   source={{ uri: imageData }}
                   style={{
-                    width: '80%', // Reducir más el ancho
-                    height: 200, // Reducir la altura
+                    width: '90%', // Reducir ligeramente el ancho
+                    height: 250, // Reducir la altura
                     borderRadius: 10,
                     marginBottom: 10,
                     alignSelf: 'center', // Centrar la imagen
                   }}
-                  resizeMode="contain"
                   onError={(error) =>
                     console.error(
                       'Error al cargar la imagen:',
                       error.nativeEvent.error
                     )
                   }
+                  resizeMode="contain" // Asegurar que la imagen se adapte dentro del contenedor
                 />
+
               ) : (
                 <Text
                   style={{
@@ -219,17 +208,6 @@ function AsistenteSocial({ navigation }) {
                 </Text>
               )}
 
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  marginBottom: 5,
-                  flexWrap: 'wrap',
-                }}
-              >
-                {assistant.name}
-              </Text>
               <Text
                 style={{
                   fontSize: 14,
