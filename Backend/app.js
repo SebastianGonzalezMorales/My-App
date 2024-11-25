@@ -22,6 +22,10 @@ app.use(morgan('tiny'));
 app.use(authJwt);
 app.use(errorHandler);
 
+// Exponer la carpeta "uploads" como pública
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
 //Routers
 const phraseOfTheDayRoutes = require('./routes/phraseOfTheDay');
 const moodStateRoutes = require('./routes/moodState');

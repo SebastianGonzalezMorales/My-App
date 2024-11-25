@@ -1,8 +1,7 @@
-const Assistant  = require('../models/Assistant');
+const Assistant = require('../models/Assistant');
 const multer = require('multer');
 const path = require('path');
 
-// Obtener asistente por carrera
 // Obtener asistente por carrera
 const getAssistantByCarrera = async (req, res) => {
     try {
@@ -35,8 +34,6 @@ const getAssistantByCarrera = async (req, res) => {
     }
 };
 
-
-
 // Controlador para subir un asistente social con imagen o URL de imagen
 const addAsistente = async (req, res) => {
     upload(req, res, async (err) => {
@@ -57,7 +54,9 @@ const addAsistente = async (req, res) => {
                 email,
                 phone: telefono,
                 carreras: carreras.split(',').map((carrera) => carrera.trim()), // Elimina espacios extra en las carreras
-                imagen: req.file ? req.file.path : req.body.imagen, // Ruta de la imagen subida o URL proporcionada
+                imagen: req.file 
+                    ? `${process.env.BASE_URL}/uploads/${req.file.filename}` // Generar la URL completa desde BASE_URL
+                    : req.body.imagen, // Usar URL proporcionada si no se sube archivo
                 ubicacion,
             });
 

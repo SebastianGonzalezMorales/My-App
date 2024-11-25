@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   Text,
@@ -7,58 +7,134 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
-  ActivityIndicator,
   Linking,
 } from 'react-native';
-import { fetchWithToken } from '../../utils/apiHelpers';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Buffer } from 'buffer'; // Importar Buffer
+
+// Customisation
 import GlobalStyle from '../../../assets/styles/GlobalStyle';
+
+// Components
 import BackButton from '../../../components/buttons/BackButton';
 
-const { height } = Dimensions.get('window'); // Obtener dimensiones
+// Importamos API_URL y BASE_URL desde las variables de entorno
+import { API_URL, BASE_URL } from '@env';
+
+const { width, height } = Dimensions.get('window'); // Obtener dimensiones
 
 function AsistenteSocial({ navigation }) {
-  const [assistant, setAssistant] = useState(null); // Estado para almacenar los datos del asistente
-  const [loading, setLoading] = useState(true); // Estado de carga
-  const [error, setError] = useState(null); // Estado de error
+  const [assistant, setAssistant] = useState(null); // Para almacenar los datos del asistente social
+  const [firstName, setFirstName] = useState(''); // Para almacenar solo el primer nombre del usuario
+  const [imageData, setImageData] = useState(null); // Para almacenar los datos de la imagen en Base64
 
-  // Carrera hardcodeada temporalmente
-  const carrera = 'Ingeniería Civil Informática';
-
-  // Función para obtener datos del asistente social desde el backend
-  const fetchAssistant = async () => {
-    try {
-      const response = await fetchWithToken(`/assistants/${carrera}`);
-      if (response?.assistant) {
-        setAssistant(response.assistant); // Guardar los datos del asistente en el estado
-      } else {
-        setError('No se encontró un asistente para esta carrera.');
-      }
-    } catch (err) {
-      console.error('Error al obtener el asistente:', err);
-      setError('Hubo un problema al cargar los datos.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Obtener los datos del asistente al montar el componente
+  // Función para obtener los datos del usuario
   useEffect(() => {
-    fetchAssistant();
+    const fetchUserData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
+          const response = await axios.post(
+            `${API_URL}/users/userdata`,
+            { token: `${token}` },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          const fullName = response.data.data.name;
+          const firstName = fullName.split(' ')[0]; // Tomar solo el primer nombre
+          setFirstName(firstName); // Actualizar el estado con el primer nombre
+        } else {
+          console.log('No se encontró el token. Por favor, inicia sesión.');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  // Función para obtener los datos del asistente social y la imagen
+  useEffect(() => {
+    const fetchAssistantData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
+          // Obtener datos del asistente
+          const response = await axios.get(
+            `${API_URL}/assistants/Ingeniería Civil Informática`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+          const assistantData = response.data.assistant;
+
+          // Reemplazar 'http://localhost:3001' con 'BASE_URL' en la URL de la imagen
+          if (assistantData.imagen) {
+            assistantData.imagen = assistantData.imagen.replace(
+              'http://localhost:3001',
+              BASE_URL
+            );
+          }
+
+          setAssistant(assistantData); // Almacenar los datos del asistente
+
+          // Obtener datos de la imagen con autenticación
+          if (assistantData.imagen) {
+            const imageResponse = await axios.get(assistantData.imagen, {
+              headers: { Authorization: `Bearer ${token}` },
+              responseType: 'arraybuffer',
+            });
+
+            const base64Image = `data:image/jpeg;base64,${Buffer.from(
+              imageResponse.data,
+              'binary'
+            ).toString('base64')}`;
+
+            setImageData(base64Image); // Almacenar los datos de la imagen en Base64
+          }
+        } else {
+          console.log('No se encontró el token. Por favor, inicia sesión.');
+        }
+      } catch (error) {
+        console.error('Error fetching assistant data or image:', error);
+      }
+    };
+
+    fetchAssistantData();
   }, []);
 
   return (
-    <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
+    <SafeAreaView
+      style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}
+    >
       {/* Botón para regresar */}
       <BackButton onPress={() => navigation.goBack()} />
 
       {/* Sección superior azul */}
-      <View style={{ height: height * 0.20, padding: 10, backgroundColor: '#000C7B' }}>
+      <View
+        style={{
+          height: height * 0.2,
+          padding: 10,
+          backgroundColor: '#000C7B',
+        }}
+      >
         <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
-        
-        <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
-        Contactarse con Recursos UV
+
+        <Text
+          style={[
+            GlobalStyle.text,
+            { textAlign: 'justify', color: '#FFFFFF' },
+          ]}
+        >
+          Contactarse con Recursos UV
         </Text>
-        <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
+        <Text
+          style={[
+            GlobalStyle.text,
+            { textAlign: 'justify', color: '#FFFFFF' },
+          ]}
+        >
           Asistentes Sociales
         </Text>
       </View>
@@ -72,97 +148,144 @@ function AsistenteSocial({ navigation }) {
           borderTopRightRadius: 20,
         }}
       >
-        {loading ? (
-          <ActivityIndicator size="large" color="#000C7B" style={{ marginTop: 20 }} />
-        ) : error ? (
-          <Text style={{ color: 'red', textAlign: 'center', marginTop: 20 }}>{error}</Text>
-        ) : (
-          <ScrollView contentContainerStyle={{ padding: 20, alignItems: 'center' }}>
-            {/* Frase personalizada (opcional) */}
-            <View
-              style={{
-                padding: 20,
-                backgroundColor: '#F5F5F5',
-                borderRadius: 10,
-                marginBottom: 20,
-                width: '100%',
-              }}
-            >
-              <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'justify', color: '#333' }}>
-                Sebastián, te presentamos a la asistente social asignada a tu carrera. Ella es tu
-                primer contacto para recibir orientación y apoyo.
-              </Text>
-            </View>
+        {/* Frase personalizada */}
+        <View
+          style={{
+            padding: 20,
+            backgroundColor: '#F5F5F5',
+            borderRadius: 10,
+            marginHorizontal: 20,
+            marginBottom: 10, // Reducir el margen inferior
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: 'bold',
+              textAlign: 'justify',
+              color: '#333',
+            }}
+          >
+            {firstName
+              ? `${firstName}, te presentamos a la asistente social asignada a tu carrera. Ella es tu primer contacto para recibir orientación y apoyo.`
+              : 'Cargando...'}
+          </Text>
+        </View>
 
-            {/* Tarjeta del asistente */}
+        {/* Información del asistente */}
+        {assistant ? (
+          <ScrollView contentContainerStyle={{ padding: 20 }}>
             <View
               style={{
-                backgroundColor: '#F5F5F5',
+                backgroundColor: '#FFFFFF',
+                padding: 10,
                 borderRadius: 10,
-                padding: 15,
-                marginBottom: 15,
-                alignItems: 'center',
-                width: '100%',
                 shadowColor: '#000',
                 shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.3,
+                shadowOpacity: 0.2,
                 shadowRadius: 4,
                 elevation: 3,
+                marginHorizontal: 20,
+                marginTop: -5, // Subir el recuadro para acercarlo a la frase
               }}
             >
-              <Image
-                source={{ uri: assistant.imagen }}
-                style={{
-                  width: 250, // Ajustar el ancho de la imagen
-                  height: 250, // Ajustar la altura de la imagen
-                  borderRadius: 20,
-                  marginBottom: 20,
-                }}
-              />
+              {imageData ? (
+                <Image
+                  source={{ uri: imageData }}
+                  style={{
+                    width: '80%', // Reducir más el ancho
+                    height: 200, // Reducir la altura
+                    borderRadius: 10,
+                    marginBottom: 10,
+                    alignSelf: 'center', // Centrar la imagen
+                  }}
+                  resizeMode="contain"
+                  onError={(error) =>
+                    console.error(
+                      'Error al cargar la imagen:',
+                      error.nativeEvent.error
+                    )
+                  }
+                />
+              ) : (
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    color: '#999',
+                    marginBottom: 10,
+                  }}
+                >
+                  Cargando imagen...
+                </Text>
+              )}
 
-              {/* Se elimina el texto redundante */}
-              {/* Botones para contactar */}
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  marginBottom: 5,
+                  flexWrap: 'wrap',
+                }}
+              >
+                {assistant.name}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: '#555',
+                  textAlign: 'center',
+                  marginBottom: 5,
+                }}
+              >
+                {assistant.ubicacion}
+              </Text>
               <View
                 style={{
                   flexDirection: 'row',
-                  justifyContent: 'space-between',
+                  justifyContent: 'space-evenly',
                   marginTop: 10,
-                  width: '100%',
                 }}
               >
                 <TouchableOpacity
                   style={{
-                    flex: 1,
-                    backgroundColor: '#B2EBF2',
-                    padding: 15,
-                    borderRadius: 10,
-                    marginHorizontal: 5,
+                    backgroundColor: '#4CAF50',
+                    padding: 10,
+                    borderRadius: 5,
                     alignItems: 'center',
                   }}
                   onPress={() => {
                     Linking.openURL(`tel:${assistant.phone}`);
                   }}
                 >
-                  <Text style={{ color: '#00796B', fontWeight: 'bold' }}>Llamar</Text>
+                  <Text style={{ color: 'white' }}>Llamar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
-                    flex: 1,
-                    backgroundColor: '#FFCDD2',
-                    padding: 15,
-                    borderRadius: 10,
-                    marginHorizontal: 5,
+                    backgroundColor: '#2196F3',
+                    padding: 10,
+                    borderRadius: 5,
                     alignItems: 'center',
                   }}
                   onPress={() => {
                     Linking.openURL(`mailto:${assistant.email}`);
                   }}
                 >
-                  <Text style={{ color: '#C62828', fontWeight: 'bold' }}>Correo</Text>
+                  <Text style={{ color: 'white' }}>Correo</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </ScrollView>
+        ) : (
+          <Text
+            style={{
+              textAlign: 'center',
+              color: '#999',
+              marginTop: 20,
+            }}
+          >
+            Cargando datos...
+          </Text>
         )}
       </View>
     </SafeAreaView>
