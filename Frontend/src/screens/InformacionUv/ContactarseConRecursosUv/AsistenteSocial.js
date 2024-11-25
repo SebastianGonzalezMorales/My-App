@@ -239,33 +239,34 @@ function AsistenteSocial({ navigation }) {
                   <Text style={{ color: 'white' }}>Llamar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={{
-                    backgroundColor: '#2196F3',
-                    padding: 10,
-                    borderRadius: 5,
-                    alignItems: 'center',
-                  }}
-                  onPress={() => {
-                    const assistantFirstName = assistant?.name
-                      ? assistant.name.split(' ')[0]
-                      : 'Asistente';
+  style={{
+    backgroundColor: '#2196F3',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  }}
+  onPress={() => {
+    const assistantFirstName = assistant?.name
+      ? assistant.name.trim().split(' ')[0] // Recortar y tomar solo el primer nombre
+      : 'Asistente'; // Valor predeterminado si no hay nombre
 
-                    console.log('Nombre del asistente:', assistantFirstName); // Depuración
+    console.log('Nombre del asistente:', assistantFirstName); // Depuración
 
-                    Linking.openURL(
-                      `mailto:${assistant.email}?subject=[Atención salud Mental]&body=Estimada ${assistantFirstName},%0D%0A%0D%0A` +
-                        `Junto con saludar y esperando que se encuentre bien, le escribo este correo para ver la posibilidad de tener acompañamiento psicológico.%0D%0A%0D%0A` +
-                        `Datos del estudiante:%0D%0A` +
-                        `- Nombre: ${firstName}%0D%0A` +
-                        `- Carrera: ${userCareer}%0D%0A` +
-                        `- RUT: ${userRut}%0D%0A%0D%0A` +
-                        `Quedo atento.%0D%0A%0D%0A` +
-                        `Muchas gracias.`
-                    );
-                  }}
-                >
-                  <Text style={{ color: 'white' }}>Correo</Text>
-                </TouchableOpacity>
+    Linking.openURL(
+      `mailto:${assistant.email}?subject=[Atención salud Mental]&body=Estimada ${assistantFirstName},%0D%0A%0D%0A` +
+        `Junto con saludar y esperando que se encuentre bien, le escribo este correo para ver la posibilidad de tener acompañamiento psicológico.%0D%0A%0D%0A` +
+        `Datos del estudiante:%0D%0A` +
+        `- Nombre: ${firstName}%0D%0A` +
+        `- Carrera: ${userCareer}%0D%0A` +
+        `- RUT: ${userRut}%0D%0A%0D%0A` +
+        `Quedo atento.%0D%0A%0D%0A` +
+        `Muchas gracias.`
+    );
+  }}
+>
+  <Text style={{ color: 'white' }}>Correo</Text>
+</TouchableOpacity>
+
               </View>
             </View>
           </ScrollView>
