@@ -30,6 +30,7 @@ function AsistenteSocial({ navigation }) {
   const [imageData, setImageData] = useState(null); // Para almacenar los datos de la imagen en Base64
   const [userRut, setUserRut] = useState(''); // RUT del usuario
   const [userCareer, setUserCareer] = useState(''); // Carrera del usuario
+  const [userPhone, setUserPhone] = useState(''); // Carrera del usuario
 
   // Función para obtener los datos del usuario
   useEffect(() => {
@@ -42,15 +43,21 @@ function AsistenteSocial({ navigation }) {
             { token: `${token}` },
             { headers: { Authorization: `Bearer ${token}` } }
           );
+
           const userData = response.data.data;
+   
           setFirstName(userData.name.split(' ')[0]); // Tomar solo el primer nombre
           setUserRut(userData.rut); // Guardar el RUT
           setUserCareer(userData.carrera); // Guardar la carrera
+          setUserPhone(userData.phoneNumber);
+ 
+
+          console.log(" ")
         } else {
           console.log('No se encontró el token. Por favor, inicia sesión.');
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error al obtener los datos del usuario:', error);
       }
     };
 
@@ -64,45 +71,55 @@ function AsistenteSocial({ navigation }) {
         const token = await AsyncStorage.getItem('token');
         if (token) {
           const response = await axios.get(
-            `${API_URL}/assistants/${userCareer}`, // Filtrar asistente por carrera
+            `${API_URL}/assistants/${userCareer}`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
           );
           const assistantData = response.data.assistant;
-
-          console.log('Datos del asistente:', assistantData); // Depuración
-
-          // Reemplazar 'http://localhost:3001' con 'BASE_URL' en la URL de la imagen
+    
+          console.log('Datos del asistente:', assistantData);
+    
           if (assistantData.imagen) {
             assistantData.imagen = assistantData.imagen.replace(
               'http://localhost:3001',
               BASE_URL
             );
           }
-
-          setAssistant(assistantData); // Almacenar los datos del asistente
-
+    
+          setAssistant(assistantData);
           if (assistantData.imagen) {
             const imageResponse = await axios.get(assistantData.imagen, {
               headers: { Authorization: `Bearer ${token}` },
               responseType: 'arraybuffer',
             });
-
+    
             const base64Image = `data:image/jpeg;base64,${Buffer.from(
               imageResponse.data,
               'binary'
             ).toString('base64')}`;
-
-            setImageData(base64Image); // Almacenar los datos de la imagen en Base64
+    
+            setImageData(base64Image);
           }
         } else {
           console.log('No se encontró el token. Por favor, inicia sesión.');
         }
       } catch (error) {
-        console.error('Error fetching assistant data or image:', error);
-      }
+        if (error.response && error.response.status === 404) {
+            // El caso en que no se encuentra un asistente social para la carrera
+            console.log('Mensaje del servidor:', error.response.data.message);
+            setAssistant(null); // Aseguramos que el estado `assistant` sea null
+        } else if (error.response && error.response.data.message) {
+            // Otros errores provenientes del backend
+            console.error('Error del servidor:', error.response.data.message);
+        } else {
+            // Errores desconocidos (por ejemplo, problemas de red)
+            console.error('Error desconocido:', error);
+        }
+    }
+    
     };
+    
 
     if (userCareer) {
       fetchAssistantData();
@@ -253,15 +270,17 @@ function AsistenteSocial({ navigation }) {
     console.log('Nombre del asistente:', assistantFirstName); // Depuración
 
     Linking.openURL(
-      `mailto:${assistant.email}?subject=[Atención salud Mental +- AppAcompañamientoUV]&body=Estimada ${assistantFirstName},%0D%0A%0D%0A` +
-        `Junto con saludar y esperando que se encuentre bien, le escribo este correo para ver la posibilidad de tener acompañamiento psicológico.%0D%0A%0D%0A` +
+      `mailto:${assistant.email}?subject=[Atención Salud Mental - AppAcompañamientoUV]&body=Estimada ${assistantFirstName},%0D%0A%0D%0A` +
+        `Junto con saludar y esperando que se encuentre bien, le escribo este correo porque quiero contar con acompañamiento psicológico.%0D%0A%0D%0A` +
         `Datos del estudiante:%0D%0A` +
         `- Nombre: ${firstName}%0D%0A` +
         `- Carrera: ${userCareer}%0D%0A` +
-        `- RUT: ${userRut}%0D%0A%0D%0A` +
+        `- RUT: ${userRut}%0D%0A` +
+        `- Teléfono: ${userPhone}%0D%0A%0D%0A` + // Agrega el número de teléfono aquí
         `Quedo atento.%0D%0A%0D%0A` +
         `Muchas gracias.`
     );
+    
   }}
 >
   <Text style={{ color: 'white' }}>Correo</Text>
