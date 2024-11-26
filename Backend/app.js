@@ -15,6 +15,9 @@ const errorHandler = require('./helpers/error-handler')
 app.use(cors());
 app.options('*', cors());
 
+
+
+
 //middleware
 app.use(favicon(path.join(__dirname, 'public', 'icon.png')));
 app.use(boddyParser.json());

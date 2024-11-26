@@ -20,7 +20,7 @@ const loginUser = async (req, res) => {
     // Busca en la colección temporal primero
     const tempUser = await TempUser.findOne({ email: normalizedEmail });
     if (tempUser) {
-        return res.status(403).send('Por favor verifique su correo electrónico antes de iniciar sesión.');
+        return res.status(403).send('Por favor verifiqueeee su correo electrónico antes de iniciar sesión.');
     }
 
     // Busca en la colección de usuarios
@@ -110,11 +110,14 @@ const registerUser = async (req, res) => {
             return res.status(400).send('Todos los campos son obligatorios.');
         }
 
-        // Validar el número de celular
-        const phoneRegex = /^\+569\d{8}$/;
-        if (!phoneRegex.test(phoneNumber.replace(' ', ''))) {
-            return res.status(400).send('Número de celular inválido. Debe seguir el formato +569XXXXXXXX.');
+        // Validar número de celular
+        const phoneRegex = /^\+569\s?\d{8}$/; // Acepta "+569XXXXXXXX" o "+569 XXXXXXXX"
+        if (!phoneRegex.test(phoneNumber)) {
+            return res.status(400).send('Número de celular inválido. Debe seguir el formato +569 XXXXXXXX.');
         }
+
+        console.log('Número de celular recibido:', phoneNumber);
+
 
         // Verificar si la contraseña es fuerte
         if (!isStrongPassword(password)) {

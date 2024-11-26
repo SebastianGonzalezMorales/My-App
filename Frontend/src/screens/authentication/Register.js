@@ -43,7 +43,7 @@ const Register = ({ navigation }) => {
   const [carrera, setCarrera] = useState('');
   const [carrerasDisponibles, setCarrerasDisponibles] = useState([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState('+569'); // Inicializa con el prefijo
+  const [phoneNumber, setPhoneNumber] = useState('+569 '); // Inicializa con el prefijo
 
   /*
    * *******************
@@ -57,10 +57,10 @@ const Register = ({ navigation }) => {
     setCarrerasDisponibles(facultadesData[selectedFacultad] || []);
     setCarrera(''); // Resetea carrera si cambia la facultad
   };
-  
+
   const handleDateChange = (event, selectedDate) => {
     setShowDatePicker(false); // Oculta el selector de fecha
-  
+
     if (selectedDate) {
       // Formatear la fecha como YYYY-MM-DD
       const formattedDate = selectedDate.toISOString().split('T')[0];
@@ -73,31 +73,26 @@ const Register = ({ navigation }) => {
       setPhoneNumber('+569 '); // Agrega el prefijo al enfocar
     }
   };
-  
-  
+
+
   const handlePhoneNumberChange = (text) => {
-    // Si el texto es solo el prefijo, no hacemos nada
-    if (text === '+569 ') {
-      setPhoneNumber(text);
-      return;
-    }
-  
-    // Aseguramos que el prefijo se mantenga
+    // Forzar el prefijo "+569 " al inicio
     if (!text.startsWith('+569 ')) {
-      text = '+569 ' + text.replace(/[^0-9]/g, '');
+      text = '+569 ';
     }
   
     // Permitir solo números después del prefijo
     let numbersOnly = text.slice(5).replace(/[^0-9]/g, '');
   
-    // Limitar a 8 dígitos después del prefijo
+    // Limitar a 8 dígitos
     if (numbersOnly.length > 8) {
       numbersOnly = numbersOnly.slice(0, 8);
     }
   
-    setPhoneNumber('+569 ' + numbersOnly);
+    const formattedNumber = `+569 ${numbersOnly}`;
+    console.log('Número actualizado correctamente:', formattedNumber); // Log adicional
+    setPhoneNumber(formattedNumber);
   };
-  
   
   /*
   * ***********************
@@ -246,42 +241,45 @@ const Register = ({ navigation }) => {
   };
 
   const handlePasswordChange = (text) => {
-    setPassword(text);
-    if (!validatePassword(text)) {
+    const trimmedText = text.trim();
+    setPassword(trimmedText);
+    if (!isStrongPassword(trimmedText)) {
       setPasswordError('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un símbolo.');
     } else {
       setPasswordError('');
     }
   };
-
+  
 
 
   // sign up function
-  const handleSignUp = async (fullName, rut, email, password, confirmPassword, birthdate, phoneNumber, facultad, carrera) => {
+  const handleSignUp = async (fullName, rut, email, facultad, carrera, birthdate, phoneNumber, password, confirmPassword) => {
 
     try {
       console.log(" ")
       console.log(fullName)
       console.log(rut)
       console.log(email)
+      console.log(facultad)
+      console.log(carrera)
+      console.log(birthdate)
+      console.log(phoneNumber)
       console.log(password)
       console.log(confirmPassword)
-      console.log(birthdate)
-      console.log(facultad);
-      console.log(carrera)
-      console.log(phoneNumber)
       console.log(" ")
 
-      if (!/^\+569 \d{8}$/.test(phoneNumber)) {
+      if (!/^\+569 \d{8}$/.test(phoneNumber.trim())) {
+        console.log('Número de teléfono inválido (detalles):', phoneNumber.trim(), 'Longitud:', phoneNumber.trim().length);
         alert('Por favor, ingresa un número de celular válido con el formato +569 XXXXXXXX.');
         return;
       }
       
 
-      if (!facultad || !carrera) {
-        alert('Por favor, selecciona una facultad y una carrera.');
-        return;
-      }
+
+        if (!facultad || !carrera) {
+           alert('Por favor, selecciona una facultad y una carrera.');
+           return;
+         } 
 
       // Verifica si se aceptó la política
       const accepted = await AsyncStorage.getItem('policyAccepted');
@@ -303,8 +301,10 @@ const Register = ({ navigation }) => {
         alert('Correo electrónico inválido. Debe seguir el formato nombre.apellido@alumnos.uv.cl.');
         return;
       }
-
-      if (!isStrongPassword(password)) {
+      const trimmedPassword = password.trim();
+      console.log("Hola")
+      console.log(trimmedPassword)
+      if (!isStrongPassword(trimmedPassword)) {
         alert('La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un símbolo.');
         return;
       }
@@ -324,9 +324,10 @@ const Register = ({ navigation }) => {
         birthdate: birthdate,
         carrera: carrera,
         facultad: facultad,
-        phoneNumber: phoneNumber,
+        phoneNumber: phoneNumber.replace(' ', ''), // Elimina el espacio
         policyAccepted: accepted,
       };
+      console.log('Datos enviados al backend:', userData);
 
       // Realizar la solicitud POST al backend
       const response = await axios.post(`${API_URL}/users/register`, userData);
@@ -459,96 +460,96 @@ const Register = ({ navigation }) => {
             />
           </View>
 
-{/* Dropdown para Facultad */}
-<View style={[AuthStyle.inputContainer, { position: 'relative' }]}>
-  <MaterialCommunityIcons
-    name="domain"
-    size={24}
-    color="#5da5a9"
-    style={AuthStyle.icon}
-  />
-  <Picker
-    selectedValue={facultad}
-    onValueChange={(itemValue) => handleFacultadChange(itemValue)}
-    style={[
-      AuthStyle.input,
-      {
-        backgroundColor: 'transparent',
-        width: '87%', // Asegura que el Picker ocupe todo el espacio disponible
-        right: 16 // Ajusta este valor
-      },
-    ]}
-    enabled={Object.keys(facultadesData).length > 0}
-    dropdownIconColor="#92959f"
-  >
-    <Picker.Item label="Selecciona una facultad" value="" />
-    {Object.keys(facultadesData).map((fac) => (
-      <Picker.Item key={fac} label={fac} value={fac} />
-    ))}
-  </Picker>
-</View>
+          {/* Dropdown para Facultad */}
+          <View style={[AuthStyle.inputContainer, { position: 'relative' }]}>
+            <MaterialCommunityIcons
+              name="domain"
+              size={24}
+              color="#5da5a9"
+              style={AuthStyle.icon}
+            />
+            <Picker
+              selectedValue={facultad}
+              onValueChange={(itemValue) => handleFacultadChange(itemValue)}
+              style={[
+                AuthStyle.input,
+                {
+                  backgroundColor: 'transparent',
+                  width: '87%', // Asegura que el Picker ocupe todo el espacio disponible
+                  right: 16 // Ajusta este valor
+                },
+              ]}
+              enabled={Object.keys(facultadesData).length > 0}
+              dropdownIconColor="#92959f"
+            >
+              <Picker.Item label="Selecciona una facultad" value="" />
+              {Object.keys(facultadesData).map((fac) => (
+                <Picker.Item key={fac} label={fac} value={fac} />
+              ))}
+            </Picker>
+          </View>
 
 
 
 
-{/* Dropdown para Carrera */}
-<View style={[AuthStyle.inputContainer, { position: 'relative' }]}>
-  <MaterialCommunityIcons
-    name="school-outline" // Ícono para Carrera
-    size={24}
-    color="#5da5a9" // Color celeste igual al resto
-    style={AuthStyle.icon} // Usa el mismo estilo que los otros íconos
-  />
-  <Picker
-    selectedValue={carrera}
-    onValueChange={(itemValue) => setCarrera(itemValue)}
-    style={[
-      AuthStyle.input,
-      {
-        backgroundColor: 'transparent',
-        width: '87%', // Asegura que el Picker ocupe todo el espacio disponible
-        right: 16, // Ajusta este valor
-      },
-    ]}
-    enabled={carrerasDisponibles.length > 0} // Solo habilitado si hay carreras disponibles
-    dropdownIconColor="#92959f" // Color de la flecha predeterminada
-  >
-    <Picker.Item label="Selecciona una carrera" value="" />
-    {carrerasDisponibles.map((car) => (
-      <Picker.Item key={car} label={car} value={car} />
-    ))}
-  </Picker>
-</View>
+          {/* Dropdown para Carrera */}
+          <View style={[AuthStyle.inputContainer, { position: 'relative' }]}>
+            <MaterialCommunityIcons
+              name="school-outline" // Ícono para Carrera
+              size={24}
+              color="#5da5a9" // Color celeste igual al resto
+              style={AuthStyle.icon} // Usa el mismo estilo que los otros íconos
+            />
+            <Picker
+              selectedValue={carrera}
+              onValueChange={(itemValue) => setCarrera(itemValue)}
+              style={[
+                AuthStyle.input,
+                {
+                  backgroundColor: 'transparent',
+                  width: '87%', // Asegura que el Picker ocupe todo el espacio disponible
+                  right: 16, // Ajusta este valor
+                },
+              ]}
+              enabled={carrerasDisponibles.length > 0} // Solo habilitado si hay carreras disponibles
+              dropdownIconColor="#92959f" // Color de la flecha predeterminada
+            >
+              <Picker.Item label="Selecciona una carrera" value="" />
+              {carrerasDisponibles.map((car) => (
+                <Picker.Item key={car} label={car} value={car} />
+              ))}
+            </Picker>
+          </View>
 
-<TouchableOpacity 
-  onPress={() => setShowDatePicker(true)} 
-  style={AuthStyle.inputContainer} // Aplica los mismos estilos
->
-  <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%' }}>
-    <MaterialCommunityIcons
-      name="calendar-outline"
-      size={24}
-      style={AuthStyle.icon}
-    />
-    <TextInput
-      value={birthdate}
-      placeholder="Selecciona tu fecha de nacimiento"
-      placeholderTextColor="#92959f"
-      style={[AuthStyle.input, { flex: 1 }]} // Asegura que ocupe el ancho restante
-      editable={false}
-      pointerEvents="none"
-    />
-  </View>
-</TouchableOpacity>
-{showDatePicker && (
-  <DateTimePicker
-    value={birthdate ? new Date(birthdate) : new Date()}
-    mode="date"
-    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-    onChange={handleDateChange}
-    maximumDate={new Date()}
-  />
-)}
+          <TouchableOpacity
+            onPress={() => setShowDatePicker(true)}
+            style={AuthStyle.inputContainer} // Aplica los mismos estilos
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+              <MaterialCommunityIcons
+                name="calendar-outline"
+                size={24}
+                style={AuthStyle.icon}
+              />
+              <TextInput
+                value={birthdate}
+                placeholder="Selecciona tu fecha de nacimiento"
+                placeholderTextColor="#92959f"
+                style={[AuthStyle.input, { flex: 1 }]} // Asegura que ocupe el ancho restante
+                editable={false}
+                pointerEvents="none"
+              />
+            </View>
+          </TouchableOpacity>
+          {showDatePicker && (
+            <DateTimePicker
+              value={birthdate ? new Date(birthdate) : new Date()}
+              mode="date"
+              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              onChange={handleDateChange}
+              maximumDate={new Date()}
+            />
+          )}
 
 <View style={AuthStyle.inputContainer}>
   <MaterialCommunityIcons
@@ -557,17 +558,16 @@ const Register = ({ navigation }) => {
     style={AuthStyle.icon}
   />
   <TextInput
-    value={phoneNumber}
+    value={phoneNumber} // Vincular al estado phoneNumber
+    onChangeText={handlePhoneNumberChange} // Llamar a la función para actualizar el estado
     placeholder="Número de teléfono"
     placeholderTextColor="#92959f"
+    selectionColor="#5da5a9"
+    keyboardType="phone-pad" // Cambia el teclado a numérico
+    maxLength={13} // Limitar a "+569 XXXXXXXX"
     style={AuthStyle.input}
-    keyboardType="phone-pad"
-    onFocus={handlePhoneFocus} // Agrega el prefijo al enfocar
-    onChangeText={handlePhoneNumberChange}
-    maxLength={13} // "+569 " + 8 dígitos
   />
 </View>
-
 
 
 
@@ -630,7 +630,7 @@ const Register = ({ navigation }) => {
 
           <AuthButton
             text="Finalizar"
-            onPress={() => handleSignUp(fullName, rut, email, password, confirmPassword, birthdate, facultad, carrera)}
+            onPress={() => handleSignUp(fullName, rut, email, facultad, carrera, birthdate, phoneNumber, password, confirmPassword)}
           />
 
           <View style={AuthStyle.changeScreenContainer}>
