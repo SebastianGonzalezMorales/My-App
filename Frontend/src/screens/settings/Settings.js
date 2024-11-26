@@ -31,6 +31,8 @@ function Settings({ navigation }) {
   const [email, setEmail] = useState('');
   const [birthdate, setBirthdate] = useState('');
   const [carrera, setCarrera] = useState('');
+  const [phone, setPhone] = useState('');
+
 
   /*
    * *******************
@@ -101,6 +103,7 @@ function Settings({ navigation }) {
           const userEmail = response.data.data.email;
           const userBirthdate = response.data.data.birthdate.split('T')[0];
           const userCarrera = response.data.data.carrera;
+          const userPhone = response.data.data.phoneNumber; 
 
           // Actualiza el estado con el nombre
           setName(userName);
@@ -108,6 +111,7 @@ function Settings({ navigation }) {
           setEmail(userEmail);
           setBirthdate(userBirthdate);
           setCarrera(userCarrera);
+          setPhone(userPhone);
 
           // Para verificar en la consola
           console.log('User Name:', userName);
@@ -115,6 +119,7 @@ function Settings({ navigation }) {
           console.log('User Email:', userEmail);
           console.log('User Birthdate:', userBirthdate);
           console.log('User Carrera:', userCarrera);
+          console.log('User Phone:', userPhone);
 
         } else {
           console.log('No se encontró el token. Por favor, inicia sesión.');
@@ -148,44 +153,38 @@ function Settings({ navigation }) {
          * ***** Section 2 *****
          * *********************
          */}
-      <View style={GlobalStyle.rowTwo}>
-        <View style={GlobalStyle.statsContainer}>
-          <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17 }}>Nombre:</Text>  {name}</Text>
-          <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17 }}>Rut:</Text>  {rut}</Text>
-          <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17 }}>Email:</Text> {email}</Text>
-          <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17 }}>Carrera:</Text> {carrera} </Text>
-          <Text style={GlobalStyle.statsTitle}><Text style={{ fontWeight: 'bold', fontSize: 17 }}>Fecha de nacimiento:</Text>  {birthdate}</Text>
-
-        </View>
-
-        <View style={{ marginTop: 20, paddingBottom: 50 }}>
-          {/*  <SettingsButton
-                text="WeBt"
-                onPress={() => navigation.navigate('Counselling')}
-              /> */}
-
-          {/* <SettingsButton
-                text="Counselling information" 
-                onPress={() => navigation.navigate('Counselling')} 
-              />*/}
-
-          {/* <SettingsButton text="Notifications" onPress={() => navigation.navigate('Counselling')} /> */}
-          {/*  <SettingsButton
-                text="Privacy policy"
-                 onPress={() => navigation.navigate('Notification')}
-              /> */}
-
-          <AuthButton
-            onPress={handleSignOut}
-            text="Cerrar sesión"
-            iconName="log-out-outline"
-            iconColor="#388E3C"
-            buttonStyle={{ backgroundColor: '#A5D6A7' }}  // Color personalizado para cerrar sesión
-            textStyle={{ color: '#388E3C' }}  // Personaliza el color del texto
-          />
-
-        </View>
-      </View>
+<View style={GlobalStyle.rowTwo}>
+  <View style={GlobalStyle.statsContainer}>
+    <Text style={GlobalStyle.statsTitle}>
+      <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Nombre:</Text> {name}
+    </Text>
+    <Text style={GlobalStyle.statsTitle}>
+      <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Rut:</Text> {rut}
+    </Text>
+    <Text style={GlobalStyle.statsTitle}>
+      <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Email:</Text> {email}
+    </Text>
+    <Text style={GlobalStyle.statsTitle}>
+      <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Teléfono:</Text> {phone}
+    </Text>
+    <Text style={GlobalStyle.statsTitle}>
+      <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Carrera:</Text> {carrera}
+    </Text>
+    <Text style={GlobalStyle.statsTitle}>
+      <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Fecha de nacimiento:</Text> {birthdate}
+    </Text>
+  </View>
+  <View style={{ marginTop: 5, paddingBottom: 50 }}>
+    <AuthButton
+      onPress={handleSignOut}
+      text="Cerrar sesión"
+      iconName="log-out-outline"
+      iconColor="#388E3C"
+      buttonStyle={{ backgroundColor: '#A5D6A7' }}
+      textStyle={{ color: '#388E3C' }}
+    />
+  </View>
+</View>
 
     </SafeAreaView>
   );

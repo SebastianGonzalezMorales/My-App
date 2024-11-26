@@ -150,7 +150,7 @@ export default StyleSheet.create({
     color: '#5c6169',
     fontFamily: 'DoppioOne',
     fontSize: 16,
-    paddingTop: 30,
+    paddingTop: 26,
   },
 
   // settings button container

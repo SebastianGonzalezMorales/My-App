@@ -55,8 +55,8 @@ const handleLogin = async (email, password) => {
     await login(token);
     navigation.replace('Home');
   } catch (error) {
-    console.error('Error during login:', error);
-    alert('Error al iniciar sesión. Verifica tus credenciales.');
+   // console.error('Error al iniciar sesión. Verifica tus credenciales.', error);
+    alert('Error al iniciar sesión. Verifica tus credenciales', error);
   }
 };
 
