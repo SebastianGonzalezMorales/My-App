@@ -27,9 +27,10 @@ function MenuUv({ navigation }) {
       {/* Sección superior azul con título y subtítulo */}
       <View style={{ height: height * 0.30, padding: 10 }}>
         <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
+
         <Text style={GlobalStyle.welcomeText}>Contactarse con Recursos UV</Text>
         <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
-         lorem impsum
+        Accede a los servicios de apoyo para estudiantes y conecta con quienes están para ayudarte.
         </Text>
 
         {/* Imagen con altura ajustada */}
@@ -58,7 +59,7 @@ function MenuUv({ navigation }) {
               onPress={() => navigation.navigate('AsistenteSocial')}
             />
             <SettingsButton
-              text="Conectados"
+              text="Conectados UV"
               onPress={() => navigation.navigate('Conectados')}
               textStyle={{
                 color: '#d85a77', // Personaliza el color del texto

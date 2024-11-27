@@ -16,6 +16,9 @@ import { Buffer } from 'buffer'; // Importar Buffer
 // Customisation
 import GlobalStyle from '../../../assets/styles/GlobalStyle';
 
+import Icon from 'react-native-vector-icons/MaterialIcons'; // Íconos generales
+import FontAwesome from 'react-native-vector-icons/FontAwesome'; // Ícono de WhatsApp
+
 // Components
 import BackButton from '../../../components/buttons/BackButton';
 
@@ -45,12 +48,12 @@ function AsistenteSocial({ navigation }) {
           );
 
           const userData = response.data.data;
-   
+
           setFirstName(userData.name.split(' ')[0]); // Tomar solo el primer nombre
           setUserRut(userData.rut); // Guardar el RUT
           setUserCareer(userData.carrera); // Guardar la carrera
           setUserPhone(userData.phoneNumber);
- 
+
 
           console.log(" ")
         } else {
@@ -77,28 +80,28 @@ function AsistenteSocial({ navigation }) {
             }
           );
           const assistantData = response.data.assistant;
-    
+
           console.log('Datos del asistente:', assistantData);
-    
+
           if (assistantData.imagen) {
             assistantData.imagen = assistantData.imagen.replace(
               'http://localhost:3001',
               BASE_URL
             );
           }
-    
+
           setAssistant(assistantData);
           if (assistantData.imagen) {
             const imageResponse = await axios.get(assistantData.imagen, {
               headers: { Authorization: `Bearer ${token}` },
               responseType: 'arraybuffer',
             });
-    
+
             const base64Image = `data:image/jpeg;base64,${Buffer.from(
               imageResponse.data,
               'binary'
             ).toString('base64')}`;
-    
+
             setImageData(base64Image);
           }
         } else {
@@ -106,20 +109,20 @@ function AsistenteSocial({ navigation }) {
         }
       } catch (error) {
         if (error.response && error.response.status === 404) {
-            // El caso en que no se encuentra un asistente social para la carrera
-            console.log('Mensaje del servidor:', error.response.data.message);
-            setAssistant(null); // Aseguramos que el estado `assistant` sea null
+          // El caso en que no se encuentra un asistente social para la carrera
+          console.log('Mensaje del servidor:', error.response.data.message);
+          setAssistant(null); // Aseguramos que el estado `assistant` sea null
         } else if (error.response && error.response.data.message) {
-            // Otros errores provenientes del backend
-            console.error('Error del servidor:', error.response.data.message);
+          // Otros errores provenientes del backend
+          console.error('Error del servidor:', error.response.data.message);
         } else {
-            // Errores desconocidos (por ejemplo, problemas de red)
-            console.error('Error desconocido:', error);
+          // Errores desconocidos (por ejemplo, problemas de red)
+          console.error('Error desconocido:', error);
         }
-    }
-    
+      }
+
     };
-    
+
 
     if (userCareer) {
       fetchAssistantData();
@@ -141,16 +144,16 @@ function AsistenteSocial({ navigation }) {
           backgroundColor: '#000C7B',
         }}
       >
-        <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
+        <Text style={GlobalStyle.welcomeText}>Contactarse con Recursos UV</Text>
 
-        <Text
+{/*         <Text
           style={[
             GlobalStyle.text,
             { textAlign: 'justify', color: '#FFFFFF' },
           ]}
         >
           Contactarse con Recursos UV
-        </Text>
+        </Text> */}
         <Text
           style={[
             GlobalStyle.text,
@@ -247,44 +250,48 @@ function AsistenteSocial({ navigation }) {
                     backgroundColor: '#4CAF50',
                     padding: 10,
                     borderRadius: 5,
+                    flexDirection: 'row',
                     alignItems: 'center',
                   }}
                   onPress={() => {
                     Linking.openURL(`tel:${assistant.phone}`);
                   }}
                 >
+                  <Icon name="phone" size={20} color="white" style={{ marginRight: 8 }} />
                   <Text style={{ color: 'white' }}>Llamar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-  style={{
-    backgroundColor: '#2196F3',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-  }}
-  onPress={() => {
-    const assistantFirstName = assistant?.name
-      ? assistant.name.trim().split(' ')[0] // Recortar y tomar solo el primer nombre
-      : 'Asistente'; // Valor predeterminado si no hay nombre
+                  style={{
+                    backgroundColor: '#2196F3',
+                    padding: 10,
+                    borderRadius: 5,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    const assistantFirstName = assistant?.name
+                      ? assistant.name.trim().split(' ')[0] // Recortar y tomar solo el primer nombre
+                      : 'Asistente'; // Valor predeterminado si no hay nombre
 
-    console.log('Nombre del asistente:', assistantFirstName); // Depuración
+                    console.log('Nombre del asistente:', assistantFirstName); // Depuración
 
-    Linking.openURL(
-      `mailto:${assistant.email}?subject=[Atención Salud Mental - AppAcompañamientoUV]&body=Estimada ${assistantFirstName},%0D%0A%0D%0A` +
-        `Junto con saludar y esperando que se encuentre bien, le escribo este correo porque quiero contar con acompañamiento psicológico.%0D%0A%0D%0A` +
-        `Datos del estudiante:%0D%0A` +
-        `- Nombre: ${firstName}%0D%0A` +
-        `- Carrera: ${userCareer}%0D%0A` +
-        `- RUT: ${userRut}%0D%0A` +
-        `- Teléfono: ${userPhone}%0D%0A%0D%0A` + // Agrega el número de teléfono aquí
-        `Quedo atento.%0D%0A%0D%0A` +
-        `Muchas gracias.`
-    );
-    
-  }}
->
-  <Text style={{ color: 'white' }}>Correo</Text>
-</TouchableOpacity>
+                    Linking.openURL(
+                      `mailto:${assistant.email}?subject=[Atención Salud Mental - AppAcompañamientoUV]&body=Estimada ${assistantFirstName},%0D%0A%0D%0A` +
+                      `Junto con saludar y esperando que se encuentre bien, le escribo este correo porque quiero contar con acompañamiento psicológico.%0D%0A%0D%0A` +
+                      `Datos del estudiante:%0D%0A` +
+                      `- Nombre: ${firstName}%0D%0A` +
+                      `- Carrera: ${userCareer}%0D%0A` +
+                      `- RUT: ${userRut}%0D%0A` +
+                      `- Teléfono: ${userPhone}%0D%0A%0D%0A` + // Agrega el número de teléfono aquí
+                      `Quedo atento.%0D%0A%0D%0A` +
+                      `Muchas gracias.`
+                    );
+
+                  }}
+                >
+                  <Icon name="email" size={20} color="white" style={{ marginRight: 8 }} />
+                  <Text style={{ color: 'white' }}>Enviar correo</Text>
+                </TouchableOpacity>
 
               </View>
             </View>

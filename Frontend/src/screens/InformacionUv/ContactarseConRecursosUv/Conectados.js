@@ -1,81 +1,292 @@
-// react imports
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   Text,
-  ScrollView,
   View,
   Image,
-  Dimensions
+  Dimensions,
+  TouchableOpacity,
+  Linking,
 } from 'react-native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+import Icon from 'react-native-vector-icons/MaterialIcons'; // Importar íconos
+import FontAwesome from 'react-native-vector-icons/FontAwesome'; // WhatsApp icono
 
 // customisation
 import GlobalStyle from '../../../assets/styles/GlobalStyle';
 
 // Components
-import CustomButton from '../../../components/buttons/CustomButton';
-import SettingsButton from '../../../components/buttons/SettingsButton';
-import AuthButton from '../../../components/buttons/AuthButton';
 import BackButton from '../../../components/buttons/BackButton';
-const { width, height } = Dimensions.get('window'); // Obtener las dimensiones de la pantalla
 
+// Variables de entorno
+import { API_URL } from '@env';
+
+const { height, width } = Dimensions.get('window');
 
 function Conectados({ navigation }) {
+  const [userName, setUserName] = useState('');
+  const [userCareer, setUserCareer] = useState('');
+
+  // Obtener datos del usuario
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
+          const response = await axios.post(
+            `${API_URL}/users/userdata`,
+            { token },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+
+          const userData = response.data.data;
+          setUserName(userData.name);
+          setUserCareer(userData.carrera);
+        } else {
+          console.log('No se encontró el token. Por favor, inicia sesión.');
+        }
+      } catch (error) {
+        console.error('Error al obtener datos del usuario:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);<View
+  style={{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: 20,
+    marginVertical: 10,
+  }}
+>
+  {/* Botón Llamar */}
+  <TouchableOpacity
+    style={{
+      backgroundColor: '#4CAF50',
+      paddingVertical: 15,
+      borderRadius: 10,
+      flex: 1,
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      marginRight: 5,
+    }}
+    onPress={makeCall}
+  >
+    <Icon name="phone" size={20} color="white" style={{ marginRight: 8 }} />
+    <Text style={{ color: 'white', fontSize: 16 }}>Llamar</Text>
+  </TouchableOpacity>
+
+  {/* Botón WhatsApp */}
+  <TouchableOpacity
+    style={{
+      backgroundColor: '#25D366',
+      paddingVertical: 15,
+      borderRadius: 10,
+      flex: 1,
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      marginLeft: 5,
+    }}
+    onPress={openWhatsApp}
+  >
+    <FontAwesome name="whatsapp" size={20} color="white" style={{ marginRight: 8 }} />
+    <Text style={{ color: 'white', fontSize: 16 }}>Enviar mensaje</Text>
+  </TouchableOpacity>
+</View>
+
+{/* Botón Correo */}
+<TouchableOpacity
+  style={{
+    backgroundColor: '#2196F3',
+    paddingVertical: 15,
+    borderRadius: 10,
+    width: '80%',
+    marginTop: 20,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  }}
+  onPress={sendEmail}
+>
+  <Icon name="email" size={20} color="white" style={{ marginRight: 8 }} />
+  <Text style={{ color: 'white', fontSize: 16 }}>Enviar Correo</Text>
+</TouchableOpacity>
+
+  const callNumbers = [
+    '+56998074918',
+    '+56998488316',
+    '+56998530265',
+    '+56998530214',
+  ];
+
+  const whatsappNumbers = ['56959446403', '56959446919'];
+  const email = 'conectadosuv@uv.cl';
+
+  const makeCall = () => {
+    const randomNumber =
+      callNumbers[Math.floor(Math.random() * callNumbers.length)];
+    Linking.openURL(`tel:${randomNumber}`).catch(() =>
+      alert('No se pudo realizar la llamada. Verifica tu dispositivo.')
+    );
+  };
+
+  const openWhatsApp = () => {
+    const randomNumber =
+      whatsappNumbers[Math.floor(Math.random() * whatsappNumbers.length)];
+    const whatsappMessage = `Hola, mi nombre es ${userName}, estudiante de ${userCareer}. Me siento en una situación difícil y necesito orientación emocional. Muchas gracias.`;
+    const url = `https://wa.me/${randomNumber}?text=${encodeURIComponent(
+      whatsappMessage
+    )}`;
+    Linking.openURL(url).catch(() =>
+      alert('Asegúrate de tener WhatsApp instalado.')
+    );
+  };
+
+  const sendEmail = () => {
+    const subject = '[Apoyo emocional - AppAcompañamientoUv]';
+    const body = `Hola,
+    
+  Mi nombre es ${userName}, estudiante de la carrera ${userCareer}, y escribo este correo ya que quiero solicitar apoyo emocional. Me siento en una situación díficil que me gustaría compartir con ustedes para recibir orientación.
+
+Muchas gracias.
+
+Quedo atento.`;
+
+    const mailtoURL = `mailto:${email}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+
+    Linking.openURL(mailtoURL).catch(() =>
+      alert('No se pudo abrir el cliente de correo.')
+    );
+  };
+
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       <BackButton onPress={() => navigation.goBack()} />
 
-      {/* Sección superior azul con título y subtítulo */}
-      <View style={{ height: height * 0.30, padding: 10 }}>
-        <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
+      <View style={{ height: height * 0.33, padding: 10 }}>
         <Text style={GlobalStyle.welcomeText}>Contactarse con Recursos UV</Text>
-        <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
-         Conectados
+        <Text
+          style={[
+            GlobalStyle.text,
+            { textAlign: 'justify', color: '#FFFFFF' },
+          ]}
+        >
+          Conectados UV
         </Text>
-
-        {/* Imagen con altura ajustada */}
-{/*         <Image
-          source={require('../../../assets/uv_logo_act.png')}
-          style={{
-            width: '100%',
-            height: height * 0.15, // Ajustar la altura de la imagen al 20% de la pantalla
-            resizeMode: 'contain', // Cambiar a 'contain' para evitar recortes
-            marginTop: 40
-          }}
-        /> */}
+        <Text
+          style={[
+            GlobalStyle.text,
+            { textAlign: 'justify', color: '#FFFFFF' },
+          ]}
+        >
+          Estamos aquí para apoyarte emocionalmente. Si te sientes mal, no estás solo.
+        </Text>
+        <Text
+          style={[
+            GlobalStyle.text,
+            {
+              textAlign: 'justify',
+              fontWeight: 'bold',
+              color: '#FFD700', // Amarillo dorado para resaltar el mensaje
+            },
+          ]}
+        >
+          ¡Pide ayuda, estamos para escucharte!
+        </Text>
       </View>
 
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: 'white',
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          alignItems: 'center',
+          padding: 20,
+        }}
+      >
+        <Image
+          source={require('../../../../assets/RedesDeApoyo/Conectados/conectados_logo.png')}
+          style={{
+            width: width * 0.70,
+            height: width * 0.40,
+            marginBottom: 20,
+          }}
+          resizeMode="cover"
+        />
 
-      {/* Contenedor de la segunda sección con fondo blanco y bordes redondeados */}
-      <View style={{ flex: 1, backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, overflow: 'hidden' }}>
-        {/* Imagen de encabezado opcional */}
+<View
+  style={{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: 20,
+    marginVertical: 10,
+  }}
+>
+  {/* Botón Llamar */}
+  <TouchableOpacity
+    style={{
+      backgroundColor: '#4CAF50',
+      paddingVertical: 15,
+      borderRadius: 10,
+      flex: 1,
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      marginRight: 5,
+    }}
+    onPress={makeCall}
+  >
+    <Icon name="phone" size={20} color="white" style={{ marginRight: 8 }} />
+    <Text style={{ color: 'white', fontSize: 16 }}>Llamar</Text>
+  </TouchableOpacity>
 
+  {/* Botón WhatsApp */}
+  <TouchableOpacity
+    style={{
+      backgroundColor: '#25D366',
+      paddingVertical: 15,
+      borderRadius: 10,
+      flex: 1,
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      marginLeft: 5,
+    }}
+    onPress={openWhatsApp}
+  >
+    <FontAwesome name="whatsapp" size={20} color="white" style={{ marginRight: 8 }} />
+    <Text style={{ color: 'white', fontSize: 16 }}>Enviar mensaje</Text>
+  </TouchableOpacity>
+</View>
 
-        {/* ScrollView para botones y contenido adicional */}
-        <ScrollView contentContainerStyle={{ padding: 20 }}>
-          <View style={{ marginTop: 10 }}>
-{/*             <SettingsButton
-              text="Asistente Social"
-              onPress={() => navigation.navigate('InformacionUv')}
-            />
-            <SettingsButton
-              text="Conectados"
-              onPress={() => navigation.navigate('RedesSociales')}
-              textStyle={{
-                color: '#d85a77', // Personaliza el color del texto
-                fontSize: 16, // Disminuir tamaño de la letra
-                textAlign: 'left', // Alinear texto a la izquierda
-              }}
-            /> */}
-{/*             <SettingsButton
-              text="Contactarse con recursos UV"
-              onPress={() => navigation.navigate('UV')}
-              backgroundColor="#fbcdd1" // Un rojo más presente y vibrante en el fondo
-              textColor="#c62828"       // Un rojo más oscuro para el texto
-              iconColor="#c62828"       // El mismo rojo oscuro para el icono
-            /> */}
-            
-          </View>
-        </ScrollView>
+{/* Botón Correo */}
+<TouchableOpacity
+  style={{
+    backgroundColor: '#2196F3',
+    paddingVertical: 15,
+    borderRadius: 10,
+    width: '80%',
+    marginTop: 20,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  }}
+  onPress={sendEmail}
+>
+  <Icon name="email" size={20} color="white" style={{ marginRight: 8 }} />
+  <Text style={{ color: 'white', fontSize: 16 }}>Enviar Correo</Text>
+</TouchableOpacity>
+
       </View>
     </SafeAreaView>
   );
