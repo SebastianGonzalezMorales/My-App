@@ -20,7 +20,7 @@ const loginUser = async (req, res) => {
     // Busca en la colección temporal primero
     const tempUser = await TempUser.findOne({ email: normalizedEmail });
     if (tempUser) {
-        return res.status(403).send('Por favor verifiqueeee su correo electrónico antes de iniciar sesión.');
+        return res.status(403).send('Por favor verifique su correo electrónico antes de iniciar sesión.');
     }
 
     // Busca en la colección de usuarios

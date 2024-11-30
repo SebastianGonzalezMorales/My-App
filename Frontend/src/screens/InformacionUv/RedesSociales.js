@@ -16,7 +16,7 @@ const RedesSociales = ({ navigation }) => {
         <Text style={GlobalStyle.welcomeText}>Espacio UV </Text>
         <Text style={[GlobalStyle.subtitle, { textAlign: 'left' }]}>Novedades</Text>
         <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>
-          Mantente informado sobre los eventos de la UV a través de nuestras redes sociales.
+          Mantente informado sobre los eventos de la UV a través de las redes sociales de la Universidad.
         </Text>
       </View>
 

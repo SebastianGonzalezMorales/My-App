@@ -40,8 +40,8 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MenuUv from './src/screens/InformacionUv/MenuUv';
-import ContactarseConRecursosUV from './src/screens/InformacionUv/ContactarseConRecursosUv';
-import InformacionUv from './src/screens/InformacionUv/InformacionUv';
+import ContactarseConApoyoUV from './src/screens/InformacionUv/ContactarseConApoyoUv';
+import InformacionUv from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/InformacionUv';
 import Informacion from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion';
 import AprendeSobreSaludMental from './src/screens/SaludMental/AprendeSobreSaludMental/AprendeSobreSaludMental';
 import Consejos from './src/screens/SaludMental/AprendeSobreSaludMental/Consejos';
@@ -62,8 +62,15 @@ import Depresion from './src/screens/SaludMental/AprendeSobreSaludMental/Informa
 import InfoSaludMental from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion/InfoSaludMental';
 import Crisis from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion/Crisis';
 import Evaluacion from './src/screens/SaludMental/AprendeSobreSaludMental/Informacion/Evaluacion';
-import Conectados from './src/screens/InformacionUv/ContactarseConRecursosUv/Conectados';
-import AsistenteSocial from './src/screens/InformacionUv/ContactarseConRecursosUv/AsistenteSocial';
+import Conectados from './src/screens/InformacionUv/ContactarseConApoyoUv/Conectados';
+import AsistenteSocial from './src/screens/InformacionUv/ContactarseConApoyoUv/AsistenteSocial';
+import AppaUv from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/AppaUv';
+import DaeUv from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/DaeUv';
+import ConectadosUv from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/ConectadosUv';
+import UvInclusiva from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/UvInclusiva';
+import UnidadDeSalud from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/UnidadDeSalud';
+import UnidadPrimeraInfancia from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/UnidadPrimeraInfancia';
+import AreaDeporteyRecreacion from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/AreaDeporteyRecreacion';
 
 const Tab = createBottomTabNavigator(); // create tab navigator method
 const Stack = createNativeStackNavigator(); // create stack navigator method
@@ -245,9 +252,18 @@ const AppNavigator = () => {
             
             <Stack.Screen name="RedesSociales" component={RedesSociales} />
             <Stack.Screen name="InformacionUv" component={InformacionUv} />
-            <Stack.Screen name="ContactarseConRecursosUV" component={ContactarseConRecursosUV} />
+            <Stack.Screen name="ContactarseConApoyoUV" component={ContactarseConApoyoUV} />
             <Stack.Screen name="AsistenteSocial" component={AsistenteSocial} />
             <Stack.Screen name="Conectados" component={Conectados} />
+
+            <Stack.Screen name="AppaUv" component={AppaUv} />
+            <Stack.Screen name="DaeUv" component={DaeUv} />
+            <Stack.Screen name="ConectadosUv" component={ConectadosUv} />
+            <Stack.Screen name="UvInclusiva" component={UvInclusiva} />
+            <Stack.Screen name="UnidadDeSalud" component={UnidadDeSalud} />
+            <Stack.Screen name="UnidadPrimeraInfancia" component={UnidadPrimeraInfancia} />
+            <Stack.Screen name="AreaDeporteyRecreacion" component={AreaDeporteyRecreacion} />
+            
 
             
           </>

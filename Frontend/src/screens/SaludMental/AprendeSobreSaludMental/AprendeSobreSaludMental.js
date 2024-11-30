@@ -73,7 +73,7 @@ function AprendeSobreSaludMental({ navigation }) {
             />
             <SettingsButton
               text="Contactarse con recursos UV"
-              onPress={() => navigation.navigate('ContactarseConRecursosUV')}
+              onPress={() => navigation.navigate('ContactarseConApoyoUV')}
               backgroundColor="#fbcdd1" // Un rojo más presente y vibrante en el fondo
               textColor="#c62828"       // Un rojo más oscuro para el texto
               iconColor="#c62828"       // El mismo rojo oscuro para el icono

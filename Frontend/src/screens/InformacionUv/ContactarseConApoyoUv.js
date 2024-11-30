@@ -25,7 +25,7 @@ function MenuUv({ navigation }) {
       <BackButton onPress={() => navigation.goBack()} />
 
       {/* Sección superior azul con título y subtítulo */}
-      <View style={{ height: height * 0.30, padding: 10 }}>
+      <View style={{ height: height * 0.55, padding: 10 }}>
         <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
 
         <Text style={GlobalStyle.welcomeText}>Contactarse con Recursos UV</Text>
@@ -34,15 +34,15 @@ function MenuUv({ navigation }) {
         </Text>
 
         {/* Imagen con altura ajustada */}
-{/*         <Image
-          source={require('../../../assets/uv_logo_act.png')}
+        <Image
+          source={require('../../../assets/Logo-SM-UV.png')}
           style={{
             width: '100%',
-            height: height * 0.15, // Ajustar la altura de la imagen al 20% de la pantalla
+            height: height * 0.25, // Ajustar la altura de la imagen al 20% de la pantalla
             resizeMode: 'contain', // Cambiar a 'contain' para evitar recortes
             marginTop: 40
           }}
-        /> */}
+        />
       </View>
 
 
@@ -67,13 +67,6 @@ function MenuUv({ navigation }) {
                 textAlign: 'left', // Alinear texto a la izquierda
               }}
             />
-{/*             <SettingsButton
-              text="Contactarse con recursos UV"
-              onPress={() => navigation.navigate('UV')}
-              backgroundColor="#fbcdd1" // Un rojo más presente y vibrante en el fondo
-              textColor="#c62828"       // Un rojo más oscuro para el texto
-              iconColor="#c62828"       // El mismo rojo oscuro para el icono
-            /> */}
             
           </View>
         </ScrollView>

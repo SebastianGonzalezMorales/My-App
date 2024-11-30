@@ -52,7 +52,7 @@ function MenuUv({ navigation }) {
         <ScrollView contentContainerStyle={{ padding: 20 }}>
           <View style={{ marginTop: 10 }}>
             <SettingsButton
-              text="Información"
+              text="Servicios y Apoyo Estudiantil"
               onPress={() => navigation.navigate('InformacionUv')}
             />
             <SettingsButton
@@ -65,8 +65,8 @@ function MenuUv({ navigation }) {
               }}
             />
             <SettingsButton
-              text="Contactarse con recursos UV"
-              onPress={() => navigation.navigate('ContactarseConRecursosUV')}
+              text="Contactarse con Apoyo UV"
+              onPress={() => navigation.navigate('ContactarseConApoyoUV')}
               backgroundColor="#fbcdd1" // Un rojo más presente y vibrante en el fondo
               textColor="#c62828"       // Un rojo más oscuro para el texto
               iconColor="#c62828"       // El mismo rojo oscuro para el icono
