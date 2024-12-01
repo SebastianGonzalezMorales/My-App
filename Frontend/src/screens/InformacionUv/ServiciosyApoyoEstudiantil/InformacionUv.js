@@ -24,10 +24,11 @@ function InformacionUv({ navigation }) {
     { text: 'UV Inclusiva', screen: 'UvInclusiva' },
     { text: 'Unidad de Salud', screen: 'UnidadDeSalud' },
     { text: 'Unidad Primera Infancia', screen: 'UnidadPrimeraInfancia' },
-    { text: 'Área Deporte y Recreación', screen: 'UnidadDeSalud' },
-    { text: 'Área Deporte y Recreación', screen: 'UnidadDeSalud' },
-    { text: 'Área Deporte y Recreación', screen: 'UnidadDeSalud' },
-    { text: 'Área Deporte y Recreación', screen: 'UnidadDeSalud' },
+    { text: 'Área Deporte y Recreación', screen: 'AreaDeporteyRecreacion' },
+    { text: 'Área de Atencion Arancelaria', screen: 'AreaDeAtencionArancelaria' },
+    { text: 'Tne', screen: 'Tne' },
+    { text: 'Baes', screen: 'Baes' },
+
     // Puedes agregar más elementos aquí según sea necesario
   ];
 

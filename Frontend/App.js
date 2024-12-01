@@ -71,6 +71,9 @@ import UvInclusiva from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/
 import UnidadDeSalud from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/UnidadDeSalud';
 import UnidadPrimeraInfancia from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/UnidadPrimeraInfancia';
 import AreaDeporteyRecreacion from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/AreaDeporteyRecreacion';
+import Tne from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/Tne';
+import Baes from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/Baes';
+import AreaDeAtencionArancelaria from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/AreaDeAtencionArancelaria';
 
 const Tab = createBottomTabNavigator(); // create tab navigator method
 const Stack = createNativeStackNavigator(); // create stack navigator method
@@ -263,6 +266,9 @@ const AppNavigator = () => {
             <Stack.Screen name="UnidadDeSalud" component={UnidadDeSalud} />
             <Stack.Screen name="UnidadPrimeraInfancia" component={UnidadPrimeraInfancia} />
             <Stack.Screen name="AreaDeporteyRecreacion" component={AreaDeporteyRecreacion} />
+            <Stack.Screen name="Tne" component={Tne} />
+            <Stack.Screen name="Baes" component={Baes} />
+            <Stack.Screen name="AreaDeAtencionArancelaria" component={AreaDeAtencionArancelaria} />
             
 
             

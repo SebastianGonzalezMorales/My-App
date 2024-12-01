@@ -6,25 +6,31 @@ import {
   Animated,
   View,
   Dimensions,
-  StyleSheet
+  StyleSheet,
+  Image // Asegúrate de importar Image si usas imágenes
 } from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 
 // Custom styles
 import GlobalStyle from '../../../assets/styles/GlobalStyle';
 import BackButton from '../../../components/buttons/BackButton';
+import Video from 'react-native-video';
 
 // Obtener dimensiones de la pantalla
 const { width, height } = Dimensions.get('window');
 
 // Datos de los videos de los estudiantes
 const studentVideos = [
-  { id: 1, videoId: 'leQ2rv4aAGE', title: 'DAE UV' },
-  { id: 2, videoId: 'k7LKQ6YYm_U', title: 'DAE UV1' },
- /*  { id: 3, videoId: 'yqzZljKwTzU', title: 'Vida Universitaria' }, */
+
+  { id: 1, videoId: 'leQ2rv4aAGE', title: 'DAE UV', type: 'video'},
+  { id: 2, videoId: 'k7LKQ6YYm_U', title: 'DAE UV1', type: 'video' },
+  /*
+  { id: 2, videoId: 'VKHqSbcW674', title: 'Vida Universitaria', type: 'video' },*/
+ // { id: 3, imageUrl: require('../../../../assets/ServicioyApoyoEstudiantil/Organigrama_Dae.png'), title:'Imagen Ejemplo', type: 'image' },
+  
 ];
 
-function AppaUv({ navigation }) {
+function DaeUv({ navigation }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
   const [playingIndex, setPlayingIndex] = useState(null);
@@ -41,8 +47,8 @@ function AppaUv({ navigation }) {
       <View style={{ height: 215, padding: 15 }}>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
-      <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
-      Servicios y Apoyo Estudiantil
+        <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
+          Servicios y Apoyo Estudiantil
         </Text>
         
         {/* Descripción debajo del título */}
@@ -70,26 +76,33 @@ function AppaUv({ navigation }) {
                 setCurrentIndex(slideIndex);
               }}
             >
-              {studentVideos.map((video, index) => (
-                <View key={video.id} style={styles.slide}>
-               <Text style={styles.videoTitle}>
-  {video.title}
-  <Text style={{ width: 2}} /> {/* Espaciado controlado */}
-</Text>
+              {studentVideos.map((item, index) => (
+                <View key={item.id} style={styles.slide}>
+                  {/* Mostrar título del elemento */}
+                  <Text style={styles.videoTitle}>
+                    {item.title}
+                  </Text>
 
-                  <YoutubePlayer
-                    height={height * 0.3}
-                    width={width * 0.8}
-                    play={playingIndex === index}
-                    videoId={video.videoId}
-                    onChangeState={(state) => {
-                      if (state === 'playing') {
-                        onVideoPlay(index);
-                      } else if (state === 'ended' || state === 'paused') {
-                        setPlayingIndex(null);
-                      }
-                    }}
-                  />
+                  {/* Condicional para mostrar video o imagen */}
+                  {item.type === 'video' ? (
+                    <YoutubePlayer
+                      height={height * 0.3}
+                      width={width * 0.8}
+                      videoId={item.videoId}
+                      onChangeState={(state) => {
+                        if (state === 'playing') {
+                          setPlayingIndex(index);
+                        } else if (state === 'ended' || state === 'paused') {
+                          setPlayingIndex(null);
+                        }
+                      }}
+                    />
+                  ) : (
+                    <Image
+                      source={item.imageUrl}
+                      style={styles.image}
+                    />
+                  )}
                 </View>
               ))}
             </Animated.ScrollView>
@@ -182,6 +195,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     backgroundColor: '#D1D5DB',
   },
+  // Si estás usando imágenes, agrega estilos para ellas
+  image: {
+    width: width * 0.8,
+    height: height * 0.3,
+    resizeMode: 'cover',
+    borderRadius: 10,
+  },
 });
 
-export default AppaUv;
+export default DaeUv;

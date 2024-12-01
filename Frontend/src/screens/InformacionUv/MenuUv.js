@@ -50,7 +50,7 @@ function MenuUv({ navigation }) {
 
         {/* ScrollView para botones y contenido adicional */}
         <ScrollView contentContainerStyle={{ padding: 20 }}>
-          <View style={{ marginTop: 10 }}>
+          <View style={{ marginTop: 2 }}>
             <SettingsButton
               text="Servicios y Apoyo Estudiantil"
               onPress={() => navigation.navigate('InformacionUv')}
