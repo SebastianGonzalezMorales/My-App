@@ -74,6 +74,7 @@ import AreaDeporteyRecreacion from './src/screens/InformacionUv/ServiciosyApoyoE
 import Tne from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/Tne';
 import Baes from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/Baes';
 import AreaDeAtencionArancelaria from './src/screens/InformacionUv/ServiciosyApoyoEstudiantil/AreaDeAtencionArancelaria';
+import MoodDetails from './src/screens/mood/MoodDetails';
 
 const Tab = createBottomTabNavigator(); // create tab navigator method
 const Stack = createNativeStackNavigator(); // create stack navigator method
@@ -234,6 +235,7 @@ const AppNavigator = () => {
             <Stack.Screen name="MoodTrack" component={MoodTrack} />
             <Stack.Screen name="MoodStats" component={MoodStats} />
             <Stack.Screen name="MoodHistory" component={MoodHistory} />
+            <Stack.Screen name="MoodDetails" component={MoodDetails} />
 
             <Stack.Screen name="MenuUv" component={MenuUv} />
             <Stack.Screen name="Informacion" component={Informacion} />

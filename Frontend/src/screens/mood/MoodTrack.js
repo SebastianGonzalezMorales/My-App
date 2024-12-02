@@ -298,8 +298,8 @@ const MoodTrack = ({ route, navigation }) => {
                             <Text style={FormStyle.text}>Nota</Text>
                             <InputButton
                                 placeholder="Escribe una nota... (Opcional)"
-                                onChangeText={(quickNote) => {
-                                    setQuickNote(quickNote);
+                                onChangeText={(text) => {
+                                    setQuickNote(text);
                                 }}
                                 autoCorrect={false}
                             />

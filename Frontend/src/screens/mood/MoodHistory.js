@@ -141,9 +141,7 @@ const MoodHistory = ({ navigation }) => {
               textOne={item.date}
               textTwo={item.time}
               onPress={() => {
-                navigation.navigate('UpdateMood', {
-                  documentId: item.id,
-                });
+                navigation.navigate('MoodDetails', { _id: '672a8a579f51e6143848af8d' });
               }}
             />
           )}

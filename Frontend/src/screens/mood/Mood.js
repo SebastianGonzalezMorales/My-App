@@ -378,7 +378,7 @@ const Mood = ({ navigation }) => {
                 setModalVisible(true), setSelectedId(item.id) // set id as the document id
               )}
               onPress={() => {
-                navigation.navigate('UpdateMood', { documentId: item.id });
+                navigation.navigate('MoodDetails', { moodId: item.id });
               }}
             />
           )}

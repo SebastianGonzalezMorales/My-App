@@ -71,6 +71,29 @@ const postMoodState = async (req, res) => {
       });
     }
   };
+
+  const getMoodStateById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Verificar si el ID es válido
+        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+            return res.status(400).json({ success: false, message: 'ID inválido' });
+        }
+
+        // Buscar el estado de ánimo en la base de datos
+        const moodState = await MoodState.findById(id);
+
+        if (!moodState) {
+            return res.status(404).json({ success: false, message: 'Estado de ánimo no encontrado' });
+        }
+
+        res.status(200).json({ success: true, data: moodState });
+    } catch (error) {
+        console.error('Error al obtener el estado de ánimo:', error);
+        res.status(500).json({ success: false, message: 'Error del servidor', error: error.message });
+    }
+};
   
 
 
@@ -78,5 +101,6 @@ const postMoodState = async (req, res) => {
 module.exports = {
     getMoodStates,
     postMoodState,
-    getMoodStatesByUserId
+    getMoodStatesByUserId,
+    getMoodStateById
 };

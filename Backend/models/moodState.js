@@ -23,7 +23,7 @@ const moodStateSchema = new mongoose.Schema({
         type: String,
         required: false,
      },
-    commentarios: {
+    comentarios: {
         type: String,
         required: false,
     },
