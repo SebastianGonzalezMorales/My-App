@@ -30,10 +30,10 @@ const MoodHistory = ({ navigation }) => {
         const filteredMoods = moodData
           .filter((entry) => new Date(entry.date).getMonth() === currentMonthNumber)
           .map((entry) => ({
-            id: entry._id,
+            id: entry._id, // Asegúrate de pasar el ID correctamente
             mood: entry.mood_state,
             date: new Date(entry.date).toLocaleDateString(),
-            time: new Date(entry.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            time: new Date(entry.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           }));
 
         setMoods(filteredMoods);
@@ -62,10 +62,10 @@ const MoodHistory = ({ navigation }) => {
           return entryMonth === selectedValue;
         })
         .map((entry) => ({
-          id: entry._id,
+          id: entry._id, // Asegúrate de pasar el ID correctamente
           mood: entry.mood_state,
           date: new Date(entry.date).toLocaleDateString(),
-          time: new Date(entry.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          time: new Date(entry.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         }));
 
       setMoods(filteredMoods);
@@ -141,7 +141,7 @@ const MoodHistory = ({ navigation }) => {
               textOne={item.date}
               textTwo={item.time}
               onPress={() => {
-                navigation.navigate('MoodDetails', { _id: '672a8a579f51e6143848af8d' });
+                navigation.navigate('MoodDetails', { moodId: item.id }); // Pasa el ID dinámico
               }}
             />
           )}
