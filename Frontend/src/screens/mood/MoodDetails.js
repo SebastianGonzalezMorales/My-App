@@ -134,9 +134,14 @@ import {
           style={{ flex: 1 }}
         >
           <View style={FormStyle.formContainer}>
+            
             {/* Activities */}
-            <Text style={FormStyle.subtitle}>¿Qué has estado haciendo?</Text>
-  
+ {/* Activities */}
+<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+  <Text style={[FormStyle.subtitle, { fontFamily: 'Arial' }]}>¿</Text>
+  <Text style={FormStyle.subtitle}>Qué has estado haciendo?</Text>
+</View>
+
             <View style={FormStyle.flatListContainer}>
               <FlatList
                 data={activities}
