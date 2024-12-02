@@ -1,4 +1,3 @@
-// React imports
 import React, { useState, useRef } from 'react';
 import {
   SafeAreaView,
@@ -7,27 +6,22 @@ import {
   View,
   Dimensions,
   StyleSheet,
-  Image // Asegúrate de importar Image si usas imágenes
+  TouchableOpacity,
+  Linking,
 } from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-// Custom styles
+// Importación de estilos personalizados y componentes
 import GlobalStyle from '../../../assets/styles/GlobalStyle';
 import BackButton from '../../../components/buttons/BackButton';
-import Video from 'react-native-video';
 
 // Obtener dimensiones de la pantalla
 const { width, height } = Dimensions.get('window');
 
 // Datos de los videos de los estudiantes
 const studentVideos = [
-
-  { id: 1, videoId: 'leQ2rv4aAGE', title: 'DAE UV', type: 'video'},
-  { id: 2, videoId: 'k7LKQ6YYm_U', title: 'DAE UV1', type: 'video' },
-  /*
-  { id: 2, videoId: 'VKHqSbcW674', title: 'Vida Universitaria', type: 'video' },*/
- // { id: 3, imageUrl: require('../../../../assets/ServicioyApoyoEstudiantil/Organigrama_Dae.png'), title:'Imagen Ejemplo', type: 'image' },
-  
+  { id: 2, videoId: 'k7LKQ6YYm_U', type: 'video' },
 ];
 
 function DaeUv({ navigation }) {
@@ -35,14 +29,22 @@ function DaeUv({ navigation }) {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [playingIndex, setPlayingIndex] = useState(null);
 
-  // Manejar la reproducción del video
-  const onVideoPlay = (index) => {
-    setPlayingIndex(index);
+  // Datos de contacto
+  const phoneNumber = '32-2507291';
+  const phoneNumberOne= '32-2507772';
+  const email = 'dae@uv.cl';
+
+  // Manejar llamadas y correos
+  const handleCall = () => {
+    Linking.openURL(`tel:${phoneNumber}`);
+  };
+
+  const handleEmail = () => {
+    Linking.openURL(`mailto:${email}`);
   };
 
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
-      
       {/* Sección Azul del Encabezado */}
       <View style={{ height: 215, padding: 15 }}>
         <BackButton onPress={() => navigation.goBack()} />
@@ -50,10 +52,8 @@ function DaeUv({ navigation }) {
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
           Servicios y Apoyo Estudiantil
         </Text>
-        
-        {/* Descripción debajo del título */}
         <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
-        DAE - Dirección de asuntos estudiantiles
+          DAE - Dirección de asuntos estudiantiles
         </Text>
       </View>
 
@@ -65,77 +65,38 @@ function DaeUv({ navigation }) {
               horizontal
               pagingEnabled
               showsHorizontalScrollIndicator={false}
-              onScroll={Animated.event(
-                [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-                { useNativeDriver: false }
-              )}
-              scrollEventThrottle={16}
               contentContainerStyle={styles.carouselContainer}
-              onMomentumScrollEnd={(event) => {
-                const slideIndex = Math.round(event.nativeEvent.contentOffset.x / (width * 0.8));
-                setCurrentIndex(slideIndex);
-              }}
             >
-              {studentVideos.map((item, index) => (
+              {studentVideos.map((item) => (
                 <View key={item.id} style={styles.slide}>
-                  {/* Mostrar título del elemento */}
-                  <Text style={styles.videoTitle}>
-                    {item.title}
-                  </Text>
-
-                  {/* Condicional para mostrar video o imagen */}
-                  {item.type === 'video' ? (
-                    <YoutubePlayer
-                      height={height * 0.3}
-                      width={width * 0.8}
-                      videoId={item.videoId}
-                      onChangeState={(state) => {
-                        if (state === 'playing') {
-                          setPlayingIndex(index);
-                        } else if (state === 'ended' || state === 'paused') {
-                          setPlayingIndex(null);
-                        }
-                      }}
-                    />
-                  ) : (
-                    <Image
-                      source={item.imageUrl}
-                      style={styles.image}
-                    />
-                  )}
+          
+                  <YoutubePlayer height={height * 0.33} width={width * 0.8} videoId={item.videoId} />
                 </View>
               ))}
             </Animated.ScrollView>
           </View>
-          {/* Puntos de Paginación superpuestos */}
-          <View style={styles.pagination}>
-            {studentVideos.map((_, index) => {
-              const opacity = scrollX.interpolate({
-                inputRange: [
-                  (index - 1) * width * 0.8,
-                  index * width * 0.8,
-                  (index + 1) * width * 0.8
-                ],
-                outputRange: [0.3, 1, 0.3],
-                extrapolate: 'clamp',
-              });
-              return (
-                <Animated.View
-                  key={index}
-                  style={[
-                    styles.dot,
-                    {
-                      opacity,
-                      backgroundColor: index === currentIndex ? '#000C7B' : '#D1D5DB'
-                    }
-                  ]}
-                />
-              );
-            })}
-          </View>
-        </View>
+        </View>  
+              <Text style={[styles.infoText,{ marginTop: -35}]}>
+          Si tienes dudas o necesitas ayuda, contáctanos mediante los siguientes medios:
+        </Text>
+        <TouchableOpacity style={styles.callButton} onPress={handleCall}>
+          <MaterialCommunityIcons name="phone" size={18} color="#FFF" />
+          <Text style={styles.callButtonText}>Llamar al {phoneNumber}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.callButton} onPress={handleCall}>
+          <MaterialCommunityIcons name="phone" size={18} color="#FFF" />
+          <Text style={styles.callButtonText}>Llamar al {phoneNumberOne}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.emailButton} onPress={handleEmail}>
+          <MaterialCommunityIcons name="email" size={20} color="#FFF" />
+          <Text style={styles.emailButtonText}>{email}</Text>
+        </TouchableOpacity>
+ 
       </View>
-      
+
+      {/* Botones de contacto */}
+  
+
     </SafeAreaView>
   );
 }
@@ -145,10 +106,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    marginTop: 20, // Ajuste para igualar el primer código
+    marginTop: 20,
   },
   carouselWrapper: {
-    position: 'relative',
     width: width * 0.8,
     height: height * 0.4,
   },
@@ -165,12 +125,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5,
-    paddingTop: 20
+    paddingTop: 20,
   },
   videoTitle: {
     fontSize: 18,
@@ -179,28 +134,49 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     textAlign: 'center',
   },
-  pagination: {
-    position: 'absolute',
-    bottom: -20, // Ajusta este valor para acercar o alejar los puntos del video
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
+  infoBox: {
+    backgroundColor: '#E3F2FD',
+    padding: 15,
+    borderRadius: 10,
+    margin: 20,
     alignItems: 'center',
   },
-  dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginHorizontal: 4,
-    backgroundColor: '#D1D5DB',
+  infoText: {
+    fontSize: 14,
+    color: '#333',
+    lineHeight: 20,
+    textAlign: 'center',
+    marginBottom: 15,
   },
-  // Si estás usando imágenes, agrega estilos para ellas
-  image: {
-    width: width * 0.8,
-    height: height * 0.3,
-    resizeMode: 'cover',
-    borderRadius: 10,
+  callButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#4CAF50',
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    marginVertical: 5,
+  },
+  callButtonText: {
+    color: '#FFF',
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginLeft: 8,
+  },
+  emailButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2196F3',
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    marginVertical: 5,
+  },
+  emailButtonText: {
+    color: '#FFF',
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginLeft: 8,
   },
 });
 
