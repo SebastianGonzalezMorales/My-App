@@ -23,20 +23,27 @@ export default [
     },
     {
       id: '4',
-      title: 'Información UV',
+      title: 'Encuentra apoyo cuando lo necesites',
       description:
-        'Descubre los recursos y servicios que ofrece la Universidad para apoyar tu bienestar emocional y psicológico.',
+        'Descubre los recursos que ofrece la Universidad para apoyar tu bienestar emocional y psicológico.',
         image: require('../../../assets/Logo-SM-UV.png'),
     },
     {
       id: '5',
+      title: 'Servicios UV',
+      description:
+        'Descubre los servicios que la Universidad de Valparaíso tiene para ti.',
+        image: require('../../../assets/Uv.png'),
+    },
+    {
+      id: '6',
       title: 'Novedades UV',
       description:
         'Mantente al tanto de todas las actividades y eventos deportivos y recreativos.',
         image: require('../../../assets/area-deporte-uv-removebg.png'),
     },
     {
-      id: '6',
+      id: '7',
       title: '¡ Casi terminamos !',
       description:
         'Regístrese e inicie sesión, para acceder a las increíbles funcionalidades de la aplicación.',
