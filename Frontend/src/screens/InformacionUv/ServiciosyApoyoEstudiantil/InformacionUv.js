@@ -23,9 +23,9 @@ function InformacionUv({ navigation }) {
     { text: 'Conectados', screen: 'ConectadosUv', imageSource: require('../../../../assets/RedesDeApoyo/Conectados/conectados_logo.png') },
       { text: 'UV Inclusiva', screen: 'UvInclusiva' , imageSource: require('../../../../assets/RedesDeApoyo/UvInclusiva.png') },
    { text: 'Unidad de Salud', screen: 'UnidadDeSalud' , imageSource: require('../../../../assets/RedesDeApoyo/AreaDeSalud.png') },
-    { text: 'Unidad Primera Infancia', screen: 'UnidadPrimeraInfancia', imageSource: require('../../../../assets/RedesDeApoyo/AreaDePrimeraInfancia.png') },
+    { text: 'Unidad Primera de Infancia', screen: 'UnidadPrimeraInfancia', imageSource: require('../../../../assets/RedesDeApoyo/AreaDePrimeraInfancia.png') },
     { text: 'Unidad Deporte y Recreación', screen: 'AreaDeporteyRecreacion', imageSource: require('../../../../assets/RedesDeApoyo/druv.png')},
-   { text: 'Unidad de Atencion Arancelaria', screen: 'AreaDeAtencionArancelaria' , imageSource: require('../../../../assets/RedesDeApoyo/ArancelesUv.png') },
+   { text: 'Unidad de Atención Arancelaria', screen: 'AreaDeAtencionArancelaria' , imageSource: require('../../../../assets/RedesDeApoyo/ArancelesUv.png') },
    { text: 'Tne', screen: 'Tne', imageSource: require('../../../../assets/RedesDeApoyo/tne.png')},
     { text: 'Baes', screen: 'Baes', imageSource: require('../../../../assets/RedesDeApoyo/baes.png')},
   ];

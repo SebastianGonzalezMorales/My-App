@@ -6,9 +6,14 @@ import {
   Animated,
   View,
   Dimensions,
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
 } from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialIcons'; // Importar íconos
+
 
 // Custom styles
 import GlobalStyle from '../../../assets/styles/GlobalStyle';
@@ -19,9 +24,7 @@ const { width, height } = Dimensions.get('window');
 
 // Datos de los videos de los estudiantes
 const studentVideos = [
-  { id: 1, videoId: '2hFy0kOe_AM', title: 'Unidad Primera Infancia' },
-/*   { id: 2, videoId: 'VKHqSbcW674', title: 'Vida Universitaria' },
-  { id: 3, videoId: 'yqzZljKwTzU', title: 'Vida Universitaria' }, */
+  { id: 1, videoId: '2hFy0kOe_AM'},
 ];
 
 function UnidadPrimeraInfancia({ navigation }) {
@@ -36,93 +39,85 @@ function UnidadPrimeraInfancia({ navigation }) {
 
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
-      
       {/* Sección Azul del Encabezado */}
-      <View style={{ height: 215, padding: 15 }}>
+      <View style={{ height: 200, padding: 15 }}>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
-      <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
-      Servicios y Apoyo Estudiantil
+        <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
+          Servicios y Apoyo Estudiantil
         </Text>
-        
-        {/* Descripción debajo del título */}
         <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
-        Unidad Primera Infancia
+          Unidad de Primera Infancia
         </Text>
       </View>
 
       {/* Contenedor para el Carrusel de Videos */}
       <View style={[GlobalStyle.rowTwo, styles.centeredContainer]}>
         <View style={styles.carouselWrapper}>
-          <View style={styles.scrollContainer}>
-            <Animated.ScrollView
-              horizontal
-              pagingEnabled
-              showsHorizontalScrollIndicator={false}
-              onScroll={Animated.event(
-                [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-                { useNativeDriver: false }
-              )}
-              scrollEventThrottle={16}
-              contentContainerStyle={styles.carouselContainer}
-              onMomentumScrollEnd={(event) => {
-                const slideIndex = Math.round(event.nativeEvent.contentOffset.x / (width * 0.8));
-                setCurrentIndex(slideIndex);
-              }}
-            >
-              {studentVideos.map((video, index) => (
-                <View key={video.id} style={styles.slide}>
-               <Text style={styles.videoTitle}>
-  {video.title}
-  <Text style={{ width: 2}} /> {/* Espaciado controlado */}
-</Text>
-
-                  <YoutubePlayer
-                    height={height * 0.3}
-                    width={width * 0.8}
-                    play={playingIndex === index}
-                    videoId={video.videoId}
-                    onChangeState={(state) => {
-                      if (state === 'playing') {
-                        onVideoPlay(index);
-                      } else if (state === 'ended' || state === 'paused') {
-                        setPlayingIndex(null);
-                      }
-                    }}
-                  />
-                </View>
-              ))}
-            </Animated.ScrollView>
-          </View>
-          {/* Puntos de Paginación superpuestos */}
+          <Animated.ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+              { useNativeDriver: false }
+            )}
+            scrollEventThrottle={16}
+            contentContainerStyle={styles.carouselContainer}
+            onMomentumScrollEnd={(event) => {
+              const slideIndex = Math.round(event.nativeEvent.contentOffset.x / (width * 0.8));
+              setCurrentIndex(slideIndex);
+            }}
+          >
+            {studentVideos.map((video, index) => (
+              <View key={video.id} style={styles.slide}>
+          
+                <YoutubePlayer
+                  height={height * 0.3}
+                  width={width * 0.8}
+                  play={playingIndex === index}
+                  videoId={video.videoId}
+                  onChangeState={(state) => {
+                    if (state === 'playing') {
+                      onVideoPlay(index);
+                    } else if (state === 'ended' || state === 'paused') {
+                      setPlayingIndex(null);
+                    }
+                  }}
+                />
+              </View>
+            ))}
+          </Animated.ScrollView>
+          {/* Puntos de Paginación */}
           <View style={styles.pagination}>
             {studentVideos.map((_, index) => {
               const opacity = scrollX.interpolate({
                 inputRange: [
                   (index - 1) * width * 0.8,
                   index * width * 0.8,
-                  (index + 1) * width * 0.8
+                  (index + 1) * width * 0.8,
                 ],
                 outputRange: [0.3, 1, 0.3],
                 extrapolate: 'clamp',
               });
-              return (
-                <Animated.View
-                  key={index}
-                  style={[
-                    styles.dot,
-                    {
-                      opacity,
-                      backgroundColor: index === currentIndex ? '#000C7B' : '#D1D5DB'
-                    }
-                  ]}
-                />
-              );
             })}
           </View>
         </View>
-      </View>
+      {/* Botones de contacto */}
+      <View style={styles.contactButtonsContainer}>
+        {/* Botón para programa general */}
+        <TouchableOpacity
+          style={styles.emailButton}
+          onPress={() => Linking.openURL('mailto:programa.infancia@uv.cl')}
+        >
+ <Icon name="email" size={20} color="white" style={{ marginRight: 15 }} />
+          <Text style={{ color: 'white', fontSize: 16 }}>Enviar Correo</Text>
+        </TouchableOpacity>
+
       
+      </View>
+      </View>
+
     </SafeAreaView>
   );
 }
@@ -132,16 +127,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    marginTop: 20, // Ajuste para igualar el primer código
+    marginTop: 20,
   },
   carouselWrapper: {
     position: 'relative',
     width: width * 0.8,
     height: height * 0.4,
-  },
-  scrollContainer: {
-    width: '100%',
-    height: '100%',
   },
   carouselContainer: {
     alignItems: 'center',
@@ -157,7 +148,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 5,
-    paddingTop: 20
+    paddingTop: 20,
   },
   videoTitle: {
     fontSize: 18,
@@ -168,7 +159,7 @@ const styles = StyleSheet.create({
   },
   pagination: {
     position: 'absolute',
-    bottom: -20, // Ajusta este valor para acercar o alejar los puntos del video
+    bottom: -20,
     left: 0,
     right: 0,
     flexDirection: 'row',
@@ -181,6 +172,30 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginHorizontal: 4,
     backgroundColor: '#D1D5DB',
+  },
+  contactButtonsContainer: {
+    marginVertical: 20,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+  },
+  emailButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#2196F3',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    width: '60%',
+    justifyContent: 'center',
+    marginVertical: 10,
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 20,
+    textAlign: 'right',
   },
 });
 

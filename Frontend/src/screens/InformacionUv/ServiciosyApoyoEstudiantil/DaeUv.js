@@ -46,7 +46,7 @@ function DaeUv({ navigation }) {
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       {/* Sección Azul del Encabezado */}
-      <View style={{ height: 215, padding: 15 }}>
+      <View style={{ height: 230, padding: 15 }}>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
@@ -76,7 +76,7 @@ function DaeUv({ navigation }) {
             </Animated.ScrollView>
           </View>
         </View>  
-              <Text style={[styles.infoText,{ marginTop: -35}]}>
+              <Text style={[styles.infoText,{ marginTop: -40}]}>
           Si tienes dudas o necesitas ayuda, contáctanos mediante los siguientes medios:
         </Text>
         <TouchableOpacity style={styles.callButton} onPress={handleCall}>
@@ -89,7 +89,7 @@ function DaeUv({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity style={styles.emailButton} onPress={handleEmail}>
           <MaterialCommunityIcons name="email" size={20} color="#FFF" />
-          <Text style={styles.emailButtonText}>{email}</Text>
+          <Text style={styles.emailButtonText}>Enviar Correo</Text>
         </TouchableOpacity>
  
       </View>

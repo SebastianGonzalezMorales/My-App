@@ -7,40 +7,30 @@ import {
   View,
   Dimensions,
   StyleSheet,
-  Image // Asegúrate de importar Image si usas imágenes
+  TouchableOpacity,
+  Linking,
 } from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 
 // Custom styles
 import GlobalStyle from '../../../assets/styles/GlobalStyle';
 import BackButton from '../../../components/buttons/BackButton';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Obtener dimensiones de la pantalla
 const { width, height } = Dimensions.get('window');
 
 // Datos de los videos de los estudiantes
 const studentVideos = [
-  { id: 1, videoId: 'RER9MW267Js', title: 'Appa UV', type: 'video' },
-  // Puedes agregar más elementos con type 'video' o 'image'
-  /*
-  { id: 2, videoId: 'VKHqSbcW674', title: 'Vida Universitaria', type: 'video' },
-  { id: 3, imageUrl: require('path/to/image.png'), title: 'Imagen Ejemplo', type: 'image' },
-  */
+  { id: 1, videoId: 'RER9MW267Js', title: '', type: 'video' }, // Eliminado título
 ];
 
 function AppaUv({ navigation }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
-  const [playingIndex, setPlayingIndex] = useState(null);
-
-  // Manejar la reproducción del video
-  const onVideoPlay = (index) => {
-    setPlayingIndex(index);
-  };
 
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
-      
       {/* Sección Azul del Encabezado */}
       <View style={{ height: 215, padding: 15 }}>
         <BackButton onPress={() => navigation.goBack()} />
@@ -48,92 +38,58 @@ function AppaUv({ navigation }) {
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
           Servicios y Apoyo Estudiantil
         </Text>
-        
-        {/* Descripción debajo del título */}
         <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
           Appa UV - Programa de Atención Preferencial a los Primeros Años
         </Text>
       </View>
 
-      {/* Contenedor para el Carrusel de Videos */}
+      {/* Contenedor para el Video */}
       <View style={[GlobalStyle.rowTwo, styles.centeredContainer]}>
-        <View style={styles.carouselWrapper}>
-          <View style={styles.scrollContainer}>
-            <Animated.ScrollView
-              horizontal
-              pagingEnabled
-              showsHorizontalScrollIndicator={false}
-              onScroll={Animated.event(
-                [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-                { useNativeDriver: false }
-              )}
-              scrollEventThrottle={16}
-              contentContainerStyle={styles.carouselContainer}
-              onMomentumScrollEnd={(event) => {
-                const slideIndex = Math.round(event.nativeEvent.contentOffset.x / (width * 0.8));
-                setCurrentIndex(slideIndex);
-              }}
-            >
-              {studentVideos.map((item, index) => (
-                <View key={item.id} style={styles.slide}>
-                  {/* Mostrar título del elemento */}
-                  <Text style={styles.videoTitle}>
-                    {item.title}
-                  </Text>
+        <YoutubePlayer
+          height={height * 0.33}
+          width={width * 0.8} // Ajuste del ancho
+          videoId={studentVideos[0].videoId}
+        /> 
+             {/* Botones de llamada y correo */}
+   <View>
+    <Text>
 
-                  {/* Condicional para mostrar video o imagen */}
-                  {item.type === 'video' ? (
-                    <YoutubePlayer
-                      height={height * 0.3}
-                      width={width * 0.8}
-                      videoId={item.videoId}
-                      onChangeState={(state) => {
-                        if (state === 'playing') {
-                          setPlayingIndex(index);
-                        } else if (state === 'ended' || state === 'paused') {
-                          setPlayingIndex(null);
-                        }
-                      }}
-                    />
-                  ) : (
-                    <Image
-                      source={item.imageUrl}
-                      style={styles.image}
-                    />
-                  )}
-                </View>
-              ))}
-            </Animated.ScrollView>
-          </View>
-          {/* Puntos de Paginación superpuestos */}
-          <View style={styles.pagination}>
-            {studentVideos.map((_, index) => {
-              const opacity = scrollX.interpolate({
-                inputRange: [
-                  (index - 1) * width * 0.8,
-                  index * width * 0.8,
-                  (index + 1) * width * 0.8
-                ],
-                outputRange: [0.3, 1, 0.3],
-                extrapolate: 'clamp',
-              });
-              return (
-                <Animated.View
-                  key={index}
-                  style={[
-                    styles.dot,
-                    {
-                      opacity,
-                      backgroundColor: index === currentIndex ? '#000C7B' : '#D1D5DB'
-                    }
-                  ]}
-                />
-              );
-            })}
-          </View>
+    </Text>
+   </View>
+        <View>
+        <Text style={[styles.infoText,{ marginTop: -35}, {textAlign: 'center'}]}>
+          Si tienes dudas o necesitas ayuda, contáctanos mediante los siguientes medios:
+        </Text>
         </View>
+        <View>
+    <Text>
+
+    </Text>
+   </View>
+        {/* Botón de llamar */}
+        <TouchableOpacity
+        
+        
+
+          style={styles.callButton}
+          onPress={() => Linking.openURL('tel:322500000')}
+        >
+          <MaterialCommunityIcons name="phone" size={20} color="#FFF" />
+          <Text style={styles.buttonText}>Llamar al 32250 0000</Text>
+        </TouchableOpacity>
+
+        {/* Botón de correo */}
+        <TouchableOpacity
+          style={styles.emailButton}
+          onPress={() => Linking.openURL('mailto:appauv@uv.cl')}
+        >
+          <MaterialCommunityIcons name="email" size={20} color="#FFF" />
+          <Text style={styles.buttonText}>Enviar Correo</Text>
+        </TouchableOpacity>
+
       </View>
-      
+
+
     </SafeAreaView>
   );
 }
@@ -143,62 +99,39 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    marginTop: 20, // Ajuste para igualar el primer código
+    marginTop: 20,
   },
-  carouselWrapper: {
-    position: 'relative',
-    width: width * 0.8,
-    height: height * 0.4,
-  },
-  scrollContainer: {
-    width: '100%',
-    height: '100%',
-  },
-  carouselContainer: {
+  contactContainer: {
     alignItems: 'center',
+    marginTop: 20,
   },
-  slide: {
-    width: width * 0.8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5,
-    paddingTop: 20
-  },
-  videoTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#5c6169',
-    marginBottom: 5,
-    textAlign: 'center',
-  },
-  pagination: {
-    position: 'absolute',
-    bottom: -20, // Ajusta este valor para acercar o alejar los puntos del video
-    left: 0,
-    right: 0,
+  callButton: {
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-  },
-  dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginHorizontal: 4,
-    backgroundColor: '#D1D5DB',
-  },
-  // Si estás usando imágenes, agrega estilos para ellas
-  image: {
-    width: width * 0.8,
-    height: height * 0.3,
-    resizeMode: 'cover',
+    backgroundColor: '#4CAF50', // Verde para botón de llamada
     borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginVertical: 10,
+    width: '80%',
+    justifyContent: 'center',
+  },
+  emailButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2196F3', // Azul para botón de correo
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginVertical: 10,
+    width: '80%',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 10,
   },
 });
 
