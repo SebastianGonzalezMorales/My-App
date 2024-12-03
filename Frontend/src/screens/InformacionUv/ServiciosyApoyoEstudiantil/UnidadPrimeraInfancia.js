@@ -14,7 +14,6 @@ import YoutubePlayer from 'react-native-youtube-iframe';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Importar íconos
 
-
 // Custom styles
 import GlobalStyle from '../../../assets/styles/GlobalStyle';
 import BackButton from '../../../components/buttons/BackButton';
@@ -24,7 +23,7 @@ const { width, height } = Dimensions.get('window');
 
 // Datos de los videos de los estudiantes
 const studentVideos = [
-  { id: 1, videoId: '2hFy0kOe_AM'},
+  { id: 1, videoId: '2hFy0kOe_AM' },
 ];
 
 function UnidadPrimeraInfancia({ navigation }) {
@@ -71,7 +70,6 @@ function UnidadPrimeraInfancia({ navigation }) {
           >
             {studentVideos.map((video, index) => (
               <View key={video.id} style={styles.slide}>
-          
                 <YoutubePlayer
                   height={height * 0.3}
                   width={width * 0.8}
@@ -88,36 +86,25 @@ function UnidadPrimeraInfancia({ navigation }) {
               </View>
             ))}
           </Animated.ScrollView>
-          {/* Puntos de Paginación */}
-          <View style={styles.pagination}>
-            {studentVideos.map((_, index) => {
-              const opacity = scrollX.interpolate({
-                inputRange: [
-                  (index - 1) * width * 0.8,
-                  index * width * 0.8,
-                  (index + 1) * width * 0.8,
-                ],
-                outputRange: [0.3, 1, 0.3],
-                extrapolate: 'clamp',
-              });
-            })}
-          </View>
         </View>
-      {/* Botones de contacto */}
-      <View style={styles.contactButtonsContainer}>
-        {/* Botón para programa general */}
-        <TouchableOpacity
-          style={styles.emailButton}
-          onPress={() => Linking.openURL('mailto:programa.infancia@uv.cl')}
-        >
- <Icon name="email" size={20} color="white" style={{ marginRight: 15 }} />
-          <Text style={{ color: 'white', fontSize: 16 }}>Enviar Correo</Text>
-        </TouchableOpacity>
 
-      
-      </View>
-      </View>
+        {/* Texto adicional fuera del contenedor del video */}
+        <Text style={styles.helpText}>
+        Si tienes dudas o necesitas apoyo, envíanos un correo haciendo clic en el botón que aparece a continuación.
 
+        </Text>
+
+        {/* Botón de contacto */}
+        <View style={styles.contactButtonsContainer}>
+          <TouchableOpacity
+            style={styles.emailButton}
+            onPress={() => Linking.openURL('mailto:programa.infancia@uv.cl')}
+          >
+            <Icon name="email" size={20} color="white" style={{ marginRight: 15 }} />
+            <Text style={{ color: 'white', fontSize: 16 }}>Enviar Correo</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
@@ -150,28 +137,12 @@ const styles = StyleSheet.create({
     elevation: 5,
     paddingTop: 20,
   },
-  videoTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#5c6169',
-    marginBottom: 5,
-    textAlign: 'center',
-  },
-  pagination: {
-    position: 'absolute',
-    bottom: -20,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginHorizontal: 4,
-    backgroundColor: '#D1D5DB',
+  helpText: {
+    marginTop: 10, // Espaciado superior para separar del carrusel
+    fontSize: 14, // Tamaño adecuado para el texto
+    color: '#333', // Color neutro
+    textAlign: 'center', // Centrar el texto
+    paddingHorizontal: 20, // Margen horizontal para evitar que quede pegado
   },
   contactButtonsContainer: {
     marginVertical: 20,
@@ -187,7 +158,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     width: '60%',
-    justifyContent: 'center',
     marginVertical: 10,
   },
   buttonText: {

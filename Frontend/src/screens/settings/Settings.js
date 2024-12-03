@@ -1,25 +1,20 @@
-// react imports
 import {
   Linking, NativeModules, Platform, SafeAreaView, ScrollView, Text, View,
 } from 'react-native';
 import React, { useEffect, useState, useContext } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { ProgressBar } from 'react-native-paper'; // Asegúrate de instalar react-native-paper
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { AuthContext } from '../../context/AuthContext';
 
-// Import the API URL from environment variables
 import { API_URL } from '@env';
-
-// components
 
 import SmallFormButton from '../../components/buttons/SmallFormButton';
 import SettingsButton from '../../components/buttons/SettingsButton';
 import AuthButton from '../../components/buttons/AuthButton';
 
-// customisation
 import GlobalStyle from '../../assets/styles/GlobalStyle';
 
 function Settings({ navigation }) {
@@ -32,160 +27,111 @@ function Settings({ navigation }) {
   const [birthdate, setBirthdate] = useState('');
   const [carrera, setCarrera] = useState('');
   const [phone, setPhone] = useState('');
-
-
-  /*
-   * *******************
-   * **** Functions ****
-   * *******************
-   */
-
-  // hook to fetch user's data
-  useEffect(() => {
-    const fetchName = async () => {
-      /*   userRef.onSnapshot((snapshot) => {
-         const { fullName, email } = snapshot.data();
-         setName(fullName);
-         setEmail(email);
-       });*/
-    };
-    fetchName();
-  }, []);
-
-  // sign out function
-  const handleSignOut = async () => {
-    try {
-      await logout();
-      console.log("Cierre de sesión exitoso");
-      navigation.replace('Login');
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error);
-    }
-
-  };
-
-
-  // go to settings
-  const { RNAndroidOpenSettings } = NativeModules;
-  const openAppPrefs = () => {
-    if (Platform.OS === 'ios') {
-      Linking.openURL('app-settings://notification/HealthApplication');
-    } else {
-      RNAndroidOpenSettings.generalSettings();
-    }
-  };
-
-  /*
-   * ****************
-   * **** Screen ****
-   * ****************
-   */
+  const [progress, setProgress] = useState(5); // Progreso inicial en días consecutivos
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
         if (token) {
-          const response = await axios.post(`${API_URL}/users/userdata`,
-            {
-              // Token en el cuero de la solicitud
-              token: `${token}`
-            },
-            {
-              // Token de autoización en el header
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
+          const response = await axios.post(
+            `${API_URL}/users/userdata`,
+            { token },
+            { headers: { Authorization: `Bearer ${token}` } }
           );
-          const userName = response.data.data.name;
-          const userRut = response.data.data.rut;
-          const userEmail = response.data.data.email;
-          const userBirthdate = response.data.data.birthdate.split('T')[0];
-          const userCarrera = response.data.data.carrera;
-          const userPhone = response.data.data.phoneNumber; 
+          const userData = response.data.data;
 
-          // Actualiza el estado con el nombre
-          setName(userName);
-          setRut(userRut);
-          setEmail(userEmail);
-          setBirthdate(userBirthdate);
-          setCarrera(userCarrera);
-          setPhone(userPhone);
-
-          // Para verificar en la consola
-          console.log('User Name:', userName);
-          console.log('User Rut:', userRut);
-          console.log('User Email:', userEmail);
-          console.log('User Birthdate:', userBirthdate);
-          console.log('User Carrera:', userCarrera);
-          console.log('User Phone:', userPhone);
-
+          // Actualizar estados con datos del usuario
+          setName(userData.name);
+          setRut(userData.rut);
+          setEmail(userData.email);
+          setBirthdate(userData.birthdate.split('T')[0]);
+          setCarrera(userData.carrera);
+          setPhone(userData.phoneNumber);
         } else {
           console.log('No se encontró el token. Por favor, inicia sesión.');
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
-
     };
     fetchUserData();
   }, []);
 
+  const handleSignOut = async () => {
+    try {
+      await logout();
+      navigation.replace('Login');
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  };
 
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
-      {/*
-         * *********************
-         * ***** Section 1 *****
-         * *********************
-         */}
-
-
-      <View style={{ height: 225, alignItems: 'center' }}>
+      {/* Header Section */}
+      <View style={{ height: 310, alignItems: 'center' }}>
         <Text style={[GlobalStyle.welcomeText, { marginRight: 30 }]}>Mi Perfil</Text>
-        <Text style={[GlobalStyle.subtitle]}></Text>
-        <Icon name="user-circle" size={100} color="#000" />
+        <Icon name="user-circle" size={100} color="#000"  style={{ marginTop: 20 }} />
+
+        {/* Mensaje motivacional */}
+        <Text
+          style={[
+            GlobalStyle.text,
+            { textAlign: 'center', color: '#FFFFFF', fontSize: 16, marginTop: 0 },
+          ]}
+        >
+          Has registrado tu estado de ánimo durante {progress} días consecutivos. ¡Sigue así! 🎉
+        </Text>
+
+        {/* Barra de progreso */}
+        <View style={{ width: '80%', marginTop: 15 }}>
+          <ProgressBar
+            progress={progress / 7} // Progreso basado en un objetivo de 7 días
+            color="#4CAF50"
+            style={{ height: 10, borderRadius: 5 }}
+          />
+          <Text style={{ textAlign: 'center', marginTop: 5, color: '#FFFFFF' }}>
+            {progress}/7 días consecutivos
+          </Text>
+        </View>
       </View>
 
-      {/*
-         * *********************
-         * ***** Section 2 *****
-         * *********************
-         */}
-<View style={GlobalStyle.rowTwo}>
-  <View style={GlobalStyle.statsContainer}>
-    <Text style={GlobalStyle.statsTitle}>
-      <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Nombre:</Text> {name}
-    </Text>
-    <Text style={GlobalStyle.statsTitle}>
-      <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Rut:</Text> {rut}
-    </Text>
-    <Text style={GlobalStyle.statsTitle}>
-      <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Email:</Text> {email}
-    </Text>
-    <Text style={GlobalStyle.statsTitle}>
-      <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Teléfono:</Text> {phone}
-    </Text>
-    <Text style={GlobalStyle.statsTitle}>
-      <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Carrera:</Text> {carrera}
-    </Text>
-    <Text style={GlobalStyle.statsTitle}>
-      <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Fecha de nacimiento:</Text> {birthdate}
-    </Text>
-  </View>
-  <View style={{ marginTop: 5, paddingBottom: 50 }}>
-    <AuthButton
-      onPress={handleSignOut}
-      text="Cerrar sesión"
-      iconName="log-out-outline"
-      iconColor="#388E3C"
-      buttonStyle={{ backgroundColor: '#A5D6A7' }}
-      textStyle={{ color: '#388E3C' }}
-    />
-  </View>
-</View>
+      {/* User Info Section */}
+      <View style={GlobalStyle.rowTwo}>
+        <View style={GlobalStyle.statsContainer}>
+          <Text style={[GlobalStyle.statsTitle, { marginVertical: -5 }]}>
+            <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Nombre: </Text> {name}
+          </Text>
+          <Text style={[GlobalStyle.statsTitle, { marginVertical: -5 }]}>
+            <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Rut: </Text> {rut}
+          </Text>
+          <Text style={[GlobalStyle.statsTitle, { marginVertical: -5 }]}>
+            <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Email: </Text> {email}
+          </Text>
+          <Text style={[GlobalStyle.statsTitle, { marginVertical: -5 }]}>
+            <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Teléfono: </Text> {phone}
+          </Text>
+          <Text style={[GlobalStyle.statsTitle, { marginVertical: -5 }]}>
+            <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Carrera: </Text> {carrera}
+          </Text>
+          <Text style={[GlobalStyle.statsTitle, { marginVertical: -5 }]}>
+            <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Fecha de nacimiento: </Text> {birthdate}
+          </Text>
+        </View>
 
+        {/* Logout Button */}
+        <View style={{ marginTop: -7, paddingBottom: 50 }}>
+          <AuthButton
+            onPress={handleSignOut}
+            text="Cerrar sesión"
+            iconName="log-out-outline"
+            iconColor="#388E3C"
+            buttonStyle={{ backgroundColor: '#A5D6A7' }}
+            textStyle={{ color: '#388E3C' }}
+          />
+        </View>
+      </View>
     </SafeAreaView>
   );
 }

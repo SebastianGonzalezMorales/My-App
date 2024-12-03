@@ -169,7 +169,7 @@ function AsistenteSocial({ navigation }) {
           ]}
         >
           {firstName
-            ? `${firstName}, te presentamos a la asistente social asignada a tu carrera. Ella es tu primer contacto para recibir orientación y apoyo.`
+            ? `${firstName}, te presentamos a la asistente social asignada a tu carrera. Ella es tu primer contacto para recibir orientación y apoyo. Posteriormente, en caso de ser necesario podrás recibir atención psicológica`
             : 'Cargando...'}
         </Text>
       </View>

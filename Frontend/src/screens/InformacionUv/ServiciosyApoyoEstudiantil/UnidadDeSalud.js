@@ -89,36 +89,39 @@ function UnidadDeSalud({ navigation }) {
             ))}
           </Animated.ScrollView>
 
- 
-        </View>
-      {/* Botones de contacto */}
-      <View style={styles.contactButtonsContainer}>
-        {/* Botón de llamada */}
-        <TouchableOpacity
-          style={styles.callButton}
-          onPress={() => Linking.openURL('tel:322507158')}
-        >
-          <MaterialCommunityIcons name="phone" size={20} color="#FFF" />
-          <Text style={styles.buttonText}>Llamar al 32-2507158</Text>
-        </TouchableOpacity>
-  
-        <TouchableOpacity
-          style={styles.callButton}
-          onPress={() => Linking.openURL('tel:322507186')}
-        >
-          <MaterialCommunityIcons name="phone" size={20} color="#FFF" />
-          <Text style={styles.buttonText}>Llamar al 32-2507186</Text>
-        </TouchableOpacity>
+          <Text style={styles.helpText}>
+            Si tienes dudas o necesitas ayuda, contáctanos mediante los siguientes medios:
+          </Text>
 
-        {/* Botón de correo */}
-        <TouchableOpacity
-          style={styles.emailButton}
-          onPress={() => Linking.openURL('mailto:unidad.salud@uv.cl')}
-        >
-          <MaterialCommunityIcons name="email" size={20} color="#FFF" />
-          <Text style={styles.buttonText}>Enviar Correo</Text>
-        </TouchableOpacity>
-      </View>
+        </View>
+        {/* Botones de contacto */}
+        <View style={styles.contactButtonsContainer}>
+          {/* Botón de llamada */}
+          <TouchableOpacity
+            style={styles.callButton}
+            onPress={() => Linking.openURL('tel:322507158')}
+          >
+            <MaterialCommunityIcons name="phone" size={20} color="#FFF" />
+            <Text style={styles.buttonText}>Llamar al 32-2507158</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.callButton}
+            onPress={() => Linking.openURL('tel:322507186')}
+          >
+            <MaterialCommunityIcons name="phone" size={20} color="#FFF" />
+            <Text style={styles.buttonText}>Llamar al 32-2507186</Text>
+          </TouchableOpacity>
+
+          {/* Botón de correo */}
+          <TouchableOpacity
+            style={styles.emailButton}
+            onPress={() => Linking.openURL('mailto:unidad.salud@uv.cl')}
+          >
+            <MaterialCommunityIcons name="email" size={20} color="#FFF" />
+            <Text style={styles.buttonText}>Enviar Correo</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
     </SafeAreaView>
@@ -127,10 +130,17 @@ function UnidadDeSalud({ navigation }) {
 
 const styles = StyleSheet.create({
   centeredContainer: {
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     flex: 1,
     marginTop: 20,
+  },
+  helpText: {
+    marginTop: 10,
+    fontSize: 14,
+    color: '#333',
+    textAlign: 'center',
+    paddingHorizontal: 10,
   },
   carouselWrapper: {
     position: 'relative',
@@ -191,7 +201,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     width: '80%',
     justifyContent: 'center',
-    marginTop: 5 
+    marginTop: 5
   },
   emailButton: {
     flexDirection: 'row',
@@ -203,7 +213,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     width: '80%',
     justifyContent: 'center',
-    marginTop: 5 
+    marginTop: 5
   },
   buttonText: {
     color: '#FFF',

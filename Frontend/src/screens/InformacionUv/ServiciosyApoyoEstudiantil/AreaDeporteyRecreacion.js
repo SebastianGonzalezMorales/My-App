@@ -71,8 +71,8 @@ function AreaDeporteyRecreacion({ navigation }) {
               <View key={video.id} style={styles.slide}>
                 <Text style={styles.videoTitle}>{video.title}</Text>
                 <YoutubePlayer
-                  height={height * 0.3}
-                  width={width * 0.8}
+                  height={height * 0.25}
+                  width={width * 0.7}
                   play={playingIndex === index}
                   videoId={video.videoId}
                   onChangeState={(state) => {
@@ -87,28 +87,33 @@ function AreaDeporteyRecreacion({ navigation }) {
             ))}
           </Animated.ScrollView>
         </View>
-      {/* Botones de contacto */}
-      <View style={styles.contactButtonsContainer}>
-        {/* Botón de llamada */}
-        <TouchableOpacity
-          style={styles.callButton}
-          onPress={() => Linking.openURL('tel:322508488')}
-        >
-          <MaterialCommunityIcons name="phone" size={20} color="#FFF" />
-          <Text style={styles.buttonText}>Llamar al 32-2508488</Text>
-        </TouchableOpacity>
 
-        {/* Botón de correo */}
-        <TouchableOpacity
-          style={styles.emailButton}
-          onPress={() => Linking.openURL('mailto:areadeportes@uv.cl')}
-        >
-          <MaterialCommunityIcons name="email" size={20} color="#FFF" />
-          <Text style={styles.buttonText}>Enviar Correo</Text>
-        </TouchableOpacity>
-      </View>
-      </View>
+        {/* Frase adicional */}
+        <Text style={styles.helpText}>
+          Si tienes dudas o necesitas ayuda, contáctanos mediante los siguientes medios:
+        </Text>
 
+        {/* Botones de contacto */}
+        <View style={styles.contactButtonsContainer}>
+          {/* Botón de llamada */}
+          <TouchableOpacity
+            style={styles.callButton}
+            onPress={() => Linking.openURL('tel:322508488')}
+          >
+            <MaterialCommunityIcons name="phone" size={20} color="#FFF" />
+            <Text style={styles.buttonText}>Llamar al 32-2508488</Text>
+          </TouchableOpacity>
+
+          {/* Botón de correo */}
+          <TouchableOpacity
+            style={styles.emailButton}
+            onPress={() => Linking.openURL('mailto:areadeportes@uv.cl')}
+          >
+            <MaterialCommunityIcons name="email" size={20} color="#FFF" />
+            <Text style={styles.buttonText}>Enviar Correo</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
@@ -122,8 +127,10 @@ const styles = StyleSheet.create({
   },
   carouselWrapper: {
     position: 'relative',
-    width: width * 0.8,
+    width: width * 0.9,
     height: height * 0.4,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   carouselContainer: {
     alignItems: 'center',
@@ -147,6 +154,13 @@ const styles = StyleSheet.create({
     color: '#5c6169',
     marginBottom: 10,
     textAlign: 'center',
+  },
+  helpText: {
+    marginTop: 15,
+    fontSize: 14,
+    color: '#333',
+    textAlign: 'center',
+    paddingHorizontal: 20,
   },
   contactButtonsContainer: {
     marginVertical: 20,

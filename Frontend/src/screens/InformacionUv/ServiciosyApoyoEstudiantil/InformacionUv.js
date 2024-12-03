@@ -36,8 +36,11 @@ function InformacionUv({ navigation }) {
       {/* Sección superior azul con título y subtítulo */}
       <View style={{ height: height * 0.25, padding: 10 }}>
         <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
-        <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
+        <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF', marginTop:-15  }]}>
           Servicios y Apoyo Estudiantil
+        </Text>
+        <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
+        Conoce los servicios creados para ayudarte en tu experiencia universitaria, desde salud y bienestar hasta inclusión y recreación.
         </Text>
       </View>
 
