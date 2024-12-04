@@ -72,14 +72,14 @@ function AprendeSobreSaludMental({ navigation }) {
               text="Redes de Apoyo"
               onPress={() => navigation.navigate('RedesDeApoyo')}
               backgroundColor="#FFE0B2" // Naranja claro y cálido
-              textColor="#E65100"       // Naranja oscuro para texto
+              textColor="#FF762C"       // Naranja oscuro para texto
               iconColor="#E65100"       // Naranja oscuro para icono
             />
             <SettingsButton
               text="Contactarse con recursos UV"
               onPress={() => navigation.navigate('ContactarseConApoyoUV')}
               backgroundColor="#fbcdd1" // Un rojo más presente y vibrante en el fondo
-              textColor="#c62828"       // Un rojo más oscuro para el texto
+              textColor="#F20C0C"       // Un rojo más oscuro para el texto
               iconColor="#c62828"       // El mismo rojo oscuro para el icono
             />
 

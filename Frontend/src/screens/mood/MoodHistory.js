@@ -125,17 +125,17 @@ const MoodHistory = ({ navigation }) => {
                     ? '#d8eef7'
                     : item.mood === 'Excelente'
                     ? '#d8f7ea'
-                    : '#f7e7d8',
+                    : '#FBEEB0',
               }}
               textStyle={{
                 color:
                   item.mood === 'Mal'
-                    ? '#d85a77'
+                    ? '#F20C0C'
                     : item.mood === 'Bien'
-                    ? '#238bdf'
+                    ? '#2626D8'
                     : item.mood === 'Excelente'
-                    ? '#109f5c'
-                    : '#af7b56',
+                    ? '#32CD32'
+                    : '#F4D63D',
               }}
               title={item.mood}
               textOne={item.date}

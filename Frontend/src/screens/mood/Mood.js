@@ -102,7 +102,7 @@ const Mood = ({ navigation }) => {
             .sort((a, b) => new Date(b.date) - new Date(a.date))
             .map((item) => {
               const date = formatDate(item.date);
-              const time = new Date(item.date).toLocaleTimeString();
+              const time = new Date(item.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
               return {
                 id: item._id,
@@ -174,28 +174,28 @@ const Mood = ({ navigation }) => {
         {
           name: 'Mal',
           count: mal,
-          color: '#d85a77',
+          color: '#F20C0C', // Color ajustado
           legendFontColor: '#7F7F7F',
           legendFontSize: 14,
         },
         {
           name: 'Regular',
           count: regular,
-          color: '#238bdf',
+          color: '#F4D63D', // Color ajustado
           legendFontColor: '#7F7F7F',
           legendFontSize: 14,
         },
         {
           name: 'Bien',
           count: bien,
-          color: '#109f5c',
+          color: '#2626D8', // Color ajustado
           legendFontColor: '#7F7F7F',
           legendFontSize: 14,
         },
         {
           name: 'Excelente',
           count: excelente,
-          color: '#cc8e62',
+          color: '#32CD32', // Color ajustado
           legendFontColor: '#7F7F7F',
           legendFontSize: 14,
         },
@@ -497,20 +497,24 @@ const Mood = ({ navigation }) => {
                   item.mood === 'Mal'
                     ? '#f7d8e3'
                     : item.mood === 'Regular'
-                    ? '#d8eef7'
+                    ? '#FBEEB0' // Color ajustado
                     : item.mood === 'Bien'
-                    ? '#d8f7ea'
-                    : '#f7e7d8',
+                    ? '#d8eef7'
+                    : item.mood === 'Excelente'
+                    ? '#d8f7ea' // Color ajustado
+                    : '#fff',
               }}
               textStyle={{
                 color:
                   item.mood === 'Mal'
-                    ? '#d85a77'
+                    ? '#F20C0C'
                     : item.mood === 'Regular'
-                    ? '#238bdf'
+                    ? '#F4D63D' // Color ajustado
                     : item.mood === 'Bien'
-                    ? '#109f5c'
-                    : '#af7b56',
+                    ? '#2626D8'
+                    : item.mood === 'Excelente'
+                    ? '#32CD32' // Color ajustado
+                    : '#000',
               }}
               // Mostrar emojis en lugar de texto
               title={
