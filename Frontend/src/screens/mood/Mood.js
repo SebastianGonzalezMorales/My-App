@@ -404,7 +404,7 @@ const Mood = ({ navigation }) => {
           <HistoryButton
           onPress={() => navigation.navigate('MoodStats')}
            textLeft="Estadísticas del último mes"
-          textRight="Ver detalles" />
+          textRight="Ver todo" />
        {/*    <StatsButton onPress={() => navigation.navigate('MoodStats')} /> */}
         </View>
 
@@ -418,8 +418,8 @@ const Mood = ({ navigation }) => {
         <View style={ChartStyle.pieChartContainer}>
           <PieChart
             data={pieChartData}
-            width={Dimensions.get('window').width * 0.85}
-            height={200}
+            width={Dimensions.get('window').width * 0.80}
+            height={130}
             chartConfig={{
               backgroundGradientFrom: '#f2f2f2',
               backgroundGradientTo: '#f2f2f2',
