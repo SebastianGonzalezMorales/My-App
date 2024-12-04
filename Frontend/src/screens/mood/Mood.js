@@ -329,8 +329,12 @@ const Mood = ({ navigation }) => {
 
       <View style={GlobalStyle.rowTwo}>
         <View style={GlobalStyle.statsContainer}>
-          <Text style={GlobalStyle.statsTitle}>Estadísticas</Text>
-          <StatsButton onPress={() => navigation.navigate('MoodStats')} />
+    
+          <HistoryButton
+          onPress={() => navigation.navigate('MoodStats')}
+           textLeft="Estadísticas del último mes"
+          textRight="Ver detalles" />
+       {/*    <StatsButton onPress={() => navigation.navigate('MoodStats')} /> */}
         </View>
         <HistoryButton
           onPress={() => navigation.navigate('MoodHistory')}
