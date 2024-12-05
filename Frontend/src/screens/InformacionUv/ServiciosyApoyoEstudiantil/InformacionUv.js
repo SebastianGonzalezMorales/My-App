@@ -22,7 +22,7 @@ function InformacionUv({ navigation }) {
     { text: 'APPA', screen: 'AppaUv', imageSource: require('../../../../assets/RedesDeApoyo/Appa.png') },
     { text: 'Conectados', screen: 'ConectadosUv', imageSource: require('../../../../assets/RedesDeApoyo/Conectados/conectados_logo.png') },
       { text: 'UV Inclusiva', screen: 'UvInclusiva' , imageSource: require('../../../../assets/RedesDeApoyo/UvInclusiva.png') },
-   { text: 'Unidad de Salud', screen: 'UnidadDeSalud' , imageSource: require('../../../../assets/RedesDeApoyo/AreaDeSalud.png') },
+   { text: 'Unidad de Salud', screen: 'UnidadDeSalud' , imageSource: require('../../../../assets/RedesDeApoyo/AreaDeSaluddd.png') },
     { text: 'Unidad Primera de Infancia', screen: 'UnidadPrimeraInfancia', imageSource: require('../../../../assets/RedesDeApoyo/AreaDePrimeraInfancia.png') },
     { text: 'Unidad Deporte y Recreación', screen: 'AreaDeporteyRecreacion', imageSource: require('../../../../assets/RedesDeApoyo/druv.png')},
    { text: 'Unidad de Atención Arancelaria', screen: 'AreaDeAtencionArancelaria' , imageSource: require('../../../../assets/RedesDeApoyo/ArancelesUv.png') },

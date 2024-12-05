@@ -33,7 +33,7 @@ export default [
       title: 'Servicios UV',
       description:
         'Descubre los servicios que la Universidad de Valparaíso tiene para ti.',
-        image: require('../../../assets/Uv.png'),
+        image: require('../../../assets/UV.png'),
     },
     {
       id: '6',
