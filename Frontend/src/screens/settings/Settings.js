@@ -11,8 +11,6 @@ import { AuthContext } from '../../context/AuthContext';
 
 import { API_URL } from '@env';
 
-import SmallFormButton from '../../components/buttons/SmallFormButton';
-import SettingsButton from '../../components/buttons/SettingsButton';
 import AuthButton from '../../components/buttons/AuthButton';
 
 import GlobalStyle from '../../assets/styles/GlobalStyle';

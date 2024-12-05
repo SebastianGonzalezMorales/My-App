@@ -6,20 +6,13 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 // Navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
 import { NavigationContainer } from '@react-navigation/native';
-
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthContext, AuthProvider } from './src/context/AuthContext';
-
-
-
-import { StatusBar } from 'expo-status-bar';
 
 //Screens
 import Onboarding from './src/screens/onboarding/Onboarding';
 import Policy from './src/screens/onboarding/Policy';
-import HomeScreen from './src/components/buttons/HomeScreen';
 
 import Login from './src/screens/authentication/Login';
 import Register from './src/screens/authentication/Register';
@@ -130,15 +123,7 @@ function Home() {
         name={'MenuUv'}
         component={MenuUv}
       />
-      
 
-      
-{/* 
-      <Tab.Screen
-        options={{ headerShown: false, gestureEnabled: false }}
-        name={'Questionnaire'}
-        component={Questionnaire}
-      /> */}
       <Tab.Screen
         options={{ headerShown: false, gestureEnabled: false }}
         name={'Settings'}
@@ -150,7 +135,6 @@ function Home() {
 
 const AppNavigator = () => {
   const { userToken, isLoading } = useContext(AuthContext);
-  //const [loading, setLoading] = useState(true);
   const [viewedOnboarding, setViewedOnboarding] = useState(false);
   const checkOnboarding = async () => {
   try {
@@ -164,7 +148,6 @@ const AppNavigator = () => {
 
     console.log('Error @checkOnboarding:', err)
   } finally {
-    //setLoading(false)
 
   }
   }
@@ -173,9 +156,6 @@ const AppNavigator = () => {
     checkOnboarding();
   }, [])
 
- /*  const handleOnboardingCompletion = () => {
-    setViewedOnboarding(true);
-  } */
 
      const [initialising, setInitialising] = useState(true);
     const [user, setUser] = useState();
