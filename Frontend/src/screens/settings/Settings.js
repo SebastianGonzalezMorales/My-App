@@ -27,19 +27,20 @@ function Settings({ navigation }) {
   const [birthdate, setBirthdate] = useState('');
   const [carrera, setCarrera] = useState('');
   const [phone, setPhone] = useState('');
-  const [progress, setProgress] = useState(5); // Progreso inicial en días consecutivos
+  const [progress, setProgress] = useState(0); // Progreso inicial en días consecutivos
+  const [message, setMessage] = useState('Cargando tu progreso semanal...'); // Mensaje motivacional
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
         if (token) {
-          const response = await axios.post(
+          const userResponse = await axios.post(
             `${API_URL}/users/userdata`,
             { token },
             { headers: { Authorization: `Bearer ${token}` } }
           );
-          const userData = response.data.data;
+          const userData = userResponse.data.data;
 
           // Actualizar estados con datos del usuario
           setName(userData.name);
@@ -48,11 +49,22 @@ function Settings({ navigation }) {
           setBirthdate(userData.birthdate.split('T')[0]);
           setCarrera(userData.carrera);
           setPhone(userData.phoneNumber);
+
+          // Obtener progreso semanal desde el backend
+          const progressResponse = await axios.get(
+            `${API_URL}/moodState/calculateStreak`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+
+          const progressData = progressResponse.data;
+          setProgress(progressData.progress);
+          setMessage(progressData.message);
         } else {
           console.log('No se encontró el token. Por favor, inicia sesión.');
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error fetching user data or progress:', error);
+        setMessage('Hubo un problema al cargar tu progreso. Inténtalo más tarde. 😓');
       }
     };
     fetchUserData();
@@ -72,7 +84,7 @@ function Settings({ navigation }) {
       {/* Header Section */}
       <View style={{ height: 310, alignItems: 'center' }}>
         <Text style={[GlobalStyle.welcomeText, { marginRight: 30 }]}>Mi Perfil</Text>
-        <Icon name="user-circle" size={100} color="#000"  style={{ marginTop: 20 }} />
+        <Icon name="user-circle" size={100} color="#000" style={{ marginTop: 20 }} />
 
         {/* Mensaje motivacional */}
         <Text
@@ -81,7 +93,7 @@ function Settings({ navigation }) {
             { textAlign: 'center', color: '#FFFFFF', fontSize: 16, marginTop: 0 },
           ]}
         >
-          Has registrado tu estado de ánimo durante {progress} días consecutivos. ¡Sigue así! 🎉
+          {message}
         </Text>
 
         {/* Barra de progreso */}
@@ -92,7 +104,7 @@ function Settings({ navigation }) {
             style={{ height: 10, borderRadius: 5 }}
           />
           <Text style={{ textAlign: 'center', marginTop: 5, color: '#FFFFFF' }}>
-            {progress}/7 días consecutivos
+            {progress}/7 días esta semana
           </Text>
         </View>
       </View>

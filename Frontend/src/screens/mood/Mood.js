@@ -248,37 +248,52 @@ const Mood = ({ navigation }) => {
     }
   };
 
-  // Función para obtener datos del usuario
-  const fetchUserData = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (token) {
-        const response = await axios.post(
-          `${API_URL}/users/userdata`,
-          {
-            // Token en el cuerpo de la solicitud
-            token: `${token}`,
-          },
-          {
-            // Token de autorización en el header
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const userName = response.data.data.name;
 
-        // Actualiza el estado con el nombre
-        setName(userName);
+// Función para obtener datos del usuario
+const fetchUserData = async () => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    if (token) {
+      const response = await axios.post(
+        `${API_URL}/users/userdata`,
+        {
+          // Token en el cuerpo de la solicitud
+          token: `${token}`,
+        },
+        {
+          // Token de autorización en el header
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const fullName = response.data.data.name;
+
+      // Verificar que fullName existe y es una cadena
+      if (fullName && typeof fullName === 'string') {
+        // Eliminar espacios en blanco al inicio y al final
+        const trimmedName = fullName.trim();
+
+        // Dividir el nombre completo por espacios y tomar el primer nombre
+        const firstName = trimmedName.split(' ')[0];
+
+        // Actualizar el estado con el primer nombre
+        setName(firstName);
+
         // Para verificar en la consola
-        // console.log('User name:', userName);
+        // console.log('First name:', firstName);
       } else {
-        console.log('No se encontró el token. Por favor, inicia sesión.');
+        console.log('Nombre no válido recibido del servidor.');
+        setName('Usuario'); // Nombre por defecto en caso de fallo
       }
-    } catch (error) {
-      console.error('Error fetching user data:', error);
+    } else {
+      console.log('No se encontró el token. Por favor, inicia sesión.');
     }
-  };
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    setName('Usuario'); // Nombre por defecto en caso de error
+  }
+};
 
   /*
    * *********************
@@ -347,39 +362,7 @@ const Mood = ({ navigation }) => {
         </View>
       </Modal>
 
-      {/* delete document modal */}
-      <Modal
-        visible={modalVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={ModalStyle.halfModalContent}>
-          <View style={ModalStyle.halfModalWrapper}>
-            <FormButton
-              text="Delete"
-              onPress={() => {
-                deleteItem(), setModalVisible(!modalVisible);
-              }}
-              buttonStyle={{
-                backgroundColor: '#e55e7e',
-              }}
-              textStyle={{ color: '#f2f2f2' }}
-            />
 
-            <FormButton
-              text="Cancel"
-              onPress={() => setModalVisible(!modalVisible)}
-              buttonStyle={{
-                backgroundColor: '#5da5a9',
-              }}
-              textStyle={{ color: '#f2f2f2' }}
-            />
-          </View>
-        </View>
-      </Modal>
 
       {/*
        * *********************
@@ -388,19 +371,13 @@ const Mood = ({ navigation }) => {
        */}
       {/* Espacio hasta la frase del día */}
       <View style={{ height: 290 }}>
-        <Text style={GlobalStyle.welcomeText}>Hola, {name}!</Text>
+        <Text style={GlobalStyle.welcomeText}>Hola, {name} !</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={[GlobalStyle.subtitle, { textAlign: 'left' }]}>
             Cómo te sientes ahora mismo?
           </Text>
 
-          <MaterialCommunityIcons
-            name="information"
-            color="#f2f2f2"
-            size={24}
-            style={{ paddingTop: 28, paddingRight: 30 }}
-            onPress={() => setInfoModalVisible(true)}
-          />
+
         </View>
         <View style={GlobalStyle.moodsContainer}>
           <PickMoodButton
