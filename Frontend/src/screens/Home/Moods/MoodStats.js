@@ -1,14 +1,14 @@
 import { Dimensions, SafeAreaView, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { LineChart, PieChart } from 'react-native-chart-kit';
-import { fetchWithToken } from '../utils/apiHelpers';
+import { fetchWithToken } from '../../utils/apiHelpers';
 import { Dropdown } from 'react-native-element-dropdown';
-import { getMonth, getMonths, getMonthName } from '../utils/getMonths';
-import ChartStyle from '../../assets/styles/ChartStyle';
-import GlobalStyle from '../../assets/styles/GlobalStyle';
-import FormStyle from '../../assets/styles/FormStyle';
+import { getMonth, getMonths, getMonthName } from '../../utils/getMonths';
+import ChartStyle from '../../../assets/styles/ChartStyle';
+import GlobalStyle from '../../../assets/styles/GlobalStyle';
+import FormStyle from '../../../assets/styles/FormStyle';
 
-import BackButton from '../../components/buttons/BackButton';
+import BackButton from '../../../components/buttons/BackButton';
 
 const MoodStats = ({ navigation }) => {
   const [x, setX] = useState([]);

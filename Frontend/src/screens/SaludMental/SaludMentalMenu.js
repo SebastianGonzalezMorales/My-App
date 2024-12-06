@@ -39,12 +39,13 @@ function SaludMentalMenu({ navigation }) {
 
         {/* Imagen con altura ajustada */}
         <Image
-          source={require('../../../assets/SlidesOnboarding/Icon_Application.png')}
+                source={require('./../../../assets/SlidesOnboarding/Icon_Application.png')}
+
           style={{
             width: '100%',
-            height: height * 0.3, // Ajustar la altura de la imagen al 20% de la pantalla
+            height: height * 0.2, // Ajustar la altura de la imagen al 20% de la pantalla
             resizeMode: 'contain', // Cambiar a 'contain' para evitar recortes
-            marginTop: -15
+            marginTop: 15
           }}
         />
       </View>

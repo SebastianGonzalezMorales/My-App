@@ -403,7 +403,7 @@ const Register = ({ navigation }) => {
             {/* <Text style={AuthStyle.logoText}>Logo</Text> */}
             <Image
               style={{ width: 100, height: 100 }}
-              source={require('./../../../assets/salud-mental.png')}
+              source={require('./../../../assets/SlidesOnboarding/Icon_Application.png')}
 
             />
           </SafeAreaView>

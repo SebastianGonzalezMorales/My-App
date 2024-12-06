@@ -12,7 +12,7 @@ import {
     Alert
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import Activity from './Activities';
+import Activity from '../Activities';
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -21,14 +21,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '@env';
 
 // components
-import BackButton from '../../components/buttons/BackButton';
-import FormButton from '../../components/buttons/FormButton';
-import InputButton from '../../components/buttons/InputButton';
+import BackButton from '../../../components/buttons/BackButton';
+import FormButton from '../../../components/buttons/FormButton';
+import InputButton from '../../../components/buttons/InputButton';
 
 // customisation
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FormStyle from '../../assets/styles/FormStyle';
-import GlobalStyle from '../../assets/styles/GlobalStyle';
+import FormStyle from '../../../assets/styles/FormStyle';
+import GlobalStyle from '../../../assets/styles/GlobalStyle';
 
 // route to manage navigation history
 const MoodTrack = ({ route, navigation }) => {

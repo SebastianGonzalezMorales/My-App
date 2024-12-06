@@ -14,13 +14,13 @@ import {
   import React, { useEffect, useState } from 'react';
   
   // Components
-  import BackButton from '../../components/buttons/BackButton';
-  import InputButton from '../../components/buttons/InputButton';
+  import BackButton from '../../../components/buttons/BackButton';
+  import InputButton from '../../../components/buttons/InputButton';
   
   // Customization
   import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-  import FormStyle from '../../assets/styles/FormStyle';
-  import GlobalStyle from '../../assets/styles/GlobalStyle';
+  import FormStyle from '../../../assets/styles/FormStyle';
+  import GlobalStyle from '../../../assets/styles/GlobalStyle';
   
   // Import Axios for backend requests
   import axios from 'axios';
@@ -28,7 +28,7 @@ import {
   import { API_URL } from '@env';
   
   // Import activities from Activities.js
-  import Activity from './Activities';
+  import Activity from '../Activities';
   
   const MoodDetails = ({ route, navigation }) => {
     // Obtener el ID del estado de ánimo desde la ruta

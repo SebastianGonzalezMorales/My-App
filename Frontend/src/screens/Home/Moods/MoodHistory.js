@@ -1,12 +1,12 @@
 import { FlatList, SafeAreaView, Text, View, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { fetchWithToken } from '../utils/apiHelpers';
+import { fetchWithToken } from '../../utils/apiHelpers';
 import { Dropdown } from 'react-native-element-dropdown';
-import { getMonth, getMonths } from '../utils/getMonths';
+import { getMonth, getMonths } from '../../utils/getMonths';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import ModalStyle from '../../assets/styles/ModalStyle';
-import CustomButton from '../../components/buttons/CustomButton';
-import GlobalStyles from '../../assets/styles/GlobalStyle'; // Importa el estilo global
+import ModalStyle from '../../../assets/styles/ModalStyle';
+import CustomButton from '../../../components/buttons/CustomButton';
+import GlobalStyles from '../../../assets/styles/GlobalStyle'; // Importa el estilo global
 
 const MoodHistory = ({ navigation }) => {
   const [moods, setMoods] = useState([]);

@@ -29,7 +29,7 @@ const Policy = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Image
-          source={require('../../../assets/PoliticaDePrivacidad/PoliticaDePrivacidad-removebg.png')}
+          source={require('../../../assets/PoliticaDePrivacidad/PoliticaDePrivacidadV1.png')}
           style={styles.image}
         />
         <Text style={styles.title}>Política de Seguridad y Privacidad</Text>

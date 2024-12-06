@@ -28,10 +28,10 @@ import TestDeDepresion from '../screens/SaludMental/Test/Depresion/TestDeDepresi
 import TestDepresionHistorial from '../screens/SaludMental/Test/Depresion/TestDepresionHistorial';
 import TestAnsiedadEstadisticas from '../screens/SaludMental/Test/Ansiedad/TestAnsiedadEstadisticas';
 import TestDepresionEstadisticas from '../screens/SaludMental/Test/Depresion/TestDepresionEstadisticas';
-import MoodTrack from '../screens/Home/MoodTrack';
-import MoodStats from '../screens/Home/MoodStats';
-import MoodHistory from '../screens/Home/MoodHistory';
-import MoodDetails from '../screens/Home/MoodDetails';
+import MoodTrack from '../screens/Home/Moods/MoodTrack';
+import MoodStats from '../screens/Home/Moods/MoodStats';
+import MoodHistory from '../screens/Home/Moods/MoodHistory';
+import MoodDetails from '../screens/Home/Moods/MoodDetails';
 import Informacion from '../screens/SaludMental/AprendeSobreSaludMental/Informacion';
 import Burnout from '../screens/SaludMental/AprendeSobreSaludMental/Informacion/Burnout';
 import Ansiedad from '../screens/SaludMental/AprendeSobreSaludMental/Informacion/Ansiedad';
@@ -43,9 +43,9 @@ import AprendeSobreSaludMental from '../screens/SaludMental/AprendeSobreSaludMen
 import Consejos from '../screens/SaludMental/AprendeSobreSaludMental/Consejos';
 import ConsejosDeEstudiantes from '../screens/SaludMental/AprendeSobreSaludMental/ConsejosDeEstudiantes';
 import RedesDeApoyo from '../screens/SaludMental/AprendeSobreSaludMental/RedesDeApoyo';
-import RedesSociales from '../screens/InformacionUv/RedesSociales';
+import RedesSociales from '../screens/InformacionUv/Novedades/RedesSociales';
 import InformacionUv from '../screens/InformacionUv/ServiciosyApoyoEstudiantil/InformacionUv';
-import ContactarseConApoyoUV from '../screens/InformacionUv/ContactarseConApoyoUv';
+import ContactarseConApoyoUV from '../screens/InformacionUv/ContactarseConApoyoUv/ContactarseConApoyoUv';
 import AsistenteSocial from '../screens/InformacionUv/ContactarseConApoyoUv/AsistenteSocial';
 import Conectados from '../screens/InformacionUv/ContactarseConApoyoUv/Conectados';
 import AppaUv from '../screens/InformacionUv/ServiciosyApoyoEstudiantil/AppaUv';

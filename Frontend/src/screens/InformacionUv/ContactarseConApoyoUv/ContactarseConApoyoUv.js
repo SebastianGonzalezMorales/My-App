@@ -9,13 +9,13 @@ import {
 } from 'react-native';
 
 // customisation
-import GlobalStyle from '../../assets/styles/GlobalStyle';
+import GlobalStyle from '../../../assets/styles/GlobalStyle';
 
 // Components
-import CustomButton from '../../components/buttons/CustomButton';
-import SettingsButton from '../../components/buttons/SettingsButton';
-import AuthButton from '../../components/buttons/AuthButton';
-import BackButton from '../../components/buttons/BackButton';
+import CustomButton from '../../../components/buttons/CustomButton';
+import SettingsButton from '../../../components/buttons/SettingsButton';
+import AuthButton from '../../../components/buttons/AuthButton';
+import BackButton from '../../../components/buttons/BackButton';
 const { width, height } = Dimensions.get('window'); // Obtener las dimensiones de la pantalla
 
 
@@ -35,7 +35,7 @@ function MenuUv({ navigation }) {
 
         {/* Imagen con altura ajustada */}
         <Image
-          source={require('../../../assets/SlidesOnboarding/Logo_SaludMental_UV.png')}
+          source={require('../../../../assets/SlidesOnboarding/Logo_SaludMental_UV.png')}
           style={{
             width: '100%',
             height: height * 0.25, // Ajustar la altura de la imagen al 20% de la pantalla

@@ -1,7 +1,7 @@
 import { SafeAreaView, Text, View, ScrollView, TouchableOpacity, Image, Linking } from 'react-native';
 import React from 'react';
-import GlobalStyle from '../../assets/styles/GlobalStyle';
-import BackButton from '../../components/buttons/BackButton';
+import GlobalStyle from '../../../assets/styles/GlobalStyle';
+import BackButton from '../../../components/buttons/BackButton';
 
 const openInstagram = (url) => {
   Linking.openURL(url);
@@ -29,7 +29,7 @@ const RedesSociales = ({ navigation }) => {
             <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/daeuvalpo/')}>
               <View style={GlobalStyle.outerContainer}>
                 <Image
-                  source={require('./../../../assets/Instagram/DaeUV.jpeg')}
+                  source={require('./../../../../assets/Instagram/DaeUV.jpeg')}
                   style={GlobalStyle.storyImage}
                 />
               </View>
@@ -37,7 +37,7 @@ const RedesSociales = ({ navigation }) => {
             <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/buentratoyconvivenciauv/')}>
               <View style={GlobalStyle.outerContainer}>
                 <Image
-                  source={require('./../../../assets/Instagram/BuenTratoYConvivenciaUV.jpeg')}
+                  source={require('./../../../../assets/Instagram/BuenTratoYConvivenciaUV.jpeg')}
                   style={GlobalStyle.storyImage}
                 />
               </View>
@@ -45,7 +45,7 @@ const RedesSociales = ({ navigation }) => {
             <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/conectadosuv_dae/')}>
               <View style={GlobalStyle.outerContainer}>
                 <Image
-                  source={require('./../../../assets/Instagram/ConectadosUV1.png')}
+                  source={require('./../../../../assets/Instagram/ConectadosUV1.png')}
                   style={GlobalStyle.storyImage}
                 />
               </View>
@@ -53,7 +53,7 @@ const RedesSociales = ({ navigation }) => {
             <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/viveuv.saludable/')}>
               <View style={GlobalStyle.outerContainer}>
                 <Image
-                  source={require('./../../../assets/Instagram/ViveUVSaludable.png')}
+                  source={require('./../../../../assets/Instagram/ViveUVSaludable.png')}
                   style={GlobalStyle.storyImage}
                 />
               </View>
@@ -67,7 +67,7 @@ const RedesSociales = ({ navigation }) => {
             <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/uvalpochile/')}>
               <View style={GlobalStyle.outerContainer}>
                 <Image
-                  source={require('./../../../assets/Instagram/UValpoChile.jpeg')}
+                  source={require('./../../../../assets/Instagram/UValpoChile.jpeg')}
                   style={GlobalStyle.storyImage}
                 />
               </View>
@@ -75,7 +75,7 @@ const RedesSociales = ({ navigation }) => {
             <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/federacionuv/')}>
               <View style={GlobalStyle.outerContainer}>
                 <Image
-                  source={require('./../../../assets/Instagram/FeUV.png')}
+                  source={require('./../../../../assets/Instagram/FeUV.png')}
                   style={GlobalStyle.storyImage}
                 />
               </View>
@@ -88,7 +88,7 @@ const RedesSociales = ({ navigation }) => {
             <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/deportesyrecreacionuv/?hl=es')}>
               <View style={GlobalStyle.outerContainer}>
                 <Image
-                  source={require('./../../../assets/Instagram/Druv.jpeg')}
+                  source={require('./../../../../assets/Instagram/Druv.jpeg')}
                   style={GlobalStyle.storyImage}
                 />
               </View>
@@ -101,7 +101,7 @@ const RedesSociales = ({ navigation }) => {
             <TouchableOpacity onPress={() => openInstagram('https://www.instagram.com/cienciaabiertauv/')}>
               <View style={GlobalStyle.outerContainer}>
                 <Image
-                  source={require('./../../../assets/Instagram/CienciaAbiertaUV.jpeg')}
+                  source={require('./../../../../assets/Instagram/CienciaAbiertaUV.jpeg')}
                   style={GlobalStyle.storyImage}
                 />
               </View>

@@ -95,8 +95,8 @@ const ChangePassword = ({ navigation }) => {
           </Svg>
           <SafeAreaView style={AuthStyle.logo}>
             <Image
-              style={{ width: 100, height: 100 }}
-              source={require('./../../../assets/salud-mental.png')}
+              style={{ width: 120, height: 120 }}
+              source={require('./../../../assets/SlidesOnboarding/Icon_Application.png')}
             />
           </SafeAreaView>
         </View>

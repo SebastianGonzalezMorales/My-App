@@ -88,8 +88,8 @@ const handlePasswordRecovery = async () => {
           <SafeAreaView style={AuthStyle.logo}>
             <TouchableOpacity style={{ marginTop: 20 }}>
               <Image
-                style={{ width: 100, height: 100 }}
-                source={require('./../../../assets/salud-mental.png')}
+                style={{ width: 120, height: 120 }}
+                source={require('./../../../assets/SlidesOnboarding/Icon_Application.png')}
               />
             </TouchableOpacity>
           </SafeAreaView>
