@@ -19,13 +19,13 @@ const { width, height } = Dimensions.get('window');
 
 // Datos de los consejos (solo las imágenes)
 const adviceImages = [
-  require('../../../../../assets/Informacion/SaludMental/1.jpg'),
-  require('../../../../../assets/Informacion/SaludMental/2.jpg'),
-  require('../../../../../assets/Informacion/SaludMental/3.jpg'),
-  require('../../../../../assets/Informacion/SaludMental/4.jpg'),
-  require('../../../../../assets/Informacion/SaludMental/5.jpg'),
-  require('../../../../../assets/Informacion/SaludMental/6.jpg'),
-  require('../../../../../assets/Informacion/SaludMental/7.jpg')
+  require('../../../../assets/images/Informacion/SaludMental/1.jpg'),
+  require('../../../../assets/images/Informacion/SaludMental/2.jpg'),
+  require('../../../../assets/images/Informacion/SaludMental/3.jpg'),
+  require('../../../../assets/images/Informacion/SaludMental/4.jpg'),
+  require('../../../../assets/images/Informacion/SaludMental/5.jpg'),
+  require('../../../../assets/images/Informacion/SaludMental/6.jpg'),
+  require('../../../../assets/images/Informacion/SaludMental/7.jpg')
 ];
 
 function InfoSaludMental({ navigation }) {

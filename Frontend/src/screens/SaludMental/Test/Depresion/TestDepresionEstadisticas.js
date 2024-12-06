@@ -11,7 +11,7 @@ import BackButton from '../../../../components/buttons/BackButton';
 import { Dropdown } from 'react-native-element-dropdown';
 
 // get functions
-import { getMonth, getMonths, getMonthName } from '../../../utils/getMonths';
+import { getMonth, getMonths, getMonthName } from '../../../../utils/getMonths';
 
 // customisation
 import ChartStyle from '../../../../assets/styles/ChartStyle';

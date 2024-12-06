@@ -39,7 +39,7 @@ function SaludMentalMenu({ navigation }) {
 
         {/* Imagen con altura ajustada */}
         <Image
-                source={require('./../../../assets/SlidesOnboarding/Icon_Application.png')}
+                source={require('./../../assets/images/SlidesOnboarding/Icon_Application.png')}
 
           style={{
             width: '100%',

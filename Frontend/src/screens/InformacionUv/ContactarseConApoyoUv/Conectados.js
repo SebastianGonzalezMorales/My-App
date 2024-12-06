@@ -214,7 +214,7 @@ Quedo atento.`;
         }}
       >
         <Image
-          source={require('../../../../assets/RedesDeApoyo/Conectados/conectados_logo.png')}
+          source={require('../../../assets/images/RedesDeApoyo/Conectados/conectados_logo.png')}
           style={{
             width: width * 0.70,
             height: width * 0.40,

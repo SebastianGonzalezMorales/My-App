@@ -82,7 +82,7 @@ const MoodTrack = ({ route, navigation }) => {
                 created: firebase.firestore.Timestamp.now(),
             });
             console.log('Mood has been tracked');
-            navigation.navigate('Mood');
+            navigation.navigate('HomeMood');
         } catch (error) {
             alert(error.message);
         }
@@ -144,7 +144,7 @@ const MoodTrack = ({ route, navigation }) => {
       
             // Mostrar el consejo al usuario con una alerta
             Alert.alert('Consejo para ti', consejo, [
-              { text: 'OK', onPress: () => navigation.navigate('Mood') },
+              { text: 'OK', onPress: () => navigation.navigate('HomeMood') },
             ]);
           } else {
             console.log('No se encontró el token. Por favor, inicia sesión.');

@@ -19,11 +19,11 @@ const { width, height } = Dimensions.get('window');
 
 // Datos de los consejos (solo las imágenes)
 const adviceImages = [
-  require('../../../../../assets/Informacion/Evaluacion/1.jpg'),
-  require('../../../../../assets/Informacion/Evaluacion/2.jpg'),
-  require('../../../../../assets/Informacion/Evaluacion/3.jpg'),
-  require('../../../../../assets/Informacion/Evaluacion/4.jpg'),
-  require('../../../../../assets/Informacion/Evaluacion/5.jpg'),
+  require('../../../../assets/images/Informacion/Evaluacion/1.jpg'),
+  require('../../../../assets/images/Informacion/Evaluacion/2.jpg'),
+  require('../../../../assets/images/Informacion/Evaluacion/3.jpg'),
+  require('../../../../assets/images/Informacion/Evaluacion/4.jpg'),
+  require('../../../../assets/images/Informacion/Evaluacion/5.jpg'),
 ];
 
 function Evaluacion({ navigation }) {

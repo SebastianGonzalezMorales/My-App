@@ -19,10 +19,10 @@ const { width, height } = Dimensions.get('window');
 
 // Datos de los consejos (solo las imágenes)
 const adviceImages = [
-  require('../../../../../assets/Informacion/Burnout/1.jpg'),
-  require('../../../../../assets/Informacion/Burnout/2.jpg'),
-  require('../../../../../assets/Informacion/Burnout/3.jpg'),
-  require('../../../../../assets/Informacion/Burnout/4.jpg'),
+  require('../../../../assets/images/Informacion/Burnout/1.jpg'),
+  require('../../../../assets/images/Informacion/Burnout/2.jpg'),
+  require('../../../../assets/images/Informacion/Burnout/3.jpg'),
+  require('../../../../assets/images/Informacion/Burnout/4.jpg'),
 ];
 
 function Burnout({ navigation }) {

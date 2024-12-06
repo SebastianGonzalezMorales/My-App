@@ -35,7 +35,7 @@ function MenuUv({ navigation }) {
 
         {/* Imagen con altura ajustada */}
         <Image
-          source={require('../../../../assets/SlidesOnboarding/Logo_SaludMental_UV.png')}
+          source={require('../../../assets/images/SlidesOnboarding/Logo_SaludMental_UV.png')}
           style={{
             width: '100%',
             height: height * 0.25, // Ajustar la altura de la imagen al 20% de la pantalla

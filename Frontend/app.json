@@ -4,10 +4,10 @@
     "slug": "AppAcompanhamientoUV-development_build",
     "version": "1.0.0",
     "orientation": "default",
-    "icon": "./assets/Icon_Application_Blue.png",
+    "icon": "./src/assets/images/Icon_Application_Blue.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/SplashScreen/splash.png",
+      "image": "./src/assets/images/SplashScreen/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#000C7B"
     },
@@ -16,7 +16,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/Icon_Application_Blue.png",
+        "foregroundImage": "./src/assets/images/Icon_Application_Blue.png",
         "backgroundColor": "#000C7B"
       },
       "permissions": [
@@ -26,7 +26,7 @@
       "package": "com.sebastian2040.AppAcompanhamientoUVdevelopment_build"
     },
     "web": {
-      "favicon": "./assets/Icon_Application_Blue.png"
+      "favicon": "./src/assets/images/Icon_Application_Blue.png"
     },
     "extra": {
       "eas": {

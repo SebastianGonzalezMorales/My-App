@@ -25,7 +25,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import AuthStyle from '../../assets/styles/AuthStyle';
 
-import facultadesData from '../utils/facultades.json'; // Importamos el archivo JSON con las facultades y carreras
+import facultadesData from '../../assets/data/facultades.json'; // Importamos el archivo JSON con las facultades y carreras
 
 const Register = ({ navigation }) => {
 
@@ -403,7 +403,7 @@ const Register = ({ navigation }) => {
             {/* <Text style={AuthStyle.logoText}>Logo</Text> */}
             <Image
               style={{ width: 100, height: 100 }}
-              source={require('./../../../assets/SlidesOnboarding/Icon_Application.png')}
+              source={require('./../../assets/images/SlidesOnboarding/Icon_Application.png')}
 
             />
           </SafeAreaView>

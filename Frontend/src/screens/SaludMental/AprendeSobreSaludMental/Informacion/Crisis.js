@@ -19,11 +19,11 @@ const { width, height } = Dimensions.get('window');
 
 // Datos de los consejos (solo las imágenes)
 const adviceImages = [
-  require('../../../../../assets/Informacion/Crisis/1.jpg'),
-  require('../../../../../assets/Informacion/Crisis/2.jpg'),
-  require('../../../../../assets/Informacion/Crisis/3.jpg'),
-  require('../../../../../assets/Informacion/Crisis/4.jpg'),
-  require('../../../../../assets/Informacion/Crisis/5.jpg'),
+  require('../../../../assets/images/Informacion/Crisis/1.jpg'),
+  require('../../../../assets/images/Informacion/Crisis/2.jpg'),
+  require('../../../../assets/images/Informacion/Crisis/3.jpg'),
+  require('../../../../assets/images/Informacion/Crisis/4.jpg'),
+  require('../../../../assets/images/Informacion/Crisis/5.jpg'),
 ];
 
 function Crisis({ navigation }) {

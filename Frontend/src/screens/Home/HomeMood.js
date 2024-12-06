@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Image, Alert } from 'react-native';
-import { fetchWithToken } from '../utils/apiHelpers';
+import { fetchWithToken } from '../../utils/apiHelpers';
 
 // Componentes personalizados y estilos
 import CustomButton from '../../components/buttons/CustomButton';
@@ -34,7 +34,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Importar la URL de la API desde variables de entorno
 import { API_URL } from '@env';
 
-const Mood = ({ navigation }) => {
+const HomeMood = ({ navigation }) => {
   // Estados
   const [name, setName] = useState('');
   const [moods, setMoods] = useState([]);
@@ -532,4 +532,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Mood;
+export default HomeMood;

@@ -19,14 +19,14 @@ const { width, height } = Dimensions.get('window');
 
 // Datos de los consejos (solo las imágenes)
 const adviceImages = [
-  require('../../../../../assets/Informacion/Depresion/1.jpg'),
-  require('../../../../../assets/Informacion/Depresion/2.jpg'),
-  require('../../../../../assets/Informacion/Depresion/3.jpg'),
-  require('../../../../../assets/Informacion/Depresion/4.jpg'),
-  require('../../../../../assets/Informacion/Depresion/5.jpg'),
-  require('../../../../../assets/Informacion/Depresion/6.jpg'),
-  require('../../../../../assets/Informacion/Depresion/7.jpg'),
-  require('../../../../../assets/Informacion/Depresion/8.jpg'),
+  require('../../../../assets/images/Informacion/Depresion/1.jpg'),
+  require('../../../../assets/images/Informacion/Depresion/2.jpg'),
+  require('../../../../assets/images/Informacion/Depresion/3.jpg'),
+  require('../../../../assets/images/Informacion/Depresion/4.jpg'),
+  require('../../../../assets/images/Informacion/Depresion/5.jpg'),
+  require('../../../../assets/images/Informacion/Depresion/6.jpg'),
+  require('../../../../assets/images/Informacion/Depresion/7.jpg'),
+  require('../../../../assets/images/Informacion/Depresion/8.jpg'),
 ];
 
 function Depresion({ navigation }) {

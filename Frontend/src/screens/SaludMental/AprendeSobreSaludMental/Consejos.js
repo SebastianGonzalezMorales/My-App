@@ -19,16 +19,16 @@ const { width, height } = Dimensions.get('window');
 
 // Datos de los consejos (solo las imágenes)
 const adviceImages = [
-  require('../../../../assets/Consejos/1.png'),
-  require('../../../../assets/Consejos/2.png'),
-  require('../../../../assets/Consejos/3.png'),
-  require('../../../../assets/Consejos/4.png'),
-  require('../../../../assets/Consejos/5.png'),
-  require('../../../../assets/Consejos/6.png'),
-  require('../../../../assets/Consejos/7.png'),
-  require('../../../../assets/Consejos/8.png'),
-  require('../../../../assets/Consejos/9.png'),
-  require('../../../../assets/Consejos/10.png'),
+  require('../../../assets/images/Consejos/1.png'),
+  require('../../../assets/images/Consejos/2.png'),
+  require('../../../assets/images/Consejos/3.png'),
+  require('../../../assets/images/Consejos/4.png'),
+  require('../../../assets/images/Consejos/5.png'),
+  require('../../../assets/images/Consejos/6.png'),
+  require('../../../assets/images/Consejos/7.png'),
+  require('../../../assets/images/Consejos/8.png'),
+  require('../../../assets/images/Consejos/9.png'),
+  require('../../../assets/images/Consejos/10.png'),
   // Añade más imágenes según sea necesario
 ];
 

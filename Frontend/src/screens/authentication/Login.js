@@ -113,7 +113,7 @@ const handleLogin = async (email, password) => {
             >
               <Image
                 style={{ width: 130, height: 130 }}
-                source={require('./../../../assets/SlidesOnboarding/Icon_Application.png')}
+                source={require('./../../assets/images/SlidesOnboarding/Icon_Application.png')}
               />
             </TouchableOpacity>
           </SafeAreaView>

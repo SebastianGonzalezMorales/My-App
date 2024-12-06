@@ -19,14 +19,14 @@ const { width, height } = Dimensions.get('window');
 
 // Datos de los consejos (solo las imágenes)
 const adviceImages = [
-  require('../../../../../assets/Informacion/Ansiedad/1.jpg'),
-  require('../../../../../assets/Informacion/Ansiedad/2.jpg'),
-  require('../../../../../assets/Informacion/Ansiedad/3.jpg'),
-  require('../../../../../assets/Informacion/Ansiedad/4.jpg'),
-  require('../../../../../assets/Informacion/Ansiedad/5.jpg'),
-  require('../../../../../assets/Informacion/Ansiedad/6.jpg'),
-  require('../../../../../assets/Informacion/Ansiedad/7.jpg'),
-  require('../../../../../assets/Informacion/Ansiedad/8.jpg'),
+  require('../../../../assets/images/Informacion/Ansiedad/1.jpg'),
+  require('../../../../assets/images/Informacion/Ansiedad/2.jpg'),
+  require('../../../../assets/images/Informacion/Ansiedad/3.jpg'),
+  require('../../../../assets/images/Informacion/Ansiedad/4.jpg'),
+  require('../../../../assets/images/Informacion/Ansiedad/5.jpg'),
+  require('../../../../assets/images/Informacion/Ansiedad/6.jpg'),
+  require('../../../../assets/images/Informacion/Ansiedad/7.jpg'),
+  require('../../../../assets/images/Informacion/Ansiedad/8.jpg'),
 ];
 
 function Ansiedad({ navigation }) {

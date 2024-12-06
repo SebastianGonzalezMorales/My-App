@@ -41,7 +41,7 @@ import {
           
                   {/* Imagen con altura ajustada */}
         <Image
-          source={require('../../../../assets/SlidesOnboarding/test.png')}
+          source={require('../../../assets/images/SlidesOnboarding/test.png')}
           style={{
             width: '100%',
             height: height * 0.20, // Ajustar la altura de la imagen al 20% de la pantalla
