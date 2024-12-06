@@ -22,16 +22,16 @@ import HomeTabs from './HomeTabs';
 
 // Importa otras pantallas que no están en los tabs
 import Tests from '../screens/SaludMental/Test/Tests';
-import TestDepresion from '../screens/SaludMental/Test/TestDepresion';
-import TestDeAnsiedad from '../screens/SaludMental/Test/TestDeAnsiedad';
-import TestDeDepresion from '../screens/SaludMental/Test/TestDeDepresion';
-import TestDepresionHistorial from '../screens/SaludMental/Test/TestDepresionHistorial';
-import TestAnsiedadEstadisticas from '../screens/SaludMental/Test/TestAnsiedadEstadisticas';
-import TestDepresionEstadisticas from '../screens/SaludMental/Test/TestDepresionEstadisticas';
-import MoodTrack from '../screens/mood/MoodTrack';
-import MoodStats from '../screens/mood/MoodStats';
-import MoodHistory from '../screens/mood/MoodHistory';
-import MoodDetails from '../screens/mood/MoodDetails';
+import TestDepresion from '../screens/SaludMental/Test/Depresion/TestDepresion';
+import TestDeAnsiedad from '../screens/SaludMental/Test/Ansiedad/TestDeAnsiedad';
+import TestDeDepresion from '../screens/SaludMental/Test/Depresion/TestDeDepresion';
+import TestDepresionHistorial from '../screens/SaludMental/Test/Depresion/TestDepresionHistorial';
+import TestAnsiedadEstadisticas from '../screens/SaludMental/Test/Ansiedad/TestAnsiedadEstadisticas';
+import TestDepresionEstadisticas from '../screens/SaludMental/Test/Depresion/TestDepresionEstadisticas';
+import MoodTrack from '../screens/Home/MoodTrack';
+import MoodStats from '../screens/Home/MoodStats';
+import MoodHistory from '../screens/Home/MoodHistory';
+import MoodDetails from '../screens/Home/MoodDetails';
 import Informacion from '../screens/SaludMental/AprendeSobreSaludMental/Informacion';
 import Burnout from '../screens/SaludMental/AprendeSobreSaludMental/Informacion/Burnout';
 import Ansiedad from '../screens/SaludMental/AprendeSobreSaludMental/Informacion/Ansiedad';

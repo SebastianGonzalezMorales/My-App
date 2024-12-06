@@ -3,10 +3,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Importa tus pantallas
-import Mood from '../screens/mood/Mood';
-import SaludMental from '../screens/SaludMental/SaludMental';
+import HomeMood from '../screens/Home/HomeMood.js';
+import SaludMentalMenu from '../screens/SaludMental/SaludMentalMenu.js';
 import MenuUv from '../screens/InformacionUv/MenuUv';
-import Settings from '../screens/settings/Settings';
+import Profile from '../screens/UserProfile/Profile.js';
 
 const Tab = createBottomTabNavigator();
 
@@ -22,16 +22,16 @@ const HomeTabs = () => {
           let iconSize = 30;
 
           switch (route.name) {
-            case 'Mood':
+            case 'HomeMood':
               iconName = focused ? 'home-variant' : 'home-variant-outline';
               break;
-            case 'SaludMental':
+            case 'SaludMentalMenu':
               iconName = 'brain';
               break;
             case 'MenuUv':
               iconName = focused ? 'file-document' : 'file-document-outline';
               break;
-            case 'Settings':
+            case 'Profile':
               iconName = 'account';
               break;
             default:
@@ -43,13 +43,13 @@ const HomeTabs = () => {
       })}
     >
       <Tab.Screen
-        name="Mood"
-        component={Mood}
+        name="HomeMood"
+        component={HomeMood}
         options={{ headerShown: false, gestureEnabled: false }}
       />
       <Tab.Screen
-        name="SaludMental"
-        component={SaludMental}
+        name="SaludMentalMenu"
+        component={SaludMentalMenu}
         options={{ headerShown: false, gestureEnabled: false }}
       />
       <Tab.Screen
@@ -58,8 +58,8 @@ const HomeTabs = () => {
         options={{ headerShown: false, gestureEnabled: false }}
       />
       <Tab.Screen
-        name="Settings"
-        component={Settings}
+        name="Profile"
+        component={Profile}
         options={{ headerShown: false, gestureEnabled: false }}
       />
     </Tab.Navigator>

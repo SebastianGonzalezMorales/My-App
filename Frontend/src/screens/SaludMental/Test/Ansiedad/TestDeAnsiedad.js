@@ -1,28 +1,22 @@
-import { FlatList, Modal, SafeAreaView, Text, View, Alert } from 'react-native';
+import { FlatList, SafeAreaView, Text, View, Alert } from 'react-native';
 import React, { useState } from 'react';
 
 // componentes
-import CustomButton from '../../../components/buttons/CustomButton';
-import FormButton from '../../../components/buttons/FormButton';
-import HistoryButton from '../../../components/buttons/HistoryButton';
-import StatsButton from '../../../components/buttons/StatsButton';
-import CircularButton from '../../../components/buttons/CircularButton';
-import BackButton from '../../../components/buttons/BackButton';
+import CustomButton from '../../../../components/buttons/CustomButton';
+import HistoryButton from '../../../../components/buttons/HistoryButton';
+import StatsButton from '../../../../components/buttons/StatsButton';
+import CircularButton from '../../../../components/buttons/CircularButton';
+import BackButton from '../../../../components/buttons/BackButton';
 
 // personalización
-import GestureRecognizer from 'react-native-swipe-gestures';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import GlobalStyle from '../../../assets/styles/GlobalStyle';
-import ModalStyle from '../../../assets/styles/ModalStyle';
+import GlobalStyle from '../../../../assets/styles/GlobalStyle';
 
 function Questionnaire({ navigation }) {
   // estados
   const [results, setResults] = useState([]);
   const [lastTest, setLastTest] = useState();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [seeAllModalVisible, setSeeAllModalVisible] = useState(false);
-  const [selectedId, setSelectedId] = useState('');
-  const [visible, setVisble] = useState(false);
+
   const [graveCount, setGraveCount] = useState(0); // Estado para contar los resultados graves
 
   /*

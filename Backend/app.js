@@ -19,7 +19,7 @@ app.options('*', cors());
 
 
 //middleware
-app.use(favicon(path.join(__dirname, 'public', 'icon.png')));
+app.use(favicon(path.join(__dirname, 'public', 'Icon_Application_Blue.png')));
 app.use(boddyParser.json());
 app.use(morgan('tiny'));
 app.use(authJwt);

@@ -13,13 +13,12 @@ import GlobalStyle from '../../assets/styles/GlobalStyle';
 
 
 //Components
-import CustomButton from '../../components/buttons/CustomButton';
 import SettingsButton from '../../components/buttons/SettingsButton';
 
 const { width, height } = Dimensions.get('window'); // Obtener las dimensiones de la pantalla
 
 
-function SaludMental({ navigation }) {
+function SaludMentalMenu({ navigation }) {
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
 
@@ -40,7 +39,7 @@ function SaludMental({ navigation }) {
 
         {/* Imagen con altura ajustada */}
         <Image
-          source={require('../../../assets/icon-copia-removebg.png')}
+          source={require('../../../assets/SlidesOnboarding/Icon_Application.png')}
           style={{
             width: '100%',
             height: height * 0.3, // Ajustar la altura de la imagen al 20% de la pantalla
@@ -72,13 +71,6 @@ function SaludMental({ navigation }) {
               text="Tests"
               onPress={() => navigation.navigate('Tests')}
             />
-
-            {/* <SettingsButton text="Notifications" onPress={() => navigation.navigate('Counselling')} /> */}
-            {/*  <SettingsButton
-              text="Privacy policy"
-               onPress={() => navigation.navigate('Notification')}
-            /> */}
-
           </View>
         </ScrollView>
       </View>
@@ -87,4 +79,4 @@ function SaludMental({ navigation }) {
   );
 }
 
-export default SaludMental;
+export default SaludMentalMenu;
