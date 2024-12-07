@@ -27,7 +27,7 @@ export const onAuthStateChanged = async (setUser, setInitialising) => {
 
     console.log(token)
     // Verificar el token con el backen
-   const response = await axios.get(`${API_URL}/users/verifyToken`, {
+   const response = await axios.get(`${API_URL}/tokens/verifyToken`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

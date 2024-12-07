@@ -127,7 +127,7 @@ const TestDepresion = ({ navigation }) => {
 
       if (token) {
         // Llama al backend para obtener el userId usando el token
-        const userResponse = await axios.post(`${API_URL}/users/userid`, {
+        const userResponse = await axios.post(`${API_URL}/tokens/userid`, {
           token: `${token}`
         }, {
           headers: {

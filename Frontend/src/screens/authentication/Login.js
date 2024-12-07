@@ -49,7 +49,7 @@ const handleLogin = async (email, password) => {
   try {
     // Convertir el correo electrónico a minúsculas
     const lowercaseEmail = email.toLowerCase();
-    const response = await axios.post(`${API_URL}/users/login`, { email: lowercaseEmail, password });
+    const response = await axios.post(`${API_URL}/auth/login`, { email: lowercaseEmail, password });
     
     const { token } = response.data;
     await login(token);

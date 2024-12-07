@@ -11,7 +11,7 @@ import { AuthContext } from '../context/AuthContext';
 
 // Importa tus pantallas de autenticación
 import Onboarding from '../screens/onboarding/Onboarding';
-import Policy from '../screens/Policy/Policy';
+import Policy from '../screens/policy/Policy';
 import Login from '../screens/authentication/Login';
 import Register from '../screens/authentication/Register';
 import ForgotPassword from '../screens/authentication/ForgotPassword';

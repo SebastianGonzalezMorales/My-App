@@ -62,7 +62,7 @@ function TestDeDepresion({ navigation }) {
           }
 
           const userResponse = await axios.post(
-            `${API_URL}/users/userid`,
+            `${API_URL}/tokens/userid`,
             { token: `${token}` },
             {
               headers: {

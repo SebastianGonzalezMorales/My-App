@@ -46,7 +46,7 @@ const ChangePassword = ({ navigation }) => {
   
       // Obtener el token de restablecimiento desde el backend
       const tokenResponse = await axios.post(
-        `${API_URL}/users/getReset-PasswordToken`,
+        `${API_URL}/password/getReset-PasswordToken`,
         { email: retrievedEmail }
       );
   
@@ -59,7 +59,7 @@ const ChangePassword = ({ navigation }) => {
   
       // Cambiar la contraseña usando el token y las nuevas contraseñas
       await axios.post(
-        `${API_URL}/users/change-password`,
+        `${API_URL}/password/change-password`,
         {
           token: token,
           newPassword: newPassword,

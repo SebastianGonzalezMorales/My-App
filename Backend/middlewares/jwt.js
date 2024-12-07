@@ -1,5 +1,9 @@
 const { expressjwt: jwt } = require("express-jwt");
 
+// Verifica que las variables se están cargando
+console.log("JWT Secret:", process.env.SECRET); 
+console.log("API URL:", process.env.API_URL);
+
 const secret =  process.env.SECRET
 const api = process.env.API_URL
 

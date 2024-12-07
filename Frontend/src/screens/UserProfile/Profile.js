@@ -34,7 +34,7 @@ function UserProfile({ navigation }) {
         const token = await AsyncStorage.getItem('token');
         if (token) {
           const userResponse = await axios.post(
-            `${API_URL}/users/userdata`,
+            `${API_URL}/user-management/userdata`,
             { token },
             { headers: { Authorization: `Bearer ${token}` } }
           );

@@ -1,1 +1,7 @@
 node_modules/
+
+uploads/
+
+.env.development
+
+.env.production

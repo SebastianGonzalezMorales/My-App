@@ -42,7 +42,7 @@ function AsistenteSocial({ navigation }) {
         const token = await AsyncStorage.getItem('token');
         if (token) {
           const response = await axios.post(
-            `${API_URL}/users/userdata`,
+            `${API_URL}/user-management/userdata`,
             { token: `${token}` },
             { headers: { Authorization: `Bearer ${token}` } }
           );

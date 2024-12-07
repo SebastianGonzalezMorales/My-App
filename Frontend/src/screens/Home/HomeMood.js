@@ -255,7 +255,7 @@ const fetchUserData = async () => {
     const token = await AsyncStorage.getItem('token');
     if (token) {
       const response = await axios.post(
-        `${API_URL}/users/userdata`,
+        `${API_URL}/user-management/userdata`,
         {
           // Token en el cuerpo de la solicitud
           token: `${token}`,

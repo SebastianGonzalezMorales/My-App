@@ -33,3 +33,6 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+#Carpeta relacionada con Windows
+%ProgramData%/

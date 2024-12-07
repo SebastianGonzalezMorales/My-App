@@ -330,7 +330,7 @@ const Register = ({ navigation }) => {
       console.log('Datos enviados al backend:', userData);
 
       // Realizar la solicitud POST al backend
-      const response = await axios.post(`${API_URL}/users/register`, userData);
+      const response = await axios.post(`${API_URL}/auth/register`, userData);
       console.log('Datos enviados al backend:', userData);
 
 
