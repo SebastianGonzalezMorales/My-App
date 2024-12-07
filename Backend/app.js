@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser'); // Corrección del nombre
+const boddyParser = require('body-parser'); // Corrección del nombre
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -29,11 +29,14 @@ const errorHandler = require('./helpers/error-handler');
 app.use(cors()); // Habilitar CORS para todas las solicitudes
 app.options('*', cors()); // Habilitar preflight para solicitudes CORS
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // Servir favicon desde la carpeta pública
 app.use(favicon(path.join(__dirname, 'public', 'Icon_Application_Blue.png')));
 
 // Middleware para parsear JSON en las solicitudes
-app.use(bodyParser.json());
+app.use(boddyParser.json());
 
 // Middleware para registrar solicitudes HTTP en la consola
 app.use(morgan('tiny'));

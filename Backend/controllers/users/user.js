@@ -1,4 +1,5 @@
 const User = require('../../models/user');
+const jwt = require("jsonwebtoken");
 
 // Controlador para obtener todos los usuarios
 const getAllUsers = async (req, res) => {
@@ -60,20 +61,33 @@ const getRandomUser = async (req, res) => {
     }
 };
 
-// Controlador para obtener datos de usuario
 const getUserData = async (req, res) => {
-    const secret = process.env.secret;
-    const { token } = req.body;
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Extrae el token después de 'Bearer'
+
+    if (!token) {
+        return res.status(400).send({ error: "Token no proporcionado" });
+    }
+
     try {
-        const user = jwt.verify(token, secret);
-        // console.log(user)
+        const user = jwt.verify(token, process.env.secret);
         const useremail = user.email;
 
-        User.findOne({ email: useremail }).then((data) => {
-            return res.send({ status: "Ok", data: data });
-        });
+        const data = await User.findOne({ email: useremail });
+
+        if (!data) {
+            return res.status(404).send({ status: "Error", message: "Usuario no encontrado" });
+        }
+
+        res.status(200).send({ status: "Ok", data });
     } catch (error) {
-        return res.send({ error: error });
+        if (error.name === "JsonWebTokenError") {
+            return res.status(401).send({ error: "Token inválido" });
+        }
+        if (error.name === "TokenExpiredError") {
+            return res.status(401).send({ error: "Token expirado" });
+        }
+        res.status(500).send({ error: error.message });
     }
 };
 

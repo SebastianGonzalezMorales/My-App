@@ -4,6 +4,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer'); // Servicio de correos
 
+const validator = require('validator');
+
+
+
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
@@ -156,6 +160,20 @@ const registerUser = async (req, res) => {
         console.error('Error registering user:', error);
         res.status(500).send('Internal server error');
     }
+};
+
+const isStrongPassword = (password) => {
+    // Verificar longitud mínima
+    if (password.length < 8) return false;
+    // Verificar si contiene al menos una letra mayúscula
+    if (!/[A-Z]/.test(password)) return false;
+    // Verificar si contiene al menos una letra minúscula
+    if (!/[a-z]/.test(password)) return false;
+    // Verificar si contiene al menos un número
+    if (!/[0-9]/.test(password)) return false;
+    // Verificar si contiene al menos un símbolo
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return false;
+    return true;
 };
 
 const verifyEmail = async (req, res) => {
