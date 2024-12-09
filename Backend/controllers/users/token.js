@@ -1,5 +1,12 @@
 const jwt = require('jsonwebtoken');
 
+// Asignar la clave secreta desde las variables de entorno
+const secret = process.env.SECRET;
+
+if (!secret) {
+  throw new Error('La clave secreta (SECRET) no está definida en las variables de entorno.');
+}
+
 const decodeToken = (req, res) => {
     const { token } = req.body;
 
@@ -7,7 +14,6 @@ const decodeToken = (req, res) => {
         return res.status(400).json({ message: 'Token no proporcionado' });
     }
 
-    const secret = process.env.secret;
     let decoded;
 
     // Intentar verificar el token para ver si ha expirado
@@ -32,7 +38,6 @@ const decodeToken = (req, res) => {
 };
 
 const getUserId = async (req, res) => {
-    const secret = process.env.secret; // Se obtiene la clave secreta del entorno
     const { token } = req.body; // Se extrae el token del cuerpo de la solicitud
     try {
         const user = jwt.verify(token, secret); // Se verifica y decodifica el token usando la clave secreta

@@ -1,6 +1,13 @@
 const User = require('../../models/user');
 const jwt = require("jsonwebtoken");
 
+// Asignar la clave secreta desde las variables de entorno
+const secret = process.env.SECRET;
+
+if (!secret) {
+  throw new Error('La clave secreta (SECRET) no está definida en las variables de entorno.');
+}
+
 // Controlador para obtener todos los usuarios
 const getAllUsers = async (req, res) => {
     try {
@@ -70,7 +77,7 @@ const getUserData = async (req, res) => {
     }
 
     try {
-        const user = jwt.verify(token, process.env.secret);
+        const user = jwt.verify(token, secret);
         const useremail = user.email;
 
         const data = await User.findOne({ email: useremail });

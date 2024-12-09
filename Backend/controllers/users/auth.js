@@ -4,9 +4,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer'); // Servicio de correos
 
-const validator = require('validator');
+// Asignar la clave secreta desde las variables de entorno
+const secret = process.env.SECRET;
 
-
+if (!secret) {
+  throw new Error('La clave secreta (SECRET) no está definida en las variables de entorno.');
+}
 
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
@@ -37,7 +40,7 @@ const loginUser = async (req, res) => {
                 email: user.email,
                 isAdmin: user.isAdmin
             },
-            process.env.secret,
+            secret,
             { expiresIn: '4d' }
         );
         return res.status(200).send({ name: user.name, user: user.email, token });
@@ -103,7 +106,7 @@ const registerUser = async (req, res) => {
             return res.status(400).send('RUT already in use.');
         }
 
-        const verificationToken = jwt.sign({ email: normalizedEmail }, process.env.secret, { expiresIn: '1h' });
+        const verificationToken = jwt.sign({ email: normalizedEmail }, secret, { expiresIn: '1h' });
 
         const tempUser = new TempUser({
             name,
@@ -199,7 +202,7 @@ const verifyEmail = async (req, res) => {
     console.log('Verifying email with token:', token);
 
     try {
-        const decoded = jwt.verify(token, process.env.secret);
+        const decoded = jwt.verify(token, secret);
         const email = decoded.email;
 
         const tempUser = await TempUser.findOne({ verificationToken: token });
