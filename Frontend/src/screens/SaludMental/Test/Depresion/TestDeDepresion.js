@@ -155,7 +155,7 @@ function TestDeDepresion({ navigation }) {
 {/* Mostrar alerta si tiene 4 o más resultados graves */}
 {/* Mostrar alerta si tiene 4 o más resultados graves */}
 {/* Mostrar alerta si tiene 4 o más resultados graves */}
-{graveCount >= 20 && (
+{graveCount >= 1 && (
   <View style={{ 
     padding: 15, 
     backgroundColor: '#fff3e0',  // Fondo claro
