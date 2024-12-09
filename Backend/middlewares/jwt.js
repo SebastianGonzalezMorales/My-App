@@ -6,6 +6,7 @@ console.log("API URL:", process.env.API_URL);
 
 const secret = process.env.SECRET;
 const api = process.env.API_URL;
+const baseUrl = process.env.BASE_URL;
 
 if (!secret) {
     throw new Error("JWT secret is not defined in environment variables");
@@ -21,6 +22,7 @@ const authJwt = jwt({
         `${api}/auth/login`,        // Login de usuarios
         `${api}/auth/register`,     // Registro de nuevos usuarios
         `${api}/auth/logout`,       // Cierre de sesión
+        `${api}/auth/verificar`, // Verificación de nuevo usuario creado
 
         // **Rutas de Recuperación y Restablecimiento de Contraseñas (`/password`)**
         `${api}/password/forgot-password`,        // Solicitud de recuperación de contraseña
@@ -31,20 +33,20 @@ const authJwt = jwt({
 
         // **Rutas de Verificación y Decodificación de Tokens (`/tokens`)**
         `${api}/tokens/decodetoken`, // Decodificación de tokens
-
-        // **Rutas de Gestión de Usuarios (`/user-management`)**
-        `${api}/user-management/verificar`, // Verificación de usuario
+      
+        `${baseUrl}/public/Icon_Application_Blue.png`,
+        { url: '/public/Icon_Application_Blue.png', methods: ['GET'] },
+        
         { 
             url: new RegExp(`${api}/user-management/[^/]+/accept-policy`), 
             methods: ['POST', 'OPTIONS'] 
         }, // Aceptación de políticas por usuario
-
+        
         // **Otras Rutas Públicas**
         `/`,                         // Ruta raíz
         `${api}/phraseOfTheDay`,     // Obtener la frase del día
 
-        // **Rutas Adicionales (si las hay)**
-        // Puedes agregar más rutas públicas aquí si es necesario
+
     ]
 });
 

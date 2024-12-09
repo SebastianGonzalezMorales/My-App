@@ -59,6 +59,8 @@ app.get('/', (req, res) => {
   res.send('<h1> Funcionando </h1>');
 });
 
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
 // Conectar a la base de datos MongoDB
 mongoose
   .connect(process.env.CONNECTION_STRING, {

@@ -56,6 +56,9 @@ const registerUser = async (req, res) => {
             return res.status(400).send('Todos los campos son obligatorios.');
         }
 
+        // Obtener el primer nombre del usuario
+        const firstName = name.split(' ')[0]; // Divide el nombre y toma el primer elemento del arreglo
+
         // Validar número de celular
         const phoneRegex = /^\+569\s?\d{8}$/; // Acepta "+569XXXXXXXX" o "+569 XXXXXXXX"
         if (!phoneRegex.test(phoneNumber)) {
@@ -64,7 +67,6 @@ const registerUser = async (req, res) => {
 
         console.log('Número de celular recibido:', phoneNumber);
 
-
         // Verificar si la contraseña es fuerte
         if (!isStrongPassword(password)) {
             return res.status(400).send('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un símbolo.');
@@ -72,6 +74,7 @@ const registerUser = async (req, res) => {
         if (password !== confirmPassword) {
             return res.status(400).send('Las contraseñas no coinciden.');
         }
+
         // Verificar que el formato de la fecha sea correcto y que la fecha sea válida
         const birthdateRegex = /^\d{4}-\d{2}-\d{2}$/;
         if (!birthdateRegex.test(birthdate)) {
@@ -84,23 +87,11 @@ const registerUser = async (req, res) => {
         // Descomponer la fecha en año, mes y día
         const [year, month, day] = birthdate.split('-').map(Number);
 
-        // Verificar que el año sea razonable (1900 < año < año actual)
+        // Validaciones adicionales de la fecha
         const currentYear = new Date().getFullYear();
-        if (year < 1900 || year > currentYear) {
-            return res.status(400).send('El año de nacimiento no es válido.');
+        if (year < 1900 || year > currentYear || month < 1 || month > 12 || day < 1 || day > 31) {
+            return res.status(400).send('La fecha de nacimiento no es válida.');
         }
-
-        // Verificar que el mes esté entre 1 y 12
-        if (month < 1 || month > 12) {
-            return res.status(400).send('El mes de nacimiento no es válido.');
-        }
-
-        // Verificar que el día sea válido para el mes y año dado
-        const daysInMonth = [31, (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-        if (day < 1 || day > daysInMonth[month - 1]) {
-            return res.status(400).send('El día de nacimiento no es válido.');
-        }
-
 
         const existingUser = await User.findOne({ email: normalizedEmail });
         if (existingUser) {
@@ -131,27 +122,52 @@ const registerUser = async (req, res) => {
         const savedTempUser = await tempUser.save();
         if (!savedTempUser) return res.status(400).send('User could not be created.');
 
-        // Obtener el puerto
-        const PORT = process.env.PORT || 3001;
-
         // Obtener BASE_URL para producción
         const baseUrl = process.env.BASE_URL;
         const api_url = process.env.API_URL;
 
-    const verificationLink = `${baseUrl}${api_url}/user-management/verificar?token=${verificationToken}`;
+        const verificationLink = `${baseUrl}${api_url}/auth/verificar?token=${verificationToken}`;
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
                 user: 'appacompanamientouv@gmail.com',
-                pass: 'equn vtzn mkai ufga'
-            }
+                pass: 'equn vtzn mkai ufga',
+            },
         });
 
+        // Enviar correo con diseño
         await transporter.sendMail({
             to: normalizedEmail,
             subject: '[Verifique su correo electrónico - App Acompañamiento UV]',
-            text: `Por favor verifique su cuenta haciendo clic en el siguiente enlace: ${verificationLink}`,
+            html: `
+                <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 10px; padding: 20px;">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <img src="cid:app_logo" alt="App Acompañamiento UV" style="width: 100px; height: auto;">
+                    </div>
+                    <h2 style="color: #1d72b8; text-align: center;">Bienvenido a la App Acompañamiento UV</h2>
+                    <p>Hola <strong>${firstName}</strong>,</p>
+                    <p>Gracias por registrarte en nuestra aplicación. Estamos encantados de que formes parte de nuestra comunidad.</p>
+                    <p>Para activar tu cuenta y comenzar a disfrutar de nuestros servicios, por favor haz clic en el siguiente botón:</p>
+                    <div style="text-align: center; margin: 20px 0;">
+                        <a href="${verificationLink}" style="background-color: #1d72b8; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Verificar Cuenta</a>
+                    </div>
+                    <p>Si no solicitaste este registro, por favor ignora este correo.</p>
+                    <p>Saludos cordiales,</p>
+                    <p style="font-style: italic; color: #333;">Equipo de App Acompañamiento UV</p>
+                    <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+                    <p style="font-size: 12px; text-align: center; color: #777;">
+                        Este correo se ha enviado automáticamente. Por favor, no respondas a este mensaje.
+                    </p>
+                </div>
+            `,
+            attachments: [
+                {
+                    filename: 'Icon_Application_Blue.png',
+                    path: 'public/Icon_Application_Blue.png',
+                    cid: 'app_logo',
+                },
+            ],
         });
 
         res.status(201).send({

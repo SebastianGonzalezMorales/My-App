@@ -14,17 +14,17 @@ const forgotPassword = async (req, res) => {
             return res.status(400).json({ success: false, message: 'No se encontró una cuenta con este correo.' });
         }
 
+        // Obtener solo el primer nombre del usuario
+        const firstName = user.name.split(' ')[0]; // Divide el nombre y toma el primer elemento del arreglo
+
         // Generar un token de restablecimiento
         const resetToken = jwt.sign({ userId: user._id, email: user.email }, process.env.secret, { expiresIn: '1h' });
 
-        // Guardar el token y su tiempo de expiración en el usuario, y reiniciar canResetPassword
+        // Guardar el token y su tiempo de expiración en el usuario
         user.resetPasswordToken = resetToken;
         user.resetPasswordExpires = Date.now() + 3600000; // Token válido por 1 hora
         user.canResetPassword = false; // Reiniciar la capacidad de restablecer contraseña
         await user.save();
-
-        // Obtener el puerto
-        const PORT = process.env.PORT || 3001;
 
         // Obtener BASE_URL para producción
         const baseUrl = process.env.BASE_URL;
@@ -41,11 +41,42 @@ const forgotPassword = async (req, res) => {
             }
         });
 
-        // Enviar el correo de restablecimiento
+        // Diseño HTML del correo
+        const htmlContent = `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 10px; padding: 20px;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <img src="cid:app_logo" alt="App Acompañamiento UV" style="width: 100px; height: auto;">
+                </div>
+                <h2 style="color: #1d72b8; text-align: center;">Restablece tu Contraseña</h2>
+                <p>Hola <strong>${firstName}</strong>,</p>
+                <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en la <strong>App Acompañamiento UV</strong>.</p>
+                <p>Si realizaste esta solicitud, haz clic en el siguiente botón para restablecer tu contraseña:</p>
+                <div style="text-align: center; margin: 20px 0;">
+                    <a href="${resetLink}" style="background-color: #1d72b8; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Restablecer Contraseña</a>
+                </div>
+                <p>Este enlace es válido por 1 hora.</p>
+                <p>Si no solicitaste este restablecimiento, por favor ignora este correo. Tu contraseña seguirá siendo segura.</p>
+                <p>Saludos cordiales,</p>
+                <p style="font-style: italic; color: #333;">Equipo de App Acompañamiento UV</p>
+                <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+                <p style="font-size: 12px; text-align: center; color: #777;">
+                    Este correo se ha enviado automáticamente. Por favor, no respondas a este mensaje.
+                </p>
+            </div>
+        `;
+
+        // Enviar el correo de restablecimiento con la imagen adjunta
         await transporter.sendMail({
             to: normalizedEmail,
             subject: 'Restablece tu contraseña - App Acompañamiento UV',
-            text: `Haz clic en el siguiente enlace para restablecer tu contraseña: ${resetLink}`,
+            html: htmlContent, // Aquí se pasa el diseño HTML
+            attachments: [
+                {
+                    filename: 'Icon_Application_Blue.png',
+                    path: 'public/Icon_Application_Blue.png', // Ruta local al archivo
+                    cid: 'app_logo', // Identificador para usar en el HTML
+                },
+            ],
         });
 
         res.status(200).json({ success: true, message: 'Se ha enviado un correo para restablecer la contraseña. Por favor, revisa tu bandeja de entrada.' });
@@ -54,7 +85,6 @@ const forgotPassword = async (req, res) => {
         res.status(500).json({ success: false, message: 'Error interno del servidor' });
     }
 };
-
 
 const changePassword = async (req, res) => {
     const { token, newPassword, confirmPassword } = req.body;
