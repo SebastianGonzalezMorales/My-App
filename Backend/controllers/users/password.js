@@ -1,6 +1,7 @@
 const User = require('../../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer'); // Servicio de correos
 
 const forgotPassword = async (req, res) => {
     const { email } = req.body;
