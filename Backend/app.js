@@ -75,6 +75,12 @@ mongoose
     console.error('Error connecting to the database:', err);
   });
 
+  console.log("Variables de entorno cargadas:");
+  console.log("API_URL:", process.env.API_URL);
+  console.log("SECRET:", process.env.SECRET);
+  console.log("CONNECTION_STRING:", process.env.CONNECTION_STRING);
+  console.log("BASE_URL:", process.env.BASE_URL);
+  
 // Configurar el puerto y arrancar el servidor
 const PORT = process.env.PORT || 3001;
 const server = app.listen(PORT, () => {
