@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const boddyParser = require('body-parser'); // Corrección del nombre
+const bodyParser = require('body-parser'); // Corrección del nombre
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -36,7 +36,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(favicon(path.join(__dirname, 'public', 'Icon_Application_Blue.png')));
 
 // Middleware para parsear JSON en las solicitudes
-app.use(boddyParser.json());
+app.use(bodyParser.json());
 
 // Middleware para registrar solicitudes HTTP en la consola
 app.use(morgan('tiny'));
@@ -75,7 +75,15 @@ mongoose
 
 // Configurar el puerto y arrancar el servidor
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`API Base URL: ${process.env.API_URL}`);
   console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+// Manejo de cierre de aplicación
+process.on('SIGINT', () => {
+  server.close(() => {
+    console.log('Process terminated. Server closed.');
+    process.exit(0);
+  });
 });

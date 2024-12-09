@@ -28,8 +28,9 @@ const forgotPassword = async (req, res) => {
 
         // Obtener BASE_URL para producción
         const baseUrl = process.env.BASE_URL;
+        const api_url = process.env.API_URL;
 
-        const resetLink = `http://${baseUrl}:${PORT}/api/v1/users/verify-reset-token?token=${resetToken}`;
+        const resetLink = `${baseUrl}${api_url}/password/verify-reset-token?token=${resetToken}`;
 
         // Configurar el transporte de nodemailer
         const transporter = nodemailer.createTransport({
