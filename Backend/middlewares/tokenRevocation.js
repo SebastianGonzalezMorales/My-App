@@ -4,7 +4,7 @@ const revokedTokens = []; // Almacena los tokens revocados (puedes usar una base
 
 const verifyToken = (req, res, next) => {
     const token = req.headers['authorization']?.split(' ')[1];
-    const secret = process.env.secret;
+    const secret = process.env.SECRET;
 
     if (!token) {
         return res.status(401).send({ message: "No token provided" });

@@ -9,7 +9,7 @@ const verifyToken = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.secret); // Decodificamos el token
+    const decoded = jwt.verify(token, process.env.SECRET); // Decodificamos el token
     req.user = decoded; // El decoded contiene el _id del usuario en la propiedad id
     next(); // Continuamos al siguiente middleware o controlador
   } catch (error) {

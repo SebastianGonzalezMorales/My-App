@@ -12,7 +12,7 @@ const userFromToken = async (req, res, next) => {
 
   try {
     // Decodificar el token
-    const decoded = jwt.verify(token, process.env.secret);
+    const decoded = jwt.verify(token, process.env.SECRET);
 
     // Buscar al usuario en la base de datos
     const user = await User.findById(decoded.userId);
