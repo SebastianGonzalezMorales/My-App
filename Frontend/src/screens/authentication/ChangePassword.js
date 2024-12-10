@@ -76,7 +76,8 @@ const ChangePassword = ({ navigation }) => {
       // Mostrar el mensaje de error al usuario
       alert(errorMessage);
   
-      console.log('Error @handleChangePassword:', error.response?.data || error.message);
+      console.log('Error @handleChangePassword:', error.response || error.message);
+
     }
   };
   

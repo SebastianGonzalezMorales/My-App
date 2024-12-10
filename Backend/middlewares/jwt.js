@@ -28,7 +28,7 @@ const authJwt = jwt({
         `${api}/password/forgot-password`,        // Solicitud de recuperación de contraseña
         `${api}/password/verify-reset-token`,     // Verificación del token de restablecimiento
         `${api}/password/change-password`,        // Cambio de contraseña
-        `${api}/password/get-reset-password-token`, // Obtener token de restablecimiento
+        `${api}/password/getReset-PasswordToken`, // Obtener token de restablecimiento
         `${api}/password/verifytoken`,            // Verificación general de token
 
         // **Rutas de Verificación y Decodificación de Tokens (`/tokens`)**
