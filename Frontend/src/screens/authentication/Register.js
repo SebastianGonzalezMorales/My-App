@@ -542,13 +542,15 @@ const Register = ({ navigation }) => {
             </View>
           </TouchableOpacity>
           {showDatePicker && (
-            <DateTimePicker
-              value={birthdate ? new Date(birthdate) : new Date()}
-              mode="date"
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-              onChange={handleDateChange}
-              maximumDate={new Date()}
-            />
+         <DateTimePicker
+         value={birthdate ? new Date(birthdate) : new Date()}
+         mode="date"
+         display={Platform.OS === 'ios' ? 'spinner' : 'spinner'}
+         onChange={handleDateChange}
+         maximumDate={new Date()}
+         locale="es-ES"
+       />
+       
           )}
 
 <View style={AuthStyle.inputContainer}>

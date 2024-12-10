@@ -1,5 +1,5 @@
 import {
-  Linking, NativeModules, Platform, SafeAreaView, ScrollView, Text, View,
+ SafeAreaView, Text, View,
 } from 'react-native';
 import React, { useEffect, useState, useContext } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
