@@ -142,36 +142,38 @@ const verifyResetToken = async (req, res) => {
 
     if (!user) {
       return res.status(400).send(`
-        <html>
-          <body>
-            <h1>El enlace de restablecimiento es inválido o ha caducado.</h1>
-          </body>
-        </html>
+          <html>
+              <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
+                  <h1 style="font-size: 32px; color: #000C7B;">El enlace de restablecimiento es inválido o ha caducado.</h1>
+              </body>
+          </html>
       `);
-    }
-
-    user.canResetPassword = true;
-    await user.save();
-
-    res.status(200).send(`
-      <html>
-        <body>
-          <h1>El token es válido. Puedes restablecer tu contraseña ahora.</h1>
-        </body>
-      </html>
-    `);
-  } catch (error) {
-    console.error('Error al verificar el token:', error);
-    res.status(400).send(`
-      <html>
-        <body>
-          <h1>El enlace de restablecimiento es inválido o ha caducado.</h1>
-        </body>
-      </html>
-    `);
   }
-};
 
+  // Marcar que el usuario puede restablecer la contraseña
+  user.canResetPassword = true;
+  await user.save();
+
+
+  // Si el token es válido, responder al frontend indicando que puede cambiar su contraseña
+  res.status(200).send(`
+      <html>
+          <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
+              <h1 style="font-size: 32px; color: #000C7B;">El token es válido. Puedes restablecer tu contraseña ahora, volviendo a tu aplicación móvil</h1>
+          </body>
+      </html>
+  `);
+} catch (error) {
+  console.error('Error al verificar el token:', error);
+  res.status(400).send(`
+      <html>
+          <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
+              <h1 style="font-size: 32px; color: #000C7B;">El enlace de restablecimiento es inválido o ha caducado.</h1>
+          </body>
+      </html>
+  `);
+}
+};
 // Controlador para obtener el token de restablecimiento de contraseña
 const getResetPasswordToken = async (req, res) => {
     const { email } = req.body; // Obtiene el correo electrónico del cuerpo de la solicitud
