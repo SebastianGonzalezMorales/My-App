@@ -5,6 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Svg, { Circle } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
+import { Alert } from 'react-native';
+
 
 import { AuthContext } from '../../context/AuthContext';
 
@@ -54,11 +56,32 @@ const handleLogin = async (email, password) => {
     const { token } = response.data;
     await login(token);
     navigation.replace('Home');
+    // Mostrar alerta de éxito
+    Alert.alert(
+      "Inicio de sesión exitoso",
+      "¡Has iniciado sesión correctamente!",
+      [
+        { 
+          text: "OK", 
+          onPress: () => console.log("Usuario presionó OK al incio de sesión exitoso") 
+        }
+      ]
+    );
   } catch (error) {
    // console.error('Error al iniciar sesión. Verifica tus credenciales.', error);
-    alert('Error al iniciar sesión. Verifica tus credenciales', error);
-  }
-};
+        // Muestra un mensaje de error claro utilizando Alert.alert
+        Alert.alert(
+          "Error",
+          "Error al iniciar sesión. Verifica tus credenciales.", 
+          [
+            { 
+              text: "OK", 
+              onPress: () => console.log("Usuario presionó OK en el alerta de error") 
+            }
+          ]
+        );
+      }
+    };
 
   
   /*
