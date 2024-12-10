@@ -6,19 +6,21 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const favicon = require('serve-favicon');
-const dotenv = require('dotenv'); //
+const dotenv = require('dotenv');
 
-// Determina el entorno actual, por defecto 'development'
-const env = process.env.NODE_ENV || 'development';
+// Solo carga archivos .env si no estás en producción
+if (process.env.NODE_ENV !== 'production') {
+  const env = process.env.NODE_ENV || 'development'; // Por defecto, 'development'
+  const envPath = path.resolve(__dirname, `.env.${env}`);
+  const result = dotenv.config({ path: envPath });
 
-// Construye la ruta al archivo .env correspondiente
-const envPath = path.resolve(__dirname, `.env.${env}`);
-
-// Carga las variables de entorno
-const result = dotenv.config({ path: envPath });
-
-if (result.error) {
-  throw result.error;
+  if (result.error) {
+    console.warn(`No se encontró el archivo .env para el entorno: ${env}.`, result.error);
+  } else {
+    console.log(`Archivo .env cargado para el entorno: ${env}.`);
+  }
+} else {
+  console.log('Entorno de producción detectado. Usando variables configuradas en Heroku.');
 }
 
 // Importar middlewares personalizados
@@ -75,19 +77,18 @@ mongoose
     console.error('Error connecting to the database:', err);
   });
 
-  
-  // Configurar el puerto y arrancar el servidor
-  const PORT = process.env.PORT || 3001;
-  const server = app.listen(PORT, () => {
-    console.log(`API Base URL: ${process.env.API_URL}`);
-    console.log(`Server is running on http://localhost:${PORT}`);
-    console.log (" ")
-    console.log("Variables de entorno cargadas:");
-    console.log("API_URL:", process.env.API_URL);
-    console.log("SECRET:", process.env.SECRET);
-    console.log("CONNECTION_STRING:", process.env.CONNECTION_STRING);
-    console.log("BASE_URL:", process.env.BASE_URL);
-  });
+// Configurar el puerto y arrancar el servidor
+const PORT = process.env.PORT || 3001;
+const server = app.listen(PORT, () => {
+  console.log(`API Base URL: ${process.env.API_URL}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(" ");
+  console.log("Variables de entorno cargadas:");
+  console.log("API_URL:", process.env.API_URL);
+  console.log("SECRET:", process.env.SECRET);
+  console.log("CONNECTION_STRING:", process.env.CONNECTION_STRING);
+  console.log("BASE_URL:", process.env.BASE_URL);
+});
 
 // Manejo de cierre de aplicación
 process.on('SIGINT', () => {
