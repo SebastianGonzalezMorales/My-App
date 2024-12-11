@@ -3,12 +3,11 @@
     "version": "1.0.0",
     "description": "Root package for Heroku deployment",
     "scripts": {
-        "start": "cd Backend && npm install && npm start"
+        "start": "cd Backend && npm install && npm dev"
     },
     "dependencies": {
         "@react-native-community/datetimepicker": "^8.2.0",
         "buffer": "^6.0.3",
-        "date-fns": "^4.1.0",
         "react-native-image-pan-zoom": "^2.1.12"
     }
 }

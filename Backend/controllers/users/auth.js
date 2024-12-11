@@ -12,42 +12,48 @@ if (!secret) {
 }
 
 const loginUser = async (req, res) => {
-    const { email, password } = req.body;
+    try {
+        const { email, password } = req.body;
 
-    // Convertir el email a minúsculas antes de buscar en la base de datos
-    const normalizedEmail = email.toLowerCase();
+        // Convertir el email a minúsculas antes de buscar en la base de datos
+        const normalizedEmail = email.toLowerCase();
 
-    // Busca en la colección temporal primero
-    const tempUser = await TempUser.findOne({ email: normalizedEmail });
-    if (tempUser) {
-        return res.status(403).send('Aún no has verificado tu correo electrónico. Por favor, revisa tu bandeja de entrada para completar el registro.');
-    }
+        // Busca en la colección temporal primero
+        const tempUser = await TempUser.findOne({ email: normalizedEmail });
+        if (tempUser) {
+            return res.status(403).json({ success: false, message: 'Aún no has verificado tu correo electrónico. Por favor, revisa tu bandeja de entrada para completar el registro.' });
+        }
 
-    // Busca en la colección de usuarios
-    const user = await User.findOne({ email: normalizedEmail });
-    if (!user) {
-        return res.status(400).send('No pudimos encontrar una cuenta con este correo electrónico. Por favor, revisa que el correo sea correcto o regístrate si aún no tienes una cuenta.');
-    }
+        // Busca en la colección de usuarios
+        const user = await User.findOne({ email: normalizedEmail });
+        if (!user) {
+            return res.status(400).json({ success: false, message: 'No pudimos encontrar una cuenta con este correo electrónico. Por favor, revisa que el correo sea correcto o regístrate si aún no tienes una cuenta.' });
+        }
 
-    if (!user.verified) {
-        return res.status(403).send('Por favor verifique su correo electrónico antes de iniciar sesión.');
-    }
+        if (!user.verified) {
+            return res.status(403).json({ success: false, message: 'Por favor verifica tu correo electrónico antes de iniciar sesión.' });
+        }
 
-    if (bcrypt.compareSync(password, user.passwordHash)) {
-        const token = jwt.sign(
-            {
-                userId: user.id,
-                email: user.email,
-                isAdmin: user.isAdmin
-            },
-            secret,
-            { expiresIn: '4d' }
-        );
-        return res.status(200).send({ name: user.name, user: user.email, token });
-    } else {
-        return res.status(400).send('Password is wrong!');
+        if (bcrypt.compareSync(password, user.passwordHash)) {
+            const token = jwt.sign(
+                {
+                    userId: user.id,
+                    email: user.email,
+                    isAdmin: user.isAdmin
+                },
+                secret,
+                { expiresIn: '4d' }
+            );
+            return res.status(200).json({ success: true, name: user.name, user: user.email, token });
+        } else {
+            return res.status(400).json({ success: false, message: 'La contraseña es incorrecta.' });
+        }
+    } catch (error) {
+        console.error('Error in loginUser:', error);
+        return res.status(500).json({ success: false, message: 'Error interno del servidor.' });
     }
 };
+
 
 const registerUser = async (req, res) => {
     try {
@@ -56,7 +62,7 @@ const registerUser = async (req, res) => {
         const normalizedEmail = email.toLowerCase();
 
         if (!name || !normalizedEmail || !rut || !birthdate || !facultad || !carrera || !phoneNumber || !password || !confirmPassword) {
-            return res.status(400).send('Todos los campos son obligatorios.');
+            return res.status(400).json({ success: false, message: 'Todos los campos son obligatorios.' });
         }
 
         // Obtener el primer nombre del usuario
@@ -65,17 +71,18 @@ const registerUser = async (req, res) => {
         // Validar número de celular
         const phoneRegex = /^\+569\s?\d{8}$/; // Acepta "+569XXXXXXXX" o "+569 XXXXXXXX"
         if (!phoneRegex.test(phoneNumber)) {
-            return res.status(400).send('Número de celular inválido. Debe seguir el formato +569 XXXXXXXX.');
+            return res.status(400).json({ success: false, message: 'Número de celular inválido. Debe seguir el formato +569 XXXXXXXX.' });
         }
 
         console.log('Número de celular recibido:', phoneNumber);
 
         // Verificar si la contraseña es fuerte
+  
         if (!isStrongPassword(password)) {
-            return res.status(400).send('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un símbolo.');
+            return res.status(400).json({ success: false, message: 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un símbolo.' });
         }
         if (password !== confirmPassword) {
-            return res.status(400).send('Las contraseñas no coinciden.');
+            return res.status(400).json({ success: false, message: 'Las contraseñas no coinciden.' });
         }
 
         // Convertir DD-MM-YYYY a YYYY-MM-DD
@@ -85,20 +92,20 @@ const registerUser = async (req, res) => {
         // Validaciones adicionales de la fecha
         const currentYear = new Date().getFullYear();
         if (year < 1900 || year > currentYear || month < 1 || month > 12 || day < 1 || day > 31) {
-            return res.status(400).send('La fecha de nacimiento no es válida.');
+            return res.status(400).json({ success: false, message: 'La fecha de nacimiento no es válida.' });
         }
         if (!policyAccepted) {
-            return res.status(400).send('Debes aceptar la política de privacidad para registrarte.');
+            return res.status(400).json({ success: false, message: 'Debes aceptar la política de privacidad para registrarte.' });
         }
 
         const existingUser = await User.findOne({ email: normalizedEmail });
         if (existingUser) {
-            return res.status(400).send('El correo electrónico que ingresaste ya está registrado.');
+            return res.status(400).json({ success: false, message: 'El correo electrónico que ingresaste ya está registrado.' });
         }
 
         const existingRut = await User.findOne({ rut: rut });
         if (existingRut) {
-            return res.status(400).send('RUT already in use.');
+            return res.status(400).json({ success: false, message: 'El Rut ya se encuentra en uso.' });
         }
 
         const verificationToken = jwt.sign({ email: normalizedEmail }, secret, { expiresIn: '1h' });
@@ -118,7 +125,7 @@ const registerUser = async (req, res) => {
         });
 
         const savedTempUser = await tempUser.save();
-        if (!savedTempUser) return res.status(400).send('User could not be created.');
+        if (!savedTempUser) return res.status(400).json({ success: false, message: 'No se pudo crear el usuario temporal.' });
 
         // Obtener BASE_URL para producción
         const baseUrl = process.env.BASE_URL;
@@ -168,12 +175,10 @@ const registerUser = async (req, res) => {
             ],
         });
 
-        res.status(201).send({
-            message: 'Registro exitoso. Por favor, revise su correo electrónico para verificar su cuenta.',
-        });
+        res.status(201).json({ success: true, message: 'Registro exitoso. Por favor, revise su correo electrónico para verificar su cuenta.' });
     } catch (error) {
         console.error('Error registering user:', error);
-        res.status(500).send('Internal server error');
+        res.status(500).json({ success: false, message: 'Error interno del servidor.' });
     }
 };
 
@@ -280,8 +285,7 @@ const logoutUser = (req, res) => {
     const token = req.headers['authorization'].split(' ')[1]; // Obtener el token del header
     revokedTokens.push(token); // Añadir el token a la lista de tokens revocados
 
-    res.status(200).send({ message: "User logged out successfully" });
+    res.status(200).json({ success: true, message: "El usuario cerró sesión exitosamente" });
 };
-
 
 module.exports = { loginUser, registerUser, verifyEmail, logoutUser };
