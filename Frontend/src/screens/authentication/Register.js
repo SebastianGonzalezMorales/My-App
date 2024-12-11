@@ -9,8 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNPickerSelect from 'react-native-picker-select';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Platform } from 'react-native';
-
-
+import { Alert } from 'react-native';
 
 // Import the API URL from environment variables
 import { API_URL } from '@env';
@@ -51,6 +50,8 @@ const Register = ({ navigation }) => {
    * *******************
    */
 
+
+
   // Función para manejar el cambio de facultad
   const handleFacultadChange = (selectedFacultad) => {
     setFacultad(selectedFacultad);
@@ -80,20 +81,20 @@ const Register = ({ navigation }) => {
     if (!text.startsWith('+569 ')) {
       text = '+569 ';
     }
-  
+
     // Permitir solo números después del prefijo
     let numbersOnly = text.slice(5).replace(/[^0-9]/g, '');
-  
+
     // Limitar a 8 dígitos
     if (numbersOnly.length > 8) {
       numbersOnly = numbersOnly.slice(0, 8);
     }
-  
+
     const formattedNumber = `+569 ${numbersOnly}`;
     console.log('Número actualizado correctamente:', formattedNumber); // Log adicional
     setPhoneNumber(formattedNumber);
   };
-  
+
   /*
   * ***********************
   * **** Recuperación de AsyncStorage ****
@@ -220,6 +221,11 @@ const Register = ({ navigation }) => {
     return uvEmailPattern.test(email);
   };
 
+  const validateFullName = (fullName) => {
+    const nameParts = fullName.trim().split(" ");
+    return nameParts.length >= 2; // Verifica que haya al menos dos palabras
+  };
+
 
   const isStrongPassword = (password) => {
     // Verificar longitud mínima
@@ -240,18 +246,6 @@ const Register = ({ navigation }) => {
     return true;
   };
 
-  const handlePasswordChange = (text) => {
-    const trimmedText = text.trim();
-    setPassword(trimmedText);
-    if (!isStrongPassword(trimmedText)) {
-      setPasswordError('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un símbolo.');
-    } else {
-      setPasswordError('');
-    }
-  };
-  
-
-
   // sign up function
   const handleSignUp = async (fullName, rut, email, facultad, carrera, birthdate, phoneNumber, password, confirmPassword) => {
 
@@ -268,18 +262,53 @@ const Register = ({ navigation }) => {
       console.log(confirmPassword)
       console.log(" ")
 
-      if (!/^\+569 \d{8}$/.test(phoneNumber.trim())) {
-        console.log('Número de teléfono inválido (detalles):', phoneNumber.trim(), 'Longitud:', phoneNumber.trim().length);
-        alert('Por favor, ingresa un número de celular válido con el formato +569 XXXXXXXX.');
+      // Validación de nombre y apellido
+      if (!validateFullName(fullName)) {
+        Alert.alert(
+          "Error",
+          "Por favor, ingresa tu nombre y apellido.",
+          [{ text: "OK" }]
+        );
         return;
       }
-      
 
+      if (!/^\+569 \d{8}$/.test(phoneNumber.trim())) {
+        console.log('Número de teléfono inválido (detalles):', phoneNumber.trim(), 'Longitud:', phoneNumber.trim().length);
+        Alert.alert(
+          "Error",
+          "El número ingresado no es válido. Asegúrate de usar el formato +569 XXXXXXXX.",
+          [{ text: "OK" }]
+        );
+        return;
+      }
 
-        if (!facultad || !carrera) {
-           alert('Por favor, selecciona una facultad y una carrera.');
-           return;
-         } 
+      if (!facultad) {
+        Alert.alert(
+          "Error",
+          "Por favor, selecciona una facultad.",
+          [{ text: "OK" }]
+        );
+        return;
+      }
+
+      if (!carrera) {
+        Alert.alert(
+          "Error",
+          "Por favor, selecciona una carrera.",
+          [{ text: "OK" }]
+        );
+        return;
+      }
+
+          // Validar que la fecha de nacimiento no esté vacía
+    if (!birthdate || birthdate.trim() === "") {
+      Alert.alert(
+        "Error",
+        "Por favor, selecciona tu fecha de nacimiento.",
+        [{ text: "OK" }]
+      );
+      return;
+    }
 
       // Verifica si se aceptó la política
       const accepted = await AsyncStorage.getItem('policyAccepted');
@@ -290,29 +319,52 @@ const Register = ({ navigation }) => {
         return; // Detenemos el registro si no se aceptó la política
       }
 
-      // Validar el RUT 
       if (!validateRut(rut)) {
-        alert('RUT inválido. Por favor, verifica el RUT ingresado.');
+        Alert.alert(
+          "Error",
+          "Rut inválido. Por favor, verifica el rut ingresado.",
+          [{ text: "OK" }]
+        );
         return;
       }
 
-      // Validar el email
-      if (!validateEmail(email)) {
-        alert('Correo electrónico inválido. Debe seguir el formato nombre.apellido@alumnos.uv.cl.');
+      if (!email.trim()) {
+        Alert.alert(
+          "Error",
+          "Por favor, ingresa tu correo electrónico.",
+          [{ text: "OK" }]
+        );
         return;
       }
+      
+      if (!validateEmail(email)) {
+        Alert.alert(
+          "Error",
+          "Correo electrónico inválido. Por favor, utiliza el formato nombre.apellido@alumnos.uv.cl.",
+          [{ text: "OK" }]
+        );
+        return;
+      }
+
       const trimmedPassword = password.trim();
-      console.log("Hola")
-      console.log(trimmedPassword)
       if (!isStrongPassword(trimmedPassword)) {
-        alert('La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un símbolo.');
+        Alert.alert(
+          "Error",
+          "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un símbolo.",
+          [{ text: "OK" }]
+        );
         return;
       }
 
       if (password !== confirmPassword) {
-        alert("Contraseñas no coinciden");
+        Alert.alert(
+          "Error",
+          "Las contraseñas no coinciden. Por favor, verifica que ambas sean iguales.",
+          [{ text: "OK" }]
+        );
         return;
       }
+
 
       // Datos a enviar al backend
       const userData = {
@@ -334,26 +386,46 @@ const Register = ({ navigation }) => {
       console.log('Datos enviados al backend:', userData);
 
 
+
       // Verificar la respuesta del servidor
       if (response.status === 201) {
-        alert('Registro existoso, verifica tu cuenta ingresando a tu correo electrónico!');
-        navigation.navigate('Login');
+        Alert.alert(
+          "Registro exitoso",
+          "¡Tu cuenta ha sido creada correctamente! Verifica tu correo electrónico para activarla.",
+          [{ text: "OK", onPress: () => navigation.navigate('Login') }]
+        );
       } else {
-        alert(`Registro fallido: ${response.data}`);
+        Alert.alert(
+          "Error en el registro",
+          `Registro fallido: ${response.data}`,
+          [{ text: "OK" }]
+        );
       }
     } catch (error) {
-      // Manejo de errores
       if (error.response) {
         // La solicitud se realizó y el servidor respondió con un estado de error
-        alert(`Error en el registro: ${error.response.data}`);
+        Alert.alert(
+          "Error en el registro",
+          error.response.data || "Ha ocurrido un error inesperado. Por favor, intenta nuevamente.",
+          [{ text: "OK" }]
+        );
       } else if (error.request) {
         // La solicitud se realizó pero no se recibió respuesta
-        alert('No hay respuesta del servidor..');
+        Alert.alert(
+          "Error de conexión",
+          "No se recibió respuesta del servidor. Por favor, verifica tu conexión a Internet e intenta nuevamente.",
+          [{ text: "OK" }]
+        );
       } else {
         // Algo salió mal al configurar la solicitud
-        alert(`Error: ${error.message}`);
+        Alert.alert(
+          "Error",
+          `Ocurrió un error inesperado: ${error.message}`,
+          [{ text: "OK" }]
+        );
       }
     }
+
   };
 
 
@@ -418,12 +490,18 @@ const Register = ({ navigation }) => {
               style={AuthStyle.icon}
             />
             <TextInput
-              onChangeText={(text) => setFullName(text)} // every time the text changes, we can set the email to that text (callback function)
-              placeholder="Nombre"
+              onChangeText={setFullName}
+              placeholder="Nombre y Apellido"
               placeholderTextColor="#92959f"
               selectionColor="#5da5a9"
               style={AuthStyle.input}
+              keyboardType="default"
+              autoCapitalize="words"
+              autoCorrect={false}
+              autoComplete="name"
+              textContentType="name"
             />
+
           </View>
           <View style={AuthStyle.inputContainer}>
             <MaterialCommunityIcons
@@ -542,34 +620,34 @@ const Register = ({ navigation }) => {
             </View>
           </TouchableOpacity>
           {showDatePicker && (
-         <DateTimePicker
-         value={birthdate ? new Date(birthdate) : new Date()}
-         mode="date"
-         display={Platform.OS === 'ios' ? 'spinner' : 'spinner'}
-         onChange={handleDateChange}
-         maximumDate={new Date()}
-         locale="es-ES"
-       />
-       
+            <DateTimePicker
+              value={birthdate ? new Date(birthdate) : new Date()}
+              mode="date"
+              display={Platform.OS === 'ios' ? 'spinner' : 'spinner'}
+              onChange={handleDateChange}
+              maximumDate={new Date()}
+              locale="es-ES"
+            />
+
           )}
 
-<View style={AuthStyle.inputContainer}>
-  <MaterialCommunityIcons
-    name="phone-outline"
-    size={24}
-    style={AuthStyle.icon}
-  />
-  <TextInput
-    value={phoneNumber} // Vincular al estado phoneNumber
-    onChangeText={handlePhoneNumberChange} // Llamar a la función para actualizar el estado
-    placeholder="Número de teléfono"
-    placeholderTextColor="#92959f"
-    selectionColor="#5da5a9"
-    keyboardType="phone-pad" // Cambia el teclado a numérico
-    maxLength={13} // Limitar a "+569 XXXXXXXX"
-    style={AuthStyle.input}
-  />
-</View>
+          <View style={AuthStyle.inputContainer}>
+            <MaterialCommunityIcons
+              name="phone-outline"
+              size={24}
+              style={AuthStyle.icon}
+            />
+            <TextInput
+              value={phoneNumber} // Vincular al estado phoneNumber
+              onChangeText={handlePhoneNumberChange} // Llamar a la función para actualizar el estado
+              placeholder="Número de teléfono"
+              placeholderTextColor="#92959f"
+              selectionColor="#5da5a9"
+              keyboardType="phone-pad" // Cambia el teclado a numérico
+              maxLength={13} // Limitar a "+569 XXXXXXXX"
+              style={AuthStyle.input}
+            />
+          </View>
 
 
 

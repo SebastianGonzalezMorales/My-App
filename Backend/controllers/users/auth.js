@@ -98,7 +98,7 @@ const registerUser = async (req, res) => {
 
         const existingUser = await User.findOne({ email: normalizedEmail });
         if (existingUser) {
-            return res.status(400).send('Correo electrónico ya en uso.');
+            return res.status(400).send('El correo electrónico que ingresaste ya está registrado.');
         }
 
         const existingRut = await User.findOne({ rut: rut });
