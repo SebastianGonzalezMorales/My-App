@@ -29,13 +29,13 @@ const Login = ({ navigation }) => {
   // states
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
 
-    /*
-   * *******************
-   * **** Functions ****
-   * *******************
-   */
+  /*
+ * *******************
+ * **** Functions ****
+ * *******************
+ */
 
   // clear onboarding from asyncstorage
   const clearOnboarding = async () => {
@@ -46,44 +46,48 @@ const Login = ({ navigation }) => {
     }
   };
 
-// Login function
-const handleLogin = async (email, password) => {
-  try {
-    // Convertir el correo electrónico a minúsculas
-    const lowercaseEmail = email.toLowerCase();
-    const response = await axios.post(`${API_URL}/auth/login`, { email: lowercaseEmail, password });
-    
-    const { token } = response.data;
-    await login(token);
-    navigation.replace('Home');
-    // Mostrar alerta de éxito
-    Alert.alert(
-      "Inicio de sesión exitoso",
-      "¡Has iniciado sesión correctamente!",
-      [
-        { 
-          text: "OK", 
-          onPress: () => console.log("Usuario presionó OK al incio de sesión exitoso") 
-        }
-      ]
-    );
-  } catch (error) {
-   // console.error('Error al iniciar sesión. Verifica tus credenciales.', error);
-        // Muestra un mensaje de error claro utilizando Alert.alert
-        Alert.alert(
-          "Error",
-          "Error al iniciar sesión. Verifica tus credenciales.", 
-          [
-            { 
-              text: "OK", 
-              onPress: () => console.log("Usuario presionó OK en el alerta de error") 
-            }
-          ]
-        );
-      }
-    };
+  // Login function
+  const handleLogin = async (email, password) => {
+    try {
+      // Convertir el correo electrónico a minúsculas
+      const lowercaseEmail = email.toLowerCase();
+      const response = await axios.post(`${API_URL}/auth/login`, { email: lowercaseEmail, password });
 
-  
+      const { token } = response.data;
+      await login(token);
+      navigation.replace('Home');
+      // Mostrar alerta de éxito
+      Alert.alert(
+        "Inicio de sesión exitoso",
+        "¡Has iniciado sesión correctamente!",
+        [
+          {
+            text: "OK",
+            onPress: () => console.log("Usuario presionó OK al incio de sesión exitoso")
+          }
+        ]
+      );
+    } catch (error) {
+      // Registra la respuesta completa del servidor para inspeccionar
+      console.log('Error en login:', error.response?.data);
+
+      // Si el backend devuelve { success: false, message: '...'}, podemos usar error.response.data.message
+      const errorMessage = error.response?.data?.message || "Error al iniciar sesión. Verifica tus credenciales.";
+
+      Alert.alert(
+        "Error",
+        errorMessage,
+        [
+          {
+            text: "OK",
+            onPress: () => console.log("Usuario presionó OK en el alerta de error")
+          }
+        ]
+      );
+    }
+  };
+
+
   /*
    * ****************
    * **** Screen ****
@@ -172,7 +176,7 @@ const handleLogin = async (email, password) => {
               size={24}
               style={AuthStyle.icon}
             />
-                <TextInput
+            <TextInput
               onChangeText={(text) => setPassword(text)}
               placeholder="Contraseña"
               placeholderTextColor="#92959f"
@@ -198,13 +202,13 @@ const handleLogin = async (email, password) => {
             onPress={() => handleLogin(email, password)}
             text="Ingresar"
             iconName="log-in"
-            
-           
+
+
           />
 
           <View style={AuthStyle.changeScreenContainer}>
             <Text style={AuthStyle.changeScreenText}>
-            ¿Aún no tienes una cuenta?
+              ¿Aún no tienes una cuenta?
             </Text>
             <SmallAuthButton
               text="Regístrate"
@@ -220,10 +224,10 @@ const handleLogin = async (email, password) => {
               onPress={() => navigation.replace('ForgotPassword')}
             />
           </View>
-        
+
           <TouchableOpacity onPress={() => navigation.replace('Onboarding')}>
-            
-            
+
+
             <Text>Conoce las funcionalidades</Text>
           </TouchableOpacity>
         </View>
