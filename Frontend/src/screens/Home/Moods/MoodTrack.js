@@ -37,19 +37,7 @@ const MoodTrack = ({ route, navigation }) => {
     const { mood, value, consejo } = route.params;
     // references
 
-    /*    // document id passed from previous screen
-       const docId = route.params.documentId;
-     
-       // obtain document id
-       const obtainId = firebase
-         .firestore()
-         .collection('users')
-         .doc(firebase.auth().currentUser.uid)
-         .collection('mood')
-         .doc(docId);
-     
        // states */
-
     const [title, setTitle] = useState('');
     const [quickNote, setQuickNote] = useState('');
     const [activities, setActivities] = useState(Activity); // select activity handler
@@ -60,8 +48,6 @@ const MoodTrack = ({ route, navigation }) => {
      * *******************
      */
 
-
-
     // delete document when back button has been pressed
     function deleteDocument() {
         /*     obtainId.delete();
@@ -69,24 +55,6 @@ const MoodTrack = ({ route, navigation }) => {
             console.log('Document', docId, 'has been deleted.');*/
         navigation.goBack();
     }
-
-    // track mood
-    const MoodTrack = async (mood, value, title, quickNote) => {
-        try {
-            await obtainId.set({
-                mood,
-                value,
-                activities: activities,
-                title,
-                quickNote,
-                created: firebase.firestore.Timestamp.now(),
-            });
-            console.log('Mood has been tracked');
-            navigation.navigate('HomeMood');
-        } catch (error) {
-            alert(error.message);
-        }
-    };
 
     // select activity handler
     const selectHandler = (item) => {
@@ -162,6 +130,7 @@ const MoodTrack = ({ route, navigation }) => {
      * **** Screen ****
      * ****************
      */
+    
     return (
         <SafeAreaView style={[FormStyle.container, GlobalStyle.androidSafeArea]}>
             {/* header */}

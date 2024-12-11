@@ -8,16 +8,13 @@ import {
   Modal,
   Dimensions,
   StyleSheet,
-  Linking,
-  TouchableOpacity,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { Image, Alert } from 'react-native';
+
 import { fetchWithToken } from '../../utils/apiHelpers';
 
 // Componentes personalizados y estilos
 import CustomButton from '../../components/buttons/CustomButton';
-import FormButton from '../../components/buttons/FormButton';
 import HistoryButton from '../../components/buttons/HistoryButton';
 import PickMoodButton from '../../components/buttons/PickMoodButton';
 import ChartStyle from '../../assets/styles/ChartStyle';
@@ -54,11 +51,6 @@ const HomeMood = ({ navigation }) => {
    * **** Functions ****
    * *******************
    */
-
-  // Función para abrir perfiles de Instagram (si es necesario)
-  const openInstagram = (url) => {
-    Linking.openURL(url);
-  };
 
   // Formatear fecha
   const formatDate = (dateString) => {

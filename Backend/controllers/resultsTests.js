@@ -46,13 +46,20 @@ const getResultsTestsByUserId = async (req, res) => {
     // Buscar resultados de tests por userId
     const results = await ResultsTests.find({ userId });
 
-    if (!results.length) {
-      return res.status(404).json({ message: 'No se encontraron resultados para este usuario.' });
-    }
-
-    res.status(200).json(results);
+    // Devolver resultados (vacío o con datos)
+    return res.status(200).json({
+      success: true,
+      message: results.length
+        ? 'Resultados encontrados.'
+        : 'No se encontraron resultados para este usuario.',
+      results,
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener los resultados del test', error: error.message });
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener los resultados del test',
+      error: error.message,
+    });
   }
 };
 
