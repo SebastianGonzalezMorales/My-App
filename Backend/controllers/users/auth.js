@@ -8,7 +8,7 @@ const nodemailer = require('nodemailer'); // Servicio de correos
 const secret = process.env.SECRET;
 
 if (!secret) {
-  throw new Error('La clave secreta (SECRET) no está definida en las variables de entorno.');
+    throw new Error('La clave secreta (SECRET) no está definida en las variables de entorno.');
 }
 
 const loginUser = async (req, res) => {
@@ -78,22 +78,17 @@ const registerUser = async (req, res) => {
             return res.status(400).send('Las contraseñas no coinciden.');
         }
 
-        // Verificar que el formato de la fecha sea correcto y que la fecha sea válida
-        const birthdateRegex = /^\d{4}-\d{2}-\d{2}$/;
-        if (!birthdateRegex.test(birthdate)) {
-            return res.status(400).send('El formato de la fecha de nacimiento debe ser YYYY-MM-DD.');
-        }
-        if (!policyAccepted) {
-            return res.status(400).send('Debes aceptar la política de privacidad para registrarte.');
-        }
-
-        // Descomponer la fecha en año, mes y día
-        const [year, month, day] = birthdate.split('-').map(Number);
+        // Convertir DD-MM-YYYY a YYYY-MM-DD
+        const [day, month, year] = birthdate.split('-').map(Number);
+        const formattedBirthdate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
         // Validaciones adicionales de la fecha
         const currentYear = new Date().getFullYear();
         if (year < 1900 || year > currentYear || month < 1 || month > 12 || day < 1 || day > 31) {
             return res.status(400).send('La fecha de nacimiento no es válida.');
+        }
+        if (!policyAccepted) {
+            return res.status(400).send('Debes aceptar la política de privacidad para registrarte.');
         }
 
         const existingUser = await User.findOne({ email: normalizedEmail });

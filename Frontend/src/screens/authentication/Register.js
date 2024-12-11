@@ -11,6 +11,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Platform } from 'react-native';
 import { Alert } from 'react-native';
 
+import { format } from 'date-fns';
+
 // Import the API URL from environment variables
 import { API_URL } from '@env';
 
@@ -63,8 +65,8 @@ const Register = ({ navigation }) => {
     setShowDatePicker(false); // Oculta el selector de fecha
 
     if (selectedDate) {
-      // Formatear la fecha como YYYY-MM-DD
-      const formattedDate = selectedDate.toISOString().split('T')[0];
+      // Formatear la fecha como "11-12-2024"
+      const formattedDate = format(selectedDate, "dd-MM-yyyy");
       setBirthdate(formattedDate); // Guardar la fecha formateada
     }
   };
