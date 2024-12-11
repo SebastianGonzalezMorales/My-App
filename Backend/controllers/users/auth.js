@@ -20,13 +20,13 @@ const loginUser = async (req, res) => {
     // Busca en la colección temporal primero
     const tempUser = await TempUser.findOne({ email: normalizedEmail });
     if (tempUser) {
-        return res.status(403).send('Por favor verifique su correo electrónico antes de iniciar sesión.');
+        return res.status(403).send('Aún no has verificado tu correo electrónico. Por favor, revisa tu bandeja de entrada para completar el registro.');
     }
 
     // Busca en la colección de usuarios
     const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
-        return res.status(400).send('Usuario no encontrado');
+        return res.status(400).send('No pudimos encontrar una cuenta con este correo electrónico. Por favor, revisa que el correo sea correcto o regístrate si aún no tienes una cuenta.');
     }
 
     if (!user.verified) {
@@ -169,7 +169,7 @@ const registerUser = async (req, res) => {
         });
 
         res.status(201).send({
-            message: 'Registration successful. Please check your email to verify your account.',
+            message: 'Registro exitoso. Por favor, revise su correo electrónico para verificar su cuenta.',
         });
     } catch (error) {
         console.error('Error registering user:', error);
