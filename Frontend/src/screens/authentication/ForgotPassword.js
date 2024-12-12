@@ -29,18 +29,35 @@ const ForgotPassword = ({ navigation }) => {
    * *******************
    */
 
-// Función de recuperación de contraseña
-const handlePasswordRecovery = async () => {
-  try {
-    // Convertir el correo electrónico a minúsculas
-    const lowercaseEmail = email.toLowerCase();
-    
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-z]+\.[a-z]+@alumnos\.uv\.cl$/; // Formato institucional
+    return emailRegex.test(email);
+  };
+  
+  
+  // Función de recuperación de contraseña
+  const handlePasswordRecovery = async () => {
+    try {
+
+      if (!email.trim()) {
+        return Alert.alert('Error', 'Por favor, ingresa tu correo institucional.');
+      }
+
+      // Usar antes de enviar la solicitud
+      if (!validateEmail(email)) {
+        return Alert.alert('Error', 'Por favor, ingresa un correo institucional válido.');
+      }
+      
+      // Convertir el correo electrónico a minúsculas
+      const lowercaseEmail = email.toLowerCase();
+      
     // Enviar la solicitud al backend
     const response = await axios.post(`${API_URL}/password/forgot-password`, { email: lowercaseEmail });
     console.log(response)
     // Manejar la respuesta del backend
     if (response.data.success) {
-      alert(response.data.message); // Mensaje de éxito del backend
+      // Mostrar mensaje de éxito
+      Alert.alert('¡Correo Enviado!', response.data.message);
 
       // Guardar el correo electrónico en AsyncStorage
       try {
@@ -57,15 +74,15 @@ const handlePasswordRecovery = async () => {
       alert(response.data.message || 'Error al enviar el enlace de recuperación.'); // Mensaje de error del backend
     }
   } catch (error) {
-    // Manejo de errores del backend
-    if (error.response) {
-      // El servidor respondió con un código de estado fuera del rango 2xx
-      alert(error.response.data.message || 'Error al enviar el enlace de recuperación. Por favor, intenta nuevamente.');
-    } else {
-      // Error en la configuración de la solicitud
-      alert('Error inesperado: ' + error.message);
-    }
-    console.log('Error @handlePasswordRecovery:', error);
+ // Manejo de errores del backend
+ if (error.response) {
+  // Mostrar mensaje basado en el error del backend
+  Alert.alert('Error', error.response.data.message || 'Algo salió mal. Intenta nuevamente.');
+} else {
+  // Error general en la solicitud
+  Alert.alert('Error', 'No se pudo conectar con el servidor. Por favor, revisa tu conexión.');
+}
+console.error('Error @handlePasswordRecovery:', error);
   }
 };
   /*

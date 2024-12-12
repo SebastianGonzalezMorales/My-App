@@ -18,7 +18,7 @@ const forgotPassword = async (req, res) => {
   try {
     const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
-      return res.status(400).json({ success: false, message: 'No se encontró una cuenta con este correo.' });
+      return res.status(404).json({ success: false, code: 'USER_NOT_FOUND', message: 'No se encontró una cuenta asociada a este correo. Por favor, verifica e intenta nuevamente.' });
     }
 
     const firstName = user.name.split(' ')[0];
@@ -81,7 +81,7 @@ const forgotPassword = async (req, res) => {
     res.status(200).json({ success: true, message: 'Se ha enviado un correo para restablecer la contraseña. Por favor, revisa tu bandeja de entrada.' });
   } catch (error) {
     console.error('Error al enviar el correo de restablecimiento:', error);
-    res.status(500).json({ success: false, message: 'Error interno del servidor' });
+    res.status(500).json({ success: false, message: 'Hubo un error interno. Por favor, intenta nuevamente más tarde.' });
   }
 };
 
@@ -148,67 +148,67 @@ const verifyResetToken = async (req, res) => {
               </body>
           </html>
       `);
-  }
+    }
 
-  // Marcar que el usuario puede restablecer la contraseña
-  user.canResetPassword = true;
-  await user.save();
+    // Marcar que el usuario puede restablecer la contraseña
+    user.canResetPassword = true;
+    await user.save();
 
 
-  // Si el token es válido, responder al frontend indicando que puede cambiar su contraseña
-  res.status(200).send(`
+    // Si el token es válido, responder al frontend indicando que puede cambiar su contraseña
+    res.status(200).send(`
       <html>
           <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
               <h1 style="font-size: 32px; color: #000C7B;">El token es válido. Puedes restablecer tu contraseña ahora, volviendo a tu aplicación móvil</h1>
           </body>
       </html>
   `);
-} catch (error) {
-  console.error('Error al verificar el token:', error);
-  res.status(400).send(`
+  } catch (error) {
+    console.error('Error al verificar el token:', error);
+    res.status(400).send(`
       <html>
           <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
               <h1 style="font-size: 32px; color: #000C7B;">El enlace de restablecimiento es inválido o ha caducado.</h1>
           </body>
       </html>
   `);
-}
+  }
 };
 // Controlador para obtener el token de restablecimiento de contraseña
 const getResetPasswordToken = async (req, res) => {
-    const { email } = req.body; // Obtiene el correo electrónico del cuerpo de la solicitud
+  const { email } = req.body; // Obtiene el correo electrónico del cuerpo de la solicitud
 
-    // Expresión regular para validar el formato nombre.apellido@alumnos.uv.cl
-    const emailRegex = /^[a-z]+\.[a-z]+@alumnos\.uv\.cl$/;
+  // Expresión regular para validar el formato nombre.apellido@alumnos.uv.cl
+  const emailRegex = /^[a-z]+\.[a-z]+@alumnos\.uv\.cl$/;
 
-    // Verifica que el formato del correo sea correcto
-    if (!emailRegex.test(email)) {
-        return res.status(400).send({ message: "El correo electrónico no tiene el formato correcto" });
+  // Verifica que el formato del correo sea correcto
+  if (!emailRegex.test(email)) {
+    return res.status(400).send({ message: "El correo electrónico no tiene el formato correcto" });
+  }
+
+  try {
+    // Busca al usuario por correo electrónico
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      return res.status(404).send({ message: "Usuario no encontrado" });
     }
 
-    try {
-        // Busca al usuario por correo electrónico
-        const user = await User.findOne({ email: email });
-
-        if (!user) {
-            return res.status(404).send({ message: "Usuario no encontrado" });
-        }
-
-        // Verifica si hay un token de restablecimiento
-        if (!user.resetPasswordToken) {
-            return res.status(400).send({ message: "No hay token de restablecimiento para este usuario" });
-        }
-
-        // Devuelve el token de restablecimiento
-        return res.status(200).send({
-            message: "Token encontrado",
-            resetPasswordToken: user.resetPasswordToken
-        });
-
-    } catch (error) {
-        // Manejo de errores
-        return res.status(500).send({ message: "Error del servidor", error: error.message });
+    // Verifica si hay un token de restablecimiento
+    if (!user.resetPasswordToken) {
+      return res.status(400).send({ message: "No hay token de restablecimiento para este usuario" });
     }
+
+    // Devuelve el token de restablecimiento
+    return res.status(200).send({
+      message: "Token encontrado",
+      resetPasswordToken: user.resetPasswordToken
+    });
+
+  } catch (error) {
+    // Manejo de errores
+    return res.status(500).send({ message: "Error del servidor", error: error.message });
+  }
 };
 
 module.exports = { forgotPassword, changePassword, verifyResetToken, getResetPasswordToken };
