@@ -11,7 +11,7 @@ const Policy = ({ navigation }) => {
     if (isPolicyChecked) {
       try {
         await AsyncStorage.setItem('policyAccepted', 'true');
-        Alert.alert('Política Aceptada', 'Gracias por aceptar la política de privacidad.');
+        Alert.alert('¡Todo Listo!', 'Gracias por aceptar nuestra política de privacidad. ¡Ahora puedes empezar a utilizar la aplicación!');
         navigation.navigate('Register'); // Redirigir al registro
       } catch (error) {
         console.error('Error al guardar la política:', error);
