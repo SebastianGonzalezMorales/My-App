@@ -1,5 +1,9 @@
-import { FlatList, SafeAreaView, Text, View, Alert } from 'react-native';
+import { FlatList, SafeAreaView, Text, View, Alert, TouchableOpacity, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Animatable from 'react-native-animatable';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useFocusEffect } from '@react-navigation/native';
 
 // componentes
 import CustomButton from '../../../../components/buttons/CustomButton';
@@ -9,87 +13,108 @@ import CircularButton from '../../../../components/buttons/CircularButton';
 import BackButton from '../../../../components/buttons/BackButton';
 
 // personalización
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import GlobalStyle from '../../../../assets/styles/GlobalStyle';
 
-function Questionnaire({ navigation }) {
+function TestDeAnsiedad({ navigation }) {
   // estados
   const [results, setResults] = useState([]);
-  const [lastTest, setLastTest] = useState();
-
+  const [lastTest, setLastTest] = useState('Cargando...');
   const [graveCount, setGraveCount] = useState(0); // Estado para contar los resultados graves
 
-  /*
-   * ****************
-   * **** Pantalla ****
-   * ****************
-   */
+  // Estados para el tooltip
+  const [showTooltip, setShowTooltip] = useState(true); // Tooltip inicia como visible
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Función para formatear la fecha (si es necesario)
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  // Función para verificar si mostrar el tooltip
+  const checkTooltip = async (noResults) => {
+    const shown = await AsyncStorage.getItem('shownTooltipAnsiedad');
+    if (!shown && noResults) {
+      setShowTooltip(true);
+    } else {
+      setShowTooltip(false);
+    }
+  };
+
+  // Función para almacenar que el tooltip ha sido mostrado
+  const storeTooltipShown = async () => {
+    await AsyncStorage.setItem('shownTooltipAnsiedad', 'true');
+  };
+
+  // useFocusEffect para cargar datos y verificar el tooltip
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        try {
+          setIsLoading(true);
+
+          // Simulación de retraso para mostrar "Cargando..." por más tiempo
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+
+          // Simulación de obtención de datos
+          const fetchedResults = []; // Simulamos que no hay resultados previos
+
+          setResults(fetchedResults);
+
+          if (fetchedResults.length > 0) {
+            setLastTest(formatDate(fetchedResults[0].created));
+          } else {
+            setLastTest('Sin resultados previos');
+          }
+
+          const graveResults = fetchedResults.filter(
+            (result) => result.severity === 'Grave'
+          );
+          setGraveCount(graveResults.length);
+
+          await checkTooltip(fetchedResults.length === 0);
+        } catch (error) {
+          console.error('Error al obtener los resultados:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchData();
+    }, [])
+  );
+
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       <BackButton onPress={() => navigation.goBack()} />
 
-      {/* Mostrar alerta si tiene 4 o más resultados graves */}
+      {/* Mostrar alerta si tiene 20 o más resultados graves */}
       {graveCount >= 20 && (
-        <View
-          style={{
-            padding: 15,
-            backgroundColor: '#fff3e0', // Fondo claro
-            borderRadius: 12,
-            marginBottom: 15,
-            borderWidth: 1,
-            borderColor: '#ffd699', // Borde rojo claro
-          }}
-        >
+        <View style={styles.alertContainer}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons
               name="alert-circle-outline"
               size={16}
-              color="#e53935" // Rojo más prominente
+              color="#e53935"
               style={{ marginRight: 8 }}
             />
-            <Text
-              style={{
-                color: '#e53935', // Título en rojo
-                fontWeight: 'bold',
-                fontSize: 16,
-                lineHeight: 22,
-                flex: 1,
-              }}
-            >
-              Atención
-            </Text>
+            <Text style={styles.alertTitle}>Atención</Text>
             <MaterialCommunityIcons
               name="close"
               size={16}
-              color="#e53935" // Color rojo
-              onPress={() => setGraveCount(0)} // Oculta el mensaje al presionar
+              color="#e53935"
+              onPress={() => setGraveCount(0)}
             />
           </View>
 
-          <Text
-            style={{
-              color: '#e53935', // Texto principal en rojo
-              fontSize: 15,
-              lineHeight: 22,
-              textAlign: 'justify',
-              marginTop: 8,
-              fontWeight: 'bold',
-            }}
-          >
+          <Text style={styles.alertMessage}>
             Hemos detectado que podrías estar atravesando una situación difícil.
           </Text>
 
-          <Text
-            style={{
-              color: '#333', // Texto secundario en negro
-              fontSize: 14,
-              lineHeight: 22,
-              textAlign: 'justify',
-              marginTop: 5,
-            }}
-          >
-            Por favor, envíanos un correo a{' '}
-            <Text style={{ fontWeight: 'bold' }}>dae@uv.cl</Text>, indicando tu
+          <Text style={styles.alertSubMessage}>
+            Por favor, envíanos un correo a <Text style={{ fontWeight: 'bold' }}>dae@uv.cl</Text>, indicando tu
             teléfono. También puedes llamarnos o escribirnos un WhatsApp al
             +569 68301655 de Lunes a Viernes de 8:30 a 17:30 horas.
           </Text>
@@ -108,7 +133,7 @@ function Questionnaire({ navigation }) {
         </Text>
         <View style={GlobalStyle.line} />
         <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>
-          Última prueba realizada: {lastTest}
+          Última prueba realizada: {isLoading ? 'Cargando...' : lastTest}
         </Text>
       </View>
 
@@ -116,65 +141,192 @@ function Questionnaire({ navigation }) {
       <View style={GlobalStyle.rowTwo}>
         <View style={GlobalStyle.statsContainer}>
           <Text style={GlobalStyle.statsTitle}>Estadísticas</Text>
-          <StatsButton
-            /* onPress={() => navigation.navigate('QuestionnaireStats')} */
-          />
+          <StatsButton />
         </View>
 
-        <HistoryButton
-        /*   onPress={() => navigation.navigate('QuestionnaireHistory')} */
-          textLeft="Resultados"
-          textRight="Ver todos"
-        />
+        <HistoryButton textLeft="Resultados" textRight="Ver todos" />
 
-        <FlatList
-          data={results.slice(0, 10)} // Mostrar solo los primeros 10 resultados
-          numColumns={1}
-          renderItem={({ item }) => (
-            <CustomButton
-              buttonStyle={{
-                backgroundColor:
-                  item.severity === 'Normal'
-                    ? '#fdf3e4'
-                    : item.severity === 'Leve'
-                    ? '#e4f7f1'
-                    : item.severity === 'Moderado'
-                    ? '#e4eff7'
-                    : item.severity === 'Moderadamente grave'
-                    ? '#f7e4eb'
-                    : '#f7d8e3', // Colores para cada tipo de severidad
-                paddingVertical: 15,
-                paddingHorizontal: 20,
-                marginBottom: 10,
-                borderRadius: 10,
-              }}
-              onPress={() => {
-                navigation.navigate('ResultView', { documentId: item.id });
-              }}
-              title={item.severity} // Pasar la severidad
-              textOne={item.dateData} // Pasar la fecha
-              textTwo={item.totalScore} // Pasar el puntaje
-              textStyle={{ color: '#af7b56' }} // Estilos del texto
-            />
-          )}
-        />
-
-        {/* Botón */}
-        <View style={GlobalStyle.circularButtonContainer}>
-          <CircularButton
-            onPress={() => {
-              Alert.alert(
-                'Funcionalidad no disponible',
-                'Las preguntas de este test aún no están cargadas. La funcionalidad se habilitará cuando el administrador las cargue. Intenta nuevamente más tarde.',
-                [{ text: 'Aceptar' }]
-              );              
-            }}
-            setVisble={false}
+        {isLoading ? (
+          <Text style={{ textAlign: 'center', color: '#888', marginTop: 20 }}>
+            Cargando resultados...
+          </Text>
+        ) : results.length === 0 ? (
+          <Text style={{ textAlign: 'center', color: '#888', marginTop: 20 }}>
+            Aún no has realizado ningún test. Completa un test para ver tus resultados.
+          </Text>
+        ) : (
+          <FlatList
+            data={results.slice(0, 10)}
+            numColumns={1}
+            renderItem={({ item }) => (
+              <CustomButton
+                buttonStyle={{
+                  backgroundColor:
+                    item.severity === 'Normal'
+                      ? '#fdf3e4'
+                      : item.severity === 'Leve'
+                      ? '#e4f7f1'
+                      : item.severity === 'Moderado'
+                      ? '#e4eff7'
+                      : item.severity === 'Moderadamente grave'
+                      ? '#f7e4eb'
+                      : '#f7d8e3',
+                  paddingVertical: 15,
+                  paddingHorizontal: 20,
+                  marginBottom: 10,
+                  borderRadius: 10,
+                }}
+                onPress={() => {
+                  navigation.navigate('ResultView', { documentId: item.id });
+                }}
+                title={item.severity}
+                textOne={item.dateData}
+                textTwo={item.totalScore}
+                textStyle={{ color: '#af7b56' }}
+              />
+            )}
           />
-        </View>
+        )}
+
+        <View style={GlobalStyle.circularButtonContainer}></View>
       </View>
+
+      {/* Tooltip */}
+      {showTooltip && (
+        <View style={styles.tooltipContainer}>
+          <Text style={styles.tooltipText}>
+            ¡Pulsa aquí para iniciar tu primer test!
+          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              setShowTooltip(false);
+              storeTooltipShown();
+            }}
+            style={styles.tooltipButton}
+          >
+            <Text style={styles.tooltipButtonText}>OK</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {showTooltip && (
+        <Animatable.View
+          animation="bounce"
+          easing="ease-in-out"
+          iterationCount="infinite"
+          style={styles.arrowContainer}
+        >
+          <MaterialCommunityIcons name="arrow-down" size={30} color="#9F8758" />
+        </Animatable.View>
+      )}
+
+      <Animatable.View
+        animation="pulse"
+        easing="ease-in-out"
+        duration={800}
+        iterationCount="infinite"
+        style={styles.floatingButtonContainer}
+      >
+        <CircularButton
+          onPress={async () => {
+            Alert.alert(
+              'Funcionalidad no disponible',
+              'Las preguntas de este test aún no están cargadas. La funcionalidad se habilitará cuando el contenido sea cargado por el administrador. Intenta nuevamente más tarde.',
+              [{ text: 'Aceptar' }]
+            );
+            setShowTooltip(false);
+            await storeTooltipShown();
+          }}
+          setVisble={false}
+        />
+      </Animatable.View>
     </SafeAreaView>
   );
 }
 
-export default Questionnaire;
+const styles = StyleSheet.create({
+  floatingButtonContainer: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+    backgroundColor: '#FFF',
+    padding: 10,
+    borderRadius: 50,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  tooltipContainer: {
+    position: 'absolute',
+    bottom: '15%',
+    right: '10%',
+    width: '40%',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  tooltipText: {
+    color: '#888',
+    fontWeight: '600',
+    textAlign: 'center',
+    fontSize: 14,
+    marginBottom: 10,
+  },
+  tooltipButton: {
+    backgroundColor: '#9F8758',
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  tooltipButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  arrowContainer: {
+    position: 'absolute',
+    bottom: 115,
+    right: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  alertContainer: {
+    padding: 15,
+    backgroundColor: '#fff3e0',
+    borderRadius: 12,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: '#ffd699',
+  },
+  alertTitle: {
+    color: '#e53935',
+    fontWeight: 'bold',
+    fontSize: 16,
+    lineHeight: 22,
+    flex: 1,
+  },
+  alertMessage: {
+    color: '#e53935',
+    fontSize: 15,
+    lineHeight: 22,
+    textAlign: 'justify',
+    marginTop: 8,
+    fontWeight: 'bold',
+  },
+  alertSubMessage: {
+    color: '#333',
+    fontSize: 14,
+    lineHeight: 22,
+    textAlign: 'justify',
+    marginTop: 5,
+  },
+});
+
+export default TestDeAnsiedad;
