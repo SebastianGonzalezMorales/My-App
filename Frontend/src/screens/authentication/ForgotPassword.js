@@ -1,5 +1,5 @@
 // react imports
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TextInput, TouchableOpacity, Alert, View } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
 import Svg, { Circle } from 'react-native-svg';

@@ -1,31 +1,35 @@
-import { FlatList, SafeAreaView, Text, View, Alert, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  FlatList,
+  SafeAreaView,
+  Text,
+  View,
+  Alert,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Animatable from 'react-native-animatable';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useFocusEffect } from '@react-navigation/native';
 
-// componentes
+// Componentes personalizados
 import CustomButton from '../../../../components/buttons/CustomButton';
 import HistoryButton from '../../../../components/buttons/HistoryButton';
 import StatsButton from '../../../../components/buttons/StatsButton';
 import CircularButton from '../../../../components/buttons/CircularButton';
 import BackButton from '../../../../components/buttons/BackButton';
 
-// personalización
+// Estilos globales
 import GlobalStyle from '../../../../assets/styles/GlobalStyle';
 
 function TestDeAnsiedad({ navigation }) {
-  // estados
   const [results, setResults] = useState([]);
   const [lastTest, setLastTest] = useState('Cargando...');
-  const [graveCount, setGraveCount] = useState(0); // Estado para contar los resultados graves
-
-  // Estados para el tooltip
-  const [showTooltip, setShowTooltip] = useState(true); // Tooltip inicia como visible
+  const [graveCount, setGraveCount] = useState(0);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Función para formatear la fecha (si es necesario)
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
@@ -34,34 +38,51 @@ function TestDeAnsiedad({ navigation }) {
     return `${day}/${month}/${year}`;
   };
 
-  // Función para verificar si mostrar el tooltip
-  const checkTooltip = async (noResults) => {
-    const shown = await AsyncStorage.getItem('shownTooltipAnsiedad');
-    if (!shown && noResults) {
-      setShowTooltip(true);
-    } else {
-      setShowTooltip(false);
+  const initializeTooltip = async () => {
+    try {
+      const shown = await AsyncStorage.getItem('shownTooltipAnsiedad');
+      if (!shown) {
+        setShowTooltip(true);
+      } else {
+        setShowTooltip(false);
+      }
+    } catch (error) {
+      console.error('Error al inicializar el estado del tooltip:', error);
     }
   };
 
-  // Función para almacenar que el tooltip ha sido mostrado
   const storeTooltipShown = async () => {
-    await AsyncStorage.setItem('shownTooltipAnsiedad', 'true');
+    try {
+      await AsyncStorage.setItem('shownTooltipAnsiedad', 'true');
+      setShowTooltip(false);
+    } catch (error) {
+      console.error('Error al guardar el estado del tooltip:', error);
+    }
   };
 
-  // useFocusEffect para cargar datos y verificar el tooltip
+  const resetTooltip = async () => {
+    try {
+      await AsyncStorage.removeItem('shownTooltipAnsiedad');
+      setShowTooltip(true);
+    } catch (error) {
+      console.error('Error al reiniciar el estado del tooltip:', error);
+    }
+  };
+
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
         try {
           setIsLoading(true);
 
+          // Inicializar tooltip solo una vez al entrar a la vista
+          await initializeTooltip();
+
           // Simulación de retraso para mostrar "Cargando..." por más tiempo
           await new Promise((resolve) => setTimeout(resolve, 1000));
 
           // Simulación de obtención de datos
-          const fetchedResults = []; // Simulamos que no hay resultados previos
-
+          const fetchedResults = []; // Simulamos que no hay resultados
           setResults(fetchedResults);
 
           if (fetchedResults.length > 0) {
@@ -74,8 +95,6 @@ function TestDeAnsiedad({ navigation }) {
             (result) => result.severity === 'Grave'
           );
           setGraveCount(graveResults.length);
-
-          await checkTooltip(fetchedResults.length === 0);
         } catch (error) {
           console.error('Error al obtener los resultados:', error);
         } finally {
@@ -90,7 +109,6 @@ function TestDeAnsiedad({ navigation }) {
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       <BackButton onPress={() => navigation.goBack()} />
 
-      {/* Mostrar alerta si tiene 20 o más resultados graves */}
       {graveCount >= 20 && (
         <View style={styles.alertContainer}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -108,37 +126,31 @@ function TestDeAnsiedad({ navigation }) {
               onPress={() => setGraveCount(0)}
             />
           </View>
-
           <Text style={styles.alertMessage}>
             Hemos detectado que podrías estar atravesando una situación difícil.
           </Text>
-
           <Text style={styles.alertSubMessage}>
-            Por favor, envíanos un correo a <Text style={{ fontWeight: 'bold' }}>dae@uv.cl</Text>, indicando tu
+            Por favor, envíanos un correo a{' '}
+            <Text style={{ fontWeight: 'bold' }}>dae@uv.cl</Text>, indicando tu
             teléfono. También puedes llamarnos o escribirnos un WhatsApp al
             +569 68301655 de Lunes a Viernes de 8:30 a 17:30 horas.
           </Text>
         </View>
       )}
 
-      {/* Sección 1 */}
       <View style={{ height: 290 }}>
         <Text style={GlobalStyle.welcomeText}>Test GAD-7</Text>
         <Text style={GlobalStyle.subtitle}>Test de Ansiedad Generalizada</Text>
-        <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>
-          El cuestionario GAD-7 es una herramienta que se utiliza para medir la
+        <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}> El cuestionario GAD-7 es una herramienta que se utiliza para medir la
           gravedad de la ansiedad a través de siete preguntas. Ayuda a
           identificar a las personas que pueden requerir una evaluación o
-          tratamiento adicional para la ansiedad.
-        </Text>
+          tratamiento adicional para la ansiedad.</Text>
         <View style={GlobalStyle.line} />
-        <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>
-          Última prueba realizada: {isLoading ? 'Cargando...' : lastTest}
-        </Text>
+        <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>Última prueba realizada: {isLoading ? 'Cargando...' : lastTest}</Text>
       </View>
 
-      {/* Sección 2 */}
-      <View style={GlobalStyle.rowTwo}>
+            {/* Sección de estadísticas y resultados */}
+            <View style={GlobalStyle.rowTwo}>
         <View style={GlobalStyle.statsContainer}>
           <Text style={GlobalStyle.statsTitle}>Estadísticas</Text>
           <StatsButton />
@@ -146,80 +158,72 @@ function TestDeAnsiedad({ navigation }) {
 
         <HistoryButton textLeft="Resultados" textRight="Ver todos" />
 
-        {isLoading ? (
-          <Text style={{ textAlign: 'center', color: '#888', marginTop: 20 }}>
-            Cargando resultados...
-          </Text>
-        ) : results.length === 0 ? (
-          <Text style={{ textAlign: 'center', color: '#888', marginTop: 20 }}>
-            Aún no has realizado ningún test. Completa un test para ver tus resultados.
-          </Text>
-        ) : (
-          <FlatList
-            data={results.slice(0, 10)}
-            numColumns={1}
-            renderItem={({ item }) => (
-              <CustomButton
-                buttonStyle={{
-                  backgroundColor:
-                    item.severity === 'Normal'
-                      ? '#fdf3e4'
-                      : item.severity === 'Leve'
-                      ? '#e4f7f1'
-                      : item.severity === 'Moderado'
-                      ? '#e4eff7'
-                      : item.severity === 'Moderadamente grave'
-                      ? '#f7e4eb'
-                      : '#f7d8e3',
-                  paddingVertical: 15,
-                  paddingHorizontal: 20,
-                  marginBottom: 10,
-                  borderRadius: 10,
-                }}
-                onPress={() => {
-                  navigation.navigate('ResultView', { documentId: item.id });
-                }}
-                title={item.severity}
-                textOne={item.dateData}
-                textTwo={item.totalScore}
-                textStyle={{ color: '#af7b56' }}
-              />
-            )}
+      {isLoading ? (
+        <Text style={{ textAlign: 'center', color: '#888', marginTop: 20 }}>Cargando resultados...</Text>
+      ) : results.length === 0 ? (
+        <Text style={{ textAlign: 'center', color: '#888', marginTop: 20 }}>            Aún no has realizado ningún test. Completa un test para ver tus resultados.</Text>
+      ) : (
+        <FlatList
+        data={results.slice(0, 10)}
+        keyExtractor={(item) => item.id}
+        numColumns={1}
+        renderItem={({ item }) => (
+          <CustomButton
+            buttonStyle={{
+              backgroundColor:
+                item.severity === 'Normal'
+                  ? '#fdf3e4'
+                  : item.severity === 'Leve'
+                  ? '#e4f7f1'
+                  : item.severity === 'Moderado'
+                  ? '#e4eff7'
+                  : item.severity === 'Moderadamente grave'
+                  ? '#f7e4eb'
+                  : '#f7d8e3',
+              paddingVertical: 15,
+              paddingHorizontal: 20,
+              marginBottom: 10,
+              borderRadius: 10,
+            }}
+            onPress={() => {
+              navigation.navigate('ResultView', { documentId: item.id });
+            }}
+            title={item.severity}
+            textOne={item.dateData}
+            textTwo={item.totalScore}
+            textStyle={{ color: '#af7b56' }}
           />
         )}
+      />
+    )}
+    </View>
 
-        <View style={GlobalStyle.circularButtonContainer}></View>
-      </View>
-
-      {/* Tooltip */}
       {showTooltip && (
-        <View style={styles.tooltipContainer}>
-          <Text style={styles.tooltipText}>
-            ¡Pulsa aquí para iniciar tu primer test!
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              setShowTooltip(false);
-              storeTooltipShown();
-            }}
-            style={styles.tooltipButton}
+        <>
+          <View style={styles.tooltipContainer}>
+            <Text style={styles.tooltipText}>¡Pulsa aquí para iniciar tu primer test!</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setShowTooltip(false);
+                storeTooltipShown();
+              }}
+              style={styles.tooltipButton}
+            >
+              <Text style={styles.tooltipButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+          <Animatable.View
+            animation="bounce"
+            easing="ease-in-out"
+            iterationCount="infinite"
+            style={styles.arrowContainer}
           >
-            <Text style={styles.tooltipButtonText}>OK</Text>
-          </TouchableOpacity>
-        </View>
+            <MaterialCommunityIcons name="arrow-down" size={30} color="#9F8758" />
+          </Animatable.View>
+        </>
       )}
 
-      {showTooltip && (
-        <Animatable.View
-          animation="bounce"
-          easing="ease-in-out"
-          iterationCount="infinite"
-          style={styles.arrowContainer}
-        >
-          <MaterialCommunityIcons name="arrow-down" size={30} color="#9F8758" />
-        </Animatable.View>
-      )}
-
+      {/* Botón flotante */}
       <Animatable.View
         animation="pulse"
         easing="ease-in-out"
@@ -240,11 +244,21 @@ function TestDeAnsiedad({ navigation }) {
           setVisble={false}
         />
       </Animatable.View>
+
+      <View style={{ position: 'absolute', top: 100, right: 20 }}>
+{/*         <TouchableOpacity
+          onPress={resetTooltip}
+          style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 5 }}
+        >
+          <Text>Reset Tooltip</Text>
+        </TouchableOpacity> */}
+      </View>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ 
+
   floatingButtonContainer: {
     position: 'absolute',
     bottom: 30,
@@ -327,6 +341,6 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
     marginTop: 5,
   },
-});
 
+ });
 export default TestDeAnsiedad;

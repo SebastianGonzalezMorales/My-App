@@ -1,5 +1,5 @@
 import { FlatList, Modal, SafeAreaView, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
@@ -37,18 +37,35 @@ function TestDeDepresion({ navigation }) {
     return `${day}/${month}/${year}`;
   };
 
-  const checkTooltip = async (noResults) => {
-    // Verificar si ya se mostró el tooltip
-    const shown = await AsyncStorage.getItem('shownTooltip');
-    if (!shown && noResults) {
-      setShowTooltip(true);
-    } else {
-      setShowTooltip(false);
+  const initializeTooltip = async () => {
+    try {
+      const shown = await AsyncStorage.getItem('shownTooltipDepresion');
+      if (!shown) {
+        setShowTooltip(true);
+      } else {
+        setShowTooltip(false);
+      }
+    } catch (error) {
+      console.error('Error al inicializar el estado del tooltip:', error);
     }
   };
 
   const storeTooltipShown = async () => {
-    await AsyncStorage.setItem('shownTooltip', 'true');
+    try {
+      await AsyncStorage.setItem('shownTooltipDepresion', 'true');
+      setShowTooltip(false);
+    } catch (error) {
+      console.error('Error al guardar el estado del tooltip:', error);
+    }
+  };
+
+  const resetTooltip = async () => {
+    try {
+      await AsyncStorage.removeItem('shownTooltipDepresion');
+      setShowTooltip(true);
+    } catch (error) {
+      console.error('Error al reiniciar el estado del tooltip:', error);
+    }
   };
 
   useFocusEffect(
@@ -56,6 +73,13 @@ function TestDeDepresion({ navigation }) {
       const fetchData = async () => {
         try {
           setIsLoading(true);
+
+          // Inicializar tooltip solo una vez al entrar a la vista
+          await initializeTooltip();
+
+          // Simulación de retraso para mostrar "Cargando..." por más tiempo
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+
           const token = await AsyncStorage.getItem('token');
           if (!token) {
             console.error('No se encontró el token');
@@ -112,9 +136,6 @@ function TestDeDepresion({ navigation }) {
           } else {
             setLastTest('Sin resultados previos');
           }
-
-          await checkTooltip(fetchedResults.length === 0);
-
         } catch (error) {
           console.error(
             'Error al obtener los resultados:',
@@ -128,56 +149,12 @@ function TestDeDepresion({ navigation }) {
     }, [])
   );
 
-  // Eliminar el useEffect que manejaba el temporizador
-
-  // Función para reiniciar el tooltip sin borrar todo el AsyncStorage
-  const resetTooltip = async () => {
-    await AsyncStorage.removeItem('shownTooltip');
-    // Si no hay tests, se puede volver a mostrar el tooltip
-    if (results.length === 0) {
-      setShowTooltip(true);
-    }
-  };
-
-  // Función para eliminar un item (necesitas implementar esta función)
-  const deleteItem = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        console.error('No se encontró el token');
-        return;
-      }
-
-      await axios.delete(
-        `${API_URL}/resultsTests/delete/${selectedId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      // Actualizar la lista de resultados después de eliminar
-      setResults(results.filter(item => item.id !== selectedId));
-      setGraveCount(graveCount - 1);
-    } catch (error) {
-      console.error('Error al eliminar el item:', error);
-    }
-  };
-
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       <BackButton onPress={() => navigation.goBack()} />
 
       {graveCount >= 1 && (
-        <View style={{
-          padding: 15,
-          backgroundColor: '#fff3e0',
-          borderRadius: 12,
-          marginBottom: 15,
-          borderWidth: 1,
-          borderColor: '#ffd699',
-        }}>
+        <View style={styles.alertContainer}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons
               name="alert-circle-outline"
@@ -185,15 +162,7 @@ function TestDeDepresion({ navigation }) {
               color="#e53935"
               style={{ marginRight: 8 }}
             />
-            <Text style={{
-              color: '#e53935',
-              fontWeight: 'bold',
-              fontSize: 16,
-              lineHeight: 22,
-              flex: 1
-            }}>
-              Atención
-            </Text>
+            <Text style={styles.alertTitle}>Atención</Text>
             <MaterialCommunityIcons
               name="close"
               size={16}
@@ -201,119 +170,21 @@ function TestDeDepresion({ navigation }) {
               onPress={() => setGraveCount(0)}
             />
           </View>
-
-          <Text style={{
-            color: '#e53935',
-            fontSize: 15,
-            lineHeight: 22,
-            textAlign: 'justify',
-            marginTop: 8,
-            fontWeight: 'bold'
-          }}>
+          <Text style={styles.alertMessage}>
             Hemos detectado que podrías estar atravesando una situación difícil.
           </Text>
-
-          <Text style={{
-            color: '#333',
-            fontSize: 14,
-            lineHeight: 22,
-            textAlign: 'justify',
-            marginTop: 5
-          }}>
+          <Text style={styles.alertSubMessage}>
             Por favor, envíanos un correo a <Text style={{ fontWeight: 'bold' }}>dae@uv.cl</Text>, indicando tu teléfono. También puedes llamarnos o escribirnos un WhatsApp al +569 68301655 de Lunes a Viernes de 8:30 a 17:30 horas.
           </Text>
         </View>
       )}
 
-      <GestureRecognizer onSwipeDown={() => setSeeAllModalVisible(false)}>
-        <Modal visible={seeAllModalVisible} animationType="slide">
-          <SafeAreaView style={ModalStyle.modalContent}>
-            <View style={ModalStyle.headerWrapper}>
-              <Text style={ModalStyle.modalTitle}>History</Text>
-              <MaterialCommunityIcons
-                name="close"
-                color="#666a72"
-                size={30}
-                style={ModalStyle.modalToggleExit}
-                onPress={() => setSeeAllModalVisible(false)}
-              />
-            </View>
-            <View style={ModalStyle.flatlistWrapper}>
-              <FlatList
-                data={results}
-                numColumns={1}
-                renderItem={({ item }) => (
-                  <CustomButton
-                    buttonStyle={{
-                      backgroundColor: '#d8eef7',
-                    }}
-                    textStyle={{ color: '#238bdf' }}
-                    title={item.severity}
-                    textOne={item.totalScore}
-                    textTwo={item.dateData}
-                    onLongPress={() => (
-                      setModalVisible(true), setSelectedId(item.id)
-                    )}
-                    onPress={() => {
-                      setSeeAllModalVisible(false);
-                      navigation.navigate('ResultView', {
-                        documentId: item.id,
-                      });
-                    }}
-                  />
-                )}
-              />
-            </View>
-          </SafeAreaView>
-        </Modal>
-      </GestureRecognizer>
-
-      <Modal
-        visible={modalVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={ModalStyle.halfModalContent}>
-          <View style={ModalStyle.halfModalWrapper}>
-            <FormButton
-              text="Delete"
-              onPress={() => {
-                deleteItem(), setModalVisible(!modalVisible);
-              }}
-              buttonStyle={{
-                backgroundColor: '#e55e7e',
-              }}
-              textStyle={{ color: '#f2f2f2' }}
-            />
-
-            <FormButton
-              text="Cancel"
-              onPress={() => setModalVisible(!modalVisible)}
-              buttonStyle={{
-                backgroundColor: '#5da5a9',
-              }}
-              textStyle={{ color: '#f2f2f2' }}
-            />
-          </View>
-        </View>
-      </Modal>
-
       <View style={{ height: 290 }}>
         <Text style={GlobalStyle.welcomeText}>Test PHQ-9</Text>
         <Text style={GlobalStyle.subtitle}>Test de depresión</Text>
-        <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>
-          El cuestionario PHQ-9 es una herramienta que se utiliza para medir la gravedad de la depresión a
-          través de nueve preguntas. Ayuda a identificar a las personas que pueden requerir una evaluación
-          o tratamiento adicional para la depresión.
-        </Text>
+        <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>El cuestionario PHQ-9 es una herramienta que se utiliza para medir la gravedad de la depresión a través de nueve preguntas. Ayuda a identificar a las personas que pueden requerir una evaluación o tratamiento adicional para la depresión.</Text>
         <View style={GlobalStyle.line} />
-        <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>
-          Última prueba realizada: {isLoading ? 'Cargando...' : lastTest}
-        </Text>
+        <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>Última prueba realizada: {isLoading ? 'Cargando...' : lastTest}</Text>
       </View>
 
       <View style={GlobalStyle.rowTwo}>
@@ -329,6 +200,7 @@ function TestDeDepresion({ navigation }) {
           textLeft="Resultados"
           textRight="Ver todos"
         />
+
         {isLoading ? (
           <Text style={{ textAlign: 'center', color: '#888', marginTop: 20 }}>
             Cargando resultados...
@@ -348,12 +220,12 @@ function TestDeDepresion({ navigation }) {
                     item.severity === 'Normal'
                       ? '#fdf3e4'
                       : item.severity === 'Leve'
-                        ? '#e4f7f1'
-                        : item.severity === 'Moderado'
-                          ? '#e4eff7'
-                          : item.severity === 'Moderadamente grave'
-                            ? '#f7e4eb'
-                            : '#f7d8e3',
+                      ? '#e4f7f1'
+                      : item.severity === 'Moderado'
+                      ? '#e4eff7'
+                      : item.severity === 'Moderadamente grave'
+                      ? '#f7e4eb'
+                      : '#f7d8e3',
                   paddingVertical: 15,
                   paddingHorizontal: 20,
                   marginBottom: 10,
@@ -372,37 +244,35 @@ function TestDeDepresion({ navigation }) {
         )}
       </View>
 
-      {showTooltip && results.length === 0 && (
-        <View style={styles.tooltipContainer}>
-          <Text style={styles.tooltipTextStyle}>
-            ¡Pulsa aquí para iniciar tu primer test!
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              setShowTooltip(false);
-              storeTooltipShown();
-            }}
-            style={styles.tooltipButton}
+      {showTooltip && (
+        <>
+          <View style={styles.tooltipContainer}>
+            <Text style={styles.tooltipTextStyle}>¡Pulsa aquí para iniciar tu primer test!</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setShowTooltip(false);
+                storeTooltipShown();
+              }}
+              style={styles.tooltipButton}
+            >
+              <Text style={styles.tooltipButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+          <Animatable.View
+            animation="bounce"
+            easing="ease-in-out"
+            iterationCount="infinite"
+            style={styles.arrowContainer}
           >
-            <Text style={styles.tooltipButtonText}>OK</Text>
-          </TouchableOpacity>
-        </View>
+            <MaterialCommunityIcons name="arrow-down" size={30} color="#9F8758" />
+          </Animatable.View>
+        </>
       )}
-{/* Flecha animada hacia el botón "+" */}
-{showTooltip && (
-  <Animatable.View
-    animation="bounce" // Animación de rebote
-    easing="ease-in-out"
-    iterationCount="infinite" // Repetición infinita
-    style={styles.arrowContainer}
-  >
-    <MaterialCommunityIcons name="arrow-down" size={30} color="#9F8758" />
-  </Animatable.View>
-)}
+
       <Animatable.View
         animation="pulse"
         easing="ease-in-out"
-        duration={800} // Duración
+        duration={800}
         iterationCount="infinite"
         style={styles.floatingButtonContainer}
       >
@@ -410,21 +280,20 @@ function TestDeDepresion({ navigation }) {
           onPress={async () => {
             setShowTooltip(false);
             await storeTooltipShown();
-            navigation.navigate('TestDepresion'); 
+            navigation.navigate('TestDepresion');
           }}
           setVisble={false}
         />
       </Animatable.View>
 
-      {/* Botón para reiniciar el tooltip */}
-{/*       <View style={{ position: 'absolute', top: 100, right: 20 }}>
-        <TouchableOpacity
+      <View style={{ position: 'absolute', top: 100, right: 20 }}>
+{/*         <TouchableOpacity
           onPress={resetTooltip}
           style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 5 }}
         >
           <Text>Reset Tooltip</Text>
-        </TouchableOpacity>
-      </View> */}
+        </TouchableOpacity> */}
+      </View>
     </SafeAreaView>
   );
 }
@@ -434,22 +303,22 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 30,
     right: 30,
-    backgroundColor: '#FFF', // Fondo blanco opaco
-    padding: 10, // Añadir espacio interno
-    borderRadius: 50, // Redondear el contenedor si es necesario
-    elevation: 5, // Agregar sombra (en Android)
-    shadowColor: '#000', // Configurar sombras (en iOS)
+    backgroundColor: '#FFF',
+    padding: 10,
+    borderRadius: 50,
+    elevation: 5,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
   },
-  
+
   tooltipContainer: {
     position: 'absolute',
-    bottom: '15%', // Proporcional al alto de la pantalla
-    right: '10%', // Proporcional al ancho de la pantalla
-    width: '40%', // Relativo al ancho de la pantalla
-    backgroundColor: 'rgba(255, 255, 255, 0.9)', // Fondo blanco semitransparente
+    bottom: '15%',
+    right: '10%',
+    width: '40%',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
@@ -457,9 +326,9 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5, // Para Android
+    elevation: 5,
   },
-  
+
   tooltipTextStyle: {
     color: '#888',
     fontWeight: '600',
@@ -467,28 +336,60 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 10,
   },
-  
+
   tooltipButton: {
     backgroundColor: '#9F8758',
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 5,
   },
-  
+
   tooltipButtonText: {
     color: '#fff',
     fontWeight: 'bold',
   },
 
-    arrowContainer: {
-      position: 'absolute',
-      bottom: 115, // Ajusta esta distancia para que quede justo sobre el botón
-      right: 50, // Ajusta según la posición del botón "+",
-      alignItems: 'center',
-      justifyContent: 'center',
-
+  arrowContainer: {
+    position: 'absolute',
+    bottom: 115,
+    right: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  
+
+  alertContainer: {
+    padding: 15,
+    backgroundColor: '#fff3e0',
+    borderRadius: 12,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: '#ffd699',
+  },
+
+  alertTitle: {
+    color: '#e53935',
+    fontWeight: 'bold',
+    fontSize: 16,
+    lineHeight: 22,
+    flex: 1,
+  },
+
+  alertMessage: {
+    color: '#e53935',
+    fontSize: 15,
+    lineHeight: 22,
+    textAlign: 'justify',
+    marginTop: 8,
+    fontWeight: 'bold',
+  },
+
+  alertSubMessage: {
+    color: '#333',
+    fontSize: 14,
+    lineHeight: 22,
+    textAlign: 'justify',
+    marginTop: 5,
+  },
 });
 
 export default TestDeDepresion;
