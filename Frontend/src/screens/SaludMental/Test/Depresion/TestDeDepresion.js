@@ -1,23 +1,20 @@
-import { FlatList, Modal, SafeAreaView, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { FlatList, SafeAreaView, Text, View, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
-
-import { API_URL } from '@env'; // Ajusta esto según tu entorno
+import { Ionicons } from '@expo/vector-icons'; 
+import { API_URL } from '@env';
 
 import CustomButton from '../../../../components/buttons/CustomButton';
-import FormButton from '../../../../components/buttons/FormButton';
 import HistoryButton from '../../../../components/buttons/HistoryButton';
 import StatsButton from '../../../../components/buttons/StatsButton';
 import CircularButton from '../../../../components/buttons/CircularButton';
 import BackButton from '../../../../components/buttons/BackButton';
 
-import GestureRecognizer from 'react-native-swipe-gestures';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import GlobalStyle from '../../../../assets/styles/GlobalStyle';
-import ModalStyle from '../../../../assets/styles/ModalStyle';
 
 function TestDeDepresion({ navigation }) {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -67,6 +64,11 @@ function TestDeDepresion({ navigation }) {
       console.error('Error al reiniciar el estado del tooltip:', error);
     }
   };
+
+  const handleLinkPress = () => {
+    Linking.openURL('https://pmc.ncbi.nlm.nih.gov/articles/PMC1495268/');
+  };
+  
 
   useFocusEffect(
     React.useCallback(() => {
@@ -179,13 +181,53 @@ function TestDeDepresion({ navigation }) {
         </View>
       )}
 
-      <View style={{ height: 290 }}>
-        <Text style={GlobalStyle.welcomeText}>Test PHQ-9</Text>
-        <Text style={GlobalStyle.subtitle}>Test de depresión</Text>
-        <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>El cuestionario PHQ-9 es una herramienta que se utiliza para medir la gravedad de la depresión a través de nueve preguntas. Ayuda a identificar a las personas que pueden requerir una evaluación o tratamiento adicional para la depresión.</Text>
-        <View style={GlobalStyle.line} />
-        <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>Última prueba realizada: {isLoading ? 'Cargando...' : lastTest}</Text>
-      </View>
+<View style={{ height: 320 }}>
+  <Text style={GlobalStyle.welcomeText}>Test PHQ-9</Text>
+  <Text style={GlobalStyle.subtitle}>Test de depresión</Text>
+  
+  <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>
+  El cuestionario PHQ-9 es una herramienta que se utiliza para medir la gravedad de la depresión a través de nueve preguntas. Ayuda a identificar a las personas que pueden requerir una evaluación o tratamiento adicional para la depresión.
+  </Text>
+  
+  {/* Contenedor del botón con margen izquierdo igual al del texto */}
+  <View style={{ 
+    marginTop: 8, 
+    paddingLeft: GlobalStyle.text.paddingLeft || 16, // Asegúrate de que coincida con el padding del texto
+    // Si `GlobalStyle.text` no tiene `paddingLeft`, ajusta el valor según corresponda
+  }}>
+    <TouchableOpacity
+      onPress={handleLinkPress}
+      style={{
+        backgroundColor: '#E6F0FF',
+        paddingVertical: 4, // Aumenté el padding para mejor apariencia
+        paddingHorizontal: 12,
+        borderRadius: 4,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#B0C4DE',
+        alignSelf: 'flex-start', // Alinea el botón al inicio del contenedor
+      }}
+    >
+      <Ionicons name="link" size={14} color="#1E90FF" />
+      <Text style={{ 
+        color: '#1E90FF', 
+        fontSize: 12, 
+        marginLeft: 4, 
+        fontWeight: '500' 
+      }}>
+        Fuente
+      </Text>
+    </TouchableOpacity>
+  </View>
+  
+  <View style={GlobalStyle.line} />
+  
+  <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>
+    Última prueba realizada: {isLoading ? 'Cargando...' : lastTest}
+  </Text>
+</View>
+
 
       <View style={GlobalStyle.rowTwo}>
         <View style={GlobalStyle.statsContainer}>
@@ -220,12 +262,12 @@ function TestDeDepresion({ navigation }) {
                     item.severity === 'Normal'
                       ? '#fdf3e4'
                       : item.severity === 'Leve'
-                      ? '#e4f7f1'
-                      : item.severity === 'Moderado'
-                      ? '#e4eff7'
-                      : item.severity === 'Moderadamente grave'
-                      ? '#f7e4eb'
-                      : '#f7d8e3',
+                        ? '#e4f7f1'
+                        : item.severity === 'Moderado'
+                          ? '#e4eff7'
+                          : item.severity === 'Moderadamente grave'
+                            ? '#f7e4eb'
+                            : '#f7d8e3',
                   paddingVertical: 15,
                   paddingHorizontal: 20,
                   marginBottom: 10,
@@ -287,7 +329,7 @@ function TestDeDepresion({ navigation }) {
       </Animatable.View>
 
       <View style={{ position: 'absolute', top: 100, right: 20 }}>
-{/*         <TouchableOpacity
+        {/*         <TouchableOpacity
           onPress={resetTooltip}
           style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 5 }}
         >

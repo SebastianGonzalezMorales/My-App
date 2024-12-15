@@ -145,12 +145,12 @@ const changePassword = async (req, res) => {
     }
 
     // Validar la fuerza de la nueva contraseña
-    const passwordRegex = /^(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&áéíóúÁÉÍÓÚñÑ]{8,}$/;
+    const passwordRegex = /^(?=.*[!@#$%^&*()_+\-={}\[\]:;"'<>,.?\/\\|~`])[A-Za-z\d!@#$%^&*()_+\-={}\[\]:;"'<>,.?\/\\|~`áéíóúÁÉÍÓÚñÑ]{8,}$/;
     if (!passwordRegex.test(newPassword)) {
       return res.status(400).json({
         success: false,
         message:
-          'La contraseña debe tener al menos 8 caracteres e incluir al menos un carácter especial (@, $, !, %, *, ?, &).',
+          'La contraseña debe tener al menos 8 caracteres e incluir al menos un carácter especial (@, $, !, %, #, ?, &, etc).',
       });
     }
 

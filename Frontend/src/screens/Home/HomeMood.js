@@ -241,51 +241,51 @@ const HomeMood = ({ navigation }) => {
   };
 
 
-// Función para obtener datos del usuario
-const fetchUserData = async () => {
-  try {
-    const token = await AsyncStorage.getItem('token');
-    if (token) {
-      const response = await axios.post(
-        `${API_URL}/user-management/userdata`,
-        {
-          // Token en el cuerpo de la solicitud
-          token: `${token}`,
-        },
-        {
-          // Token de autorización en el header
-          headers: {
-            Authorization: `Bearer ${token}`,
+  // Función para obtener datos del usuario
+  const fetchUserData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        const response = await axios.post(
+          `${API_URL}/user-management/userdata`,
+          {
+            // Token en el cuerpo de la solicitud
+            token: `${token}`,
           },
+          {
+            // Token de autorización en el header
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const fullName = response.data.data.name;
+
+        // Verificar que fullName existe y es una cadena
+        if (fullName && typeof fullName === 'string') {
+          // Eliminar espacios en blanco al inicio y al final
+          const trimmedName = fullName.trim();
+
+          // Dividir el nombre completo por espacios y tomar el primer nombre
+          const firstName = trimmedName.split(' ')[0];
+
+          // Actualizar el estado con el primer nombre
+          setName(firstName);
+
+          // Para verificar en la consola
+          // console.log('First name:', firstName);
+        } else {
+          console.log('Nombre no válido recibido del servidor.');
+          setName('Usuario'); // Nombre por defecto en caso de fallo
         }
-      );
-      const fullName = response.data.data.name;
-
-      // Verificar que fullName existe y es una cadena
-      if (fullName && typeof fullName === 'string') {
-        // Eliminar espacios en blanco al inicio y al final
-        const trimmedName = fullName.trim();
-
-        // Dividir el nombre completo por espacios y tomar el primer nombre
-        const firstName = trimmedName.split(' ')[0];
-
-        // Actualizar el estado con el primer nombre
-        setName(firstName);
-
-        // Para verificar en la consola
-        // console.log('First name:', firstName);
       } else {
-        console.log('Nombre no válido recibido del servidor.');
-        setName('Usuario'); // Nombre por defecto en caso de fallo
+        console.log('No se encontró el token. Por favor, inicia sesión.');
       }
-    } else {
-      console.log('No se encontró el token. Por favor, inicia sesión.');
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      setName('Usuario'); // Nombre por defecto en caso de error
     }
-  } catch (error) {
-    console.error('Error fetching user data:', error);
-    setName('Usuario'); // Nombre por defecto en caso de error
-  }
-};
+  };
 
   /*
    * *********************
@@ -364,13 +364,16 @@ const fetchUserData = async () => {
       {/* Espacio hasta la frase del día */}
       <View style={{ height: 290 }}>
         <Text style={GlobalStyle.welcomeText}>Hola, {name} !</Text>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={[GlobalStyle.subtitle, { textAlign: 'left' }]}>
+
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={[GlobalStyle.subtitle, { textAlign: 'left', fontFamily: 'CustomFontForQuestion', marginRight: 0, paddingRight: 0 }]}>
+            ¿
+          </Text>
+          <Text style={[GlobalStyle.subtitle, { textAlign: 'left', marginLeft: 0, paddingLeft: 0 }]}>
             Cómo te sientes ahora mismo?
           </Text>
-
-
         </View>
+
         <View style={GlobalStyle.moodsContainer}>
           <PickMoodButton
             onPress={() => startTracking('Mal', 1)}
@@ -466,34 +469,34 @@ const fetchUserData = async () => {
                   item.mood === 'Mal'
                     ? '#f7d8e3'
                     : item.mood === 'Regular'
-                    ? '#FBEEB0' // Color ajustado
-                    : item.mood === 'Bien'
-                    ? '#d8eef7'
-                    : item.mood === 'Excelente'
-                    ? '#d8f7ea' // Color ajustado
-                    : '#fff',
+                      ? '#FBEEB0' // Color ajustado
+                      : item.mood === 'Bien'
+                        ? '#d8eef7'
+                        : item.mood === 'Excelente'
+                          ? '#d8f7ea' // Color ajustado
+                          : '#fff',
               }}
               textStyle={{
                 color:
                   item.mood === 'Mal'
                     ? '#F20C0C'
                     : item.mood === 'Regular'
-                    ? '#F4D63D' // Color ajustado
-                    : item.mood === 'Bien'
-                    ? '#2626D8'
-                    : item.mood === 'Excelente'
-                    ? '#32CD32' // Color ajustado
-                    : '#000',
+                      ? '#F4D63D' // Color ajustado
+                      : item.mood === 'Bien'
+                        ? '#2626D8'
+                        : item.mood === 'Excelente'
+                          ? '#32CD32' // Color ajustado
+                          : '#000',
               }}
               // Mostrar emojis en lugar de texto
               title={
                 item.mood === 'Mal'
                   ? '😞'
                   : item.mood === 'Regular'
-                  ? '🙂'
-                  : item.mood === 'Bien'
-                  ? '😊'
-                  : '😃'
+                    ? '🙂'
+                    : item.mood === 'Bien'
+                      ? '😊'
+                      : '😃'
               }
               textOne={item.date}
               textTwo={item.time}
@@ -507,7 +510,7 @@ const fetchUserData = async () => {
           )}
         />
       </View>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 

@@ -5,11 +5,12 @@ import {
   View,
   Alert,
   TouchableOpacity,
-  StyleSheet,
+  StyleSheet, Linkin
 } from 'react-native';
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Animatable from 'react-native-animatable';
+import { Ionicons } from '@expo/vector-icons'; 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -68,6 +69,12 @@ function TestDeAnsiedad({ navigation }) {
       console.error('Error al reiniciar el estado del tooltip:', error);
     }
   };
+
+  const handleLinkPress = () => {
+    Linking.openURL('https://pubmed.ncbi.nlm.nih.gov/16717171/');
+  };
+  
+
 
   useFocusEffect(
     React.useCallback(() => {
@@ -138,13 +145,48 @@ function TestDeAnsiedad({ navigation }) {
         </View>
       )}
 
-      <View style={{ height: 290 }}>
+      <View style={{ height: 320 }}>
         <Text style={GlobalStyle.welcomeText}>Test GAD-7</Text>
         <Text style={GlobalStyle.subtitle}>Test de Ansiedad Generalizada</Text>
         <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}> El cuestionario GAD-7 es una herramienta que se utiliza para medir la
           gravedad de la ansiedad a través de siete preguntas. Ayuda a
           identificar a las personas que pueden requerir una evaluación o
           tratamiento adicional para la ansiedad.</Text>
+
+          
+  {/* Contenedor del botón con margen izquierdo igual al del texto */}
+  <View style={{ 
+    marginTop: 8, 
+    paddingLeft: GlobalStyle.text.paddingLeft || 16, // Asegúrate de que coincida con el padding del texto
+    // Si `GlobalStyle.text` no tiene `paddingLeft`, ajusta el valor según corresponda
+  }}>
+    <TouchableOpacity
+      onPress={handleLinkPress}
+      style={{
+        backgroundColor: '#E6F0FF',
+        paddingVertical: 4, // Aumenté el padding para mejor apariencia
+        paddingHorizontal: 12,
+        borderRadius: 4,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#B0C4DE',
+        alignSelf: 'flex-start', // Alinea el botón al inicio del contenedor
+      }}
+    >
+      <Ionicons name="link" size={14} color="#1E90FF" />
+      <Text style={{ 
+        color: '#1E90FF', 
+        fontSize: 12, 
+        marginLeft: 4, 
+        fontWeight: '500' 
+      }}>
+        Fuente
+      </Text>
+    </TouchableOpacity>
+  </View>
+
+
         <View style={GlobalStyle.line} />
         <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>Última prueba realizada: {isLoading ? 'Cargando...' : lastTest}</Text>
       </View>
