@@ -57,7 +57,7 @@ const ForgotPassword = ({ navigation }) => {
     // Manejar la respuesta del backend
     if (response.data.success) {
       // Mostrar mensaje de éxito
-      Alert.alert('¡Correo Enviado!', response.data.message);
+      Alert.alert('¡Correo enviado!', response.data.message);
 
       // Guardar el correo electrónico en AsyncStorage
       try {
@@ -82,7 +82,7 @@ const ForgotPassword = ({ navigation }) => {
   // Error general en la solicitud
   Alert.alert('Error', 'No se pudo conectar con el servidor. Por favor, revisa tu conexión.');
 }
-console.error('Error @handlePasswordRecovery:', error);
+console.log('Error @handlePasswordRecovery:', error.response || error.message);
   }
 };
   /*

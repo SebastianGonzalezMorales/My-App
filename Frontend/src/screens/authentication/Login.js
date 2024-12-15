@@ -199,12 +199,21 @@ const Login = ({ navigation }) => {
 
           {/* buttons */}
           <AuthButton
-            onPress={() => handleLogin(email, password)}
+            onPress={() => {
+              if (!email) {
+                Alert.alert("Error", "Por favor, ingresa tu correo electrónico.");
+                return;
+              }
+              if (!password) {
+                Alert.alert("Error", "Por favor, ingresa tu contraseña.");
+                return;
+              }
+              handleLogin(email, password);
+            }}
             text="Ingresar"
             iconName="log-in"
-
-
           />
+
 
           <View style={AuthStyle.changeScreenContainer}>
             <Text style={AuthStyle.changeScreenText}>

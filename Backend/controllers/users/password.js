@@ -85,47 +85,108 @@ const forgotPassword = async (req, res) => {
   }
 };
 
+
 const changePassword = async (req, res) => {
   const { token, newPassword, confirmPassword } = req.body;
 
-  if (!newPassword || !confirmPassword) {
-    return res.status(400).json({ success: false, message: 'Debes ingresar y confirmar la nueva contraseña.' });
+  // Verificar que el token esté presente
+  if (!token) {
+    return res.status(400).json({
+      success: false,
+      message: 'El token de restablecimiento es requerido.',
+    });
   }
 
+  // Verificar que las contraseñas estén presentes
+  if (!newPassword || !confirmPassword) {
+    return res.status(400).json({
+      success: false,
+      message: 'Debes ingresar y confirmar la nueva contraseña.',
+    });
+  }
+
+  // Verificar que las contraseñas coincidan
   if (newPassword !== confirmPassword) {
-    return res.status(400).json({ success: false, message: 'Las contraseñas no coinciden.' });
+    return res.status(400).json({
+      success: false,
+      message: 'Las contraseñas no coinciden.',
+    });
+  }
+
+  // Validar la fuerza de la nueva contraseña
+  const passwordRegex = /^(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&áéíóúÁÉÍÓÚñÑ]{8,}$/;
+  if (!passwordRegex.test(newPassword)) {
+    return res.status(400).json({
+      success: false,
+      message:
+        'La contraseña debe tener al menos 8 caracteres e incluir al menos un carácter especial (@, $, !, %, *, ?, &).',
+    });
   }
 
   try {
+    // Decodificar el token
     const decoded = jwt.verify(token, secret);
     const userId = decoded.userId;
 
+    // Buscar al usuario en la base de datos
     const user = await User.findOne({
       _id: userId,
       resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() },
-      canResetPassword: true,
+      resetPasswordExpires: { $gt: Date.now() }, // Verificar que el token no haya expirado
     });
 
+    // Si el usuario no existe o el token es inválido
     if (!user) {
       return res.status(400).json({
         success: false,
-        message: 'El enlace de restablecimiento es inválido o ha caducado.',
+        message: 'El token es inválido o ha expirado. Por favor, solicita uno nuevo.',
       });
     }
 
+    // Verificar si el usuario no confirmó el enlace
+    if (!user.canResetPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Debes confirmar el enlace enviado a tu correo antes de cambiar la contraseña.',
+      });
+    }
+
+    // Actualizar la contraseña del usuario
     user.passwordHash = bcrypt.hashSync(newPassword, 8);
-    user.resetPasswordToken = null;
-    user.resetPasswordExpires = null;
-    user.canResetPassword = false;
+    user.resetPasswordToken = null; // Invalidar el token después de usarlo
+    user.resetPasswordExpires = null; // Borrar la expiración del token
+    user.canResetPassword = false; // Prevenir el uso repetido del enlace
     await user.save();
 
-    res.status(200).json({ success: true, message: 'Contraseña actualizada con éxito. Ahora puedes iniciar sesión.' });
+    res.status(200).json({
+      success: true,
+      message: 'Contraseña actualizada con éxito. Ahora puedes iniciar sesión.',
+    });
   } catch (error) {
+    // Manejo de errores al verificar el token
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(400).json({
+        success: false,
+        message: 'El token es inválido. Por favor, solicita uno nuevo.',
+      });
+    }
+
+    if (error.name === 'TokenExpiredError') {
+      return res.status(400).json({
+        success: false,
+        message: 'El token ha expirado. Por favor, solicita uno nuevo.',
+      });
+    }
+
+    // Cualquier otro error
     console.error('Error al cambiar la contraseña:', error);
-    res.status(400).json({ success: false, message: 'Error al cambiar la contraseña.' });
+    res.status(500).json({
+      success: false,
+      message: 'Error al procesar la solicitud. Por favor, inténtalo nuevamente.',
+    });
   }
 };
+
 
 const verifyResetToken = async (req, res) => {
   const { token } = req.query;
