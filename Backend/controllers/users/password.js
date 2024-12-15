@@ -24,6 +24,9 @@ const forgotPassword = async (req, res) => {
     const firstName = user.name.split(' ')[0];
     const resetToken = jwt.sign({ userId: user._id, email: user.email }, secret, { expiresIn: '1h' });
 
+    // Imprimir el token en la consola
+    console.log('Generated reset token:', resetToken);
+
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpires = Date.now() + 3600000;
     user.canResetPassword = false;
@@ -97,32 +100,6 @@ const changePassword = async (req, res) => {
     });
   }
 
-  // Verificar que las contraseñas estén presentes
-  if (!newPassword || !confirmPassword) {
-    return res.status(400).json({
-      success: false,
-      message: 'Debes ingresar y confirmar la nueva contraseña.',
-    });
-  }
-
-  // Verificar que las contraseñas coincidan
-  if (newPassword !== confirmPassword) {
-    return res.status(400).json({
-      success: false,
-      message: 'Las contraseñas no coinciden.',
-    });
-  }
-
-  // Validar la fuerza de la nueva contraseña
-  const passwordRegex = /^(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&áéíóúÁÉÍÓÚñÑ]{8,}$/;
-  if (!passwordRegex.test(newPassword)) {
-    return res.status(400).json({
-      success: false,
-      message:
-        'La contraseña debe tener al menos 8 caracteres e incluir al menos un carácter especial (@, $, !, %, *, ?, &).',
-    });
-  }
-
   try {
     // Decodificar el token
     const decoded = jwt.verify(token, secret);
@@ -148,6 +125,32 @@ const changePassword = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Debes confirmar el enlace enviado a tu correo antes de cambiar la contraseña.',
+      });
+    }
+
+    // Verificar que las contraseñas estén presentes
+    if (!newPassword || !confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Debes ingresar y confirmar la nueva contraseña.',
+      });
+    }
+
+    // Verificar que las contraseñas coincidan
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Las contraseñas no coinciden.',
+      });
+    }
+
+    // Validar la fuerza de la nueva contraseña
+    const passwordRegex = /^(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&áéíóúÁÉÍÓÚñÑ]{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      return res.status(400).json({
+        success: false,
+        message:
+          'La contraseña debe tener al menos 8 caracteres e incluir al menos un carácter especial (@, $, !, %, *, ?, &).',
       });
     }
 
