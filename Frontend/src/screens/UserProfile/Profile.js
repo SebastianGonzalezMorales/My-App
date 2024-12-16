@@ -1,7 +1,8 @@
 import {
  SafeAreaView, Text, View,
 } from 'react-native';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native'; // Importar useFocusEffect
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ProgressBar } from 'react-native-paper'; // Asegúrate de instalar react-native-paper
 import axios from 'axios';
@@ -28,45 +29,49 @@ function UserProfile({ navigation }) {
   const [progress, setProgress] = useState(0); // Progreso inicial en días consecutivos
   const [message, setMessage] = useState('Cargando tu progreso semanal...'); // Mensaje motivacional
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        if (token) {
-          const userResponse = await axios.post(
-            `${API_URL}/user-management/userdata`,
-            { token },
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-          const userData = userResponse.data.data;
+  const fetchUserData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        const userResponse = await axios.post(
+          `${API_URL}/user-management/userdata`,
+          { token },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const userData = userResponse.data.data;
 
-          // Actualizar estados con datos del usuario
-          setName(userData.name);
-          setRut(userData.rut);
-          setEmail(userData.email);
-          setBirthdate(userData.birthdate.split('T')[0]);
-          setCarrera(userData.carrera);
-          setPhone(userData.phoneNumber);
+        // Actualizar estados con datos del usuario
+        setName(userData.name);
+        setRut(userData.rut);
+        setEmail(userData.email);
+        setBirthdate(userData.birthdate.split('T')[0]);
+        setCarrera(userData.carrera);
+        setPhone(userData.phoneNumber);
 
-          // Obtener progreso semanal desde el backend
-          const progressResponse = await axios.get(
-            `${API_URL}/moodState/calculateStreak`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
+        // Obtener progreso semanal desde el backend
+        const progressResponse = await axios.get(
+          `${API_URL}/moodState/calculateStreak`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
 
-          const progressData = progressResponse.data;
-          setProgress(progressData.progress);
-          setMessage(progressData.message);
-        } else {
-          console.log('No se encontró el token. Por favor, inicia sesión.');
-        }
-      } catch (error) {
-        console.error('Error fetching user data or progress:', error);
-        setMessage('Hubo un problema al cargar tu progreso. Inténtalo más tarde. 😓');
+        const progressData = progressResponse.data;
+        setProgress(progressData.progress);
+        setMessage(progressData.message);
+      } else {
+        console.log('No se encontró el token. Por favor, inicia sesión.');
       }
-    };
-    fetchUserData();
-  }, []);
+    } catch (error) {
+      console.error('Error fetching user data or progress:', error);
+      setMessage('Hubo un problema al cargar tu progreso. Inténtalo más tarde. 😓');
+    }
+  };
+
+  // Se ejecuta cada vez que la pantalla gana foco
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserData();
+    }, [])
+  );
 
   const handleSignOut = async () => {
     try {
