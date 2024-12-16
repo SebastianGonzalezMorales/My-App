@@ -109,7 +109,8 @@ const calculateWeeklyStreak = async (req, res) => {
       }
 
       // Obtener la fecha actual y la semana actual
-      const today = new Date();
+      //const today = new Date();
+      const today = new Date('2024-12-21'); // Simula que hoy es el 15 de diciembre
       const currentWeekStart = getWeekStart(today);
 
       // Filtrar los registros que pertenezcan a la semana actual
