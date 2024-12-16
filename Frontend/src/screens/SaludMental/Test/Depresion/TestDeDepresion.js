@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, Text, View, StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import { FlatList, SafeAreaView, Text, View, StyleSheet, TouchableOpacity, Linking, Modal } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,6 +15,8 @@ import BackButton from '../../../../components/buttons/BackButton';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import GlobalStyle from '../../../../assets/styles/GlobalStyle';
+import Icon from 'react-native-vector-icons/MaterialIcons'; // Íconos de llamada y correo
+import FontAwesome from 'react-native-vector-icons/FontAwesome'; // Ícono de WhatsApp
 
 function TestDeDepresion({ navigation }) {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -25,6 +27,12 @@ function TestDeDepresion({ navigation }) {
   const [seeAllModalVisible, setSeeAllModalVisible] = useState(false);
   const [selectedId, setSelectedId] = useState('');
   const [graveCount, setGraveCount] = useState(0);
+  const [userName, setUserName] = useState(''); 
+  const [userCareer, setUserCareer] = useState(''); 
+  const [userPhone, setUserPhone] = useState(''); 
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -68,13 +76,74 @@ function TestDeDepresion({ navigation }) {
   const handleLinkPress = () => {
     Linking.openURL('https://pmc.ncbi.nlm.nih.gov/articles/PMC1495268/');
   };
+
+  const sendEmail = () => {
+    const email = 'dae@uv.cl';
+    const subject = '[Atención Salud Mental - AppAcompañamientoUV]';
+    const body = `Hola,\n\nMi nombre es ${userName}, estudiante de la carrera ${userCareer}. Realicé el test PHQ-9 en la app de acompañamiento UV, y los resultados concuerdan con mi estado de ánimo actual. Por esta razón, quisiera solicitar apoyo emocional o guía para poder afrontar esta situación.\n\n Mi número de teléfono es el siguiente: ${userPhone}. \n\nQuedo atento a su respuesta.\n\nMuchas gracias.`;
+    const mailtoURL = `mailto:${email}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+
+    Linking.openURL(mailtoURL).catch(() =>
+      alert('No se pudo abrir el cliente de correo.')
+    );
+  };
+
+  const handleCallPress = () => {
+    Linking.openURL('tel:+56968301655');
+  };
+
+  const whatsappNumber = '56968301655'
   
+  const openWhatsApp = () => {
+    const message = `Hola, mi nombre es ${userName}, estudiante de ${userCareer}. Acabo de completar el test PHQ-9 en la app de acompañamiento UV y los resultados reflejan lo que estoy sintiendo actualmente. Me gustaría recibir orientación emocional o apoyo. Muchas gracias.`;
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    Linking.openURL(url).catch(() =>
+      alert('No se pudo abrir WhatsApp. Asegúrate de tener la aplicación instalada.')
+    );
+  };
+
+  // Función para obtener datos del usuario desde la base de datos
+const fetchUserData = async () => {
+  try {
+    const token = await AsyncStorage.getItem('token'); // Obtener el token
+    if (!token) {
+      console.error('No se encontró el token');
+      return;
+    }
+
+    // Consulta a la base de datos para obtener el usuario
+    const response = await axios.post(
+      `${API_URL}/user-management/userdata`,
+      { token }, // Envía el token en el cuerpo de la solicitud
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Autorización con Bearer Token
+        },
+      }
+    );
+
+    const userData = response.data.data; // Extraer los datos del usuario
+ 
+    setUserName(userData.name);          // Guardar el nombre del usuario
+    setUserCareer(userData.carrera);     // Guardar la carrera del usuario
+    setUserPhone(userData.phoneNumber);
+
+  } catch (error) {
+    console.error('Error al obtener datos del usuario:', error);
+  }
+};
+
 
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
         try {
           setIsLoading(true);
+
+          // Obtener los datos del usuario
+          await fetchUserData();
 
           // Inicializar tooltip solo una vez al entrar a la vista
           await initializeTooltip();
@@ -87,7 +156,7 @@ function TestDeDepresion({ navigation }) {
             console.error('No se encontró el token');
             return;
           }
-
+          
           const userResponse = await axios.post(
             `${API_URL}/tokens/userid`,
             { token: `${token}` },
@@ -98,6 +167,7 @@ function TestDeDepresion({ navigation }) {
             }
           );
 
+          // Consulta de resultados de tests
           const userId = userResponse.data.userId;
           if (!userId) {
             console.error('No se encontró userId');
@@ -157,33 +227,75 @@ function TestDeDepresion({ navigation }) {
 
       {graveCount >= 1 && (
         <View style={styles.alertContainer}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <MaterialCommunityIcons
-              name="alert-circle-outline"
-              size={16}
-              color="#e53935"
-              style={{ marginRight: 8 }}
-            />
-            <Text style={styles.alertTitle}>Atención</Text>
-            <MaterialCommunityIcons
-              name="close"
-              size={16}
-              color="#e53935"
-              onPress={() => setGraveCount(0)}
-            />
-          </View>
-          <Text style={styles.alertMessage}>
-            Hemos detectado que podrías estar atravesando una situación difícil.
-          </Text>
-          <Text style={styles.alertSubMessage}>
-            Por favor, envíanos un correo a <Text style={{ fontWeight: 'bold' }}>dae@uv.cl</Text>, indicando tu teléfono. También puedes llamarnos o escribirnos un WhatsApp al +569 68301655 de Lunes a Viernes de 8:30 a 17:30 horas.
-          </Text>
-        </View>
+  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
+    <MaterialCommunityIcons
+      name="alert-circle-outline"
+      size={18} // Ícono más pequeño
+      color="#e53935"
+      style={{ marginRight: 5 }}
+    />
+    <Text style={styles.alertTitle}>Atención</Text>
+    <TouchableOpacity
+      onPress={() => setShowConfirmModal(true)}
+      style={{
+        backgroundColor: 'white',
+        borderRadius: 8, // Más circular
+        width: 20,
+        height: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 2,
+      }}
+    >
+      <MaterialCommunityIcons name="close" size={12} color="#e53935" />
+    </TouchableOpacity>
+  </View>
+
+  <Text style={[styles.alertMessage, { marginBottom: 5, lineHeight: 18 }]}>
+    Hemos detectado que podrías estar atravesando una situación difícil.
+  </Text>
+
+  <Text style={[styles.alertSubMessage, { marginBottom: 10, lineHeight: 16 }]}>
+    Por favor, contáctanos a través de una de las siguientes opciones:
+  </Text>
+
+  {/* Botones en una sola fila */}
+  <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+    <TouchableOpacity
+      onPress={handleCallPress}
+      style={styles.smallButton}
+    >
+      <Icon name="phone" size={14} color="white" style={{ marginRight: 3 }} />
+      <Text style={styles.smallButtonText}>Llamar</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      onPress={openWhatsApp}
+      style={styles.smallButton}
+    >
+      <FontAwesome name="whatsapp" size={14} color="white" style={{ marginRight: 3 }} />
+      <Text style={styles.smallButtonText}>Mensaje</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      onPress={sendEmail}
+      style={[styles.smallButton, { backgroundColor: '#2196F3' }]}
+    >
+      <Icon name="email" size={14} color="white" style={{ marginRight: 3 }} />
+      <Text style={styles.smallButtonText}>Correo</Text>
+    </TouchableOpacity>
+  </View>
+</View>
+
       )}
 
 <View style={{ height: 320 }}>
   <Text style={GlobalStyle.welcomeText}>Test PHQ-9</Text>
-  <Text style={GlobalStyle.subtitle}>Test de depresión</Text>
+  <Text 
+  style={[GlobalStyle.subtitle, { marginTop: -10 }]}>
+  Test de depresión
+</Text>
+
   
   <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>
   El cuestionario PHQ-9 es una herramienta que se utiliza para medir la gravedad de la depresión a través de nueve preguntas. Ayuda a identificar a las personas que pueden requerir una evaluación o tratamiento adicional para la depresión.
@@ -191,7 +303,7 @@ function TestDeDepresion({ navigation }) {
   
   {/* Contenedor del botón con margen izquierdo igual al del texto */}
   <View style={{ 
-    marginTop: 8, 
+    marginTop: 5, 
     paddingLeft: GlobalStyle.text.paddingLeft || 16, // Asegúrate de que coincida con el padding del texto
     // Si `GlobalStyle.text` no tiene `paddingLeft`, ajusta el valor según corresponda
   }}>
@@ -336,6 +448,47 @@ function TestDeDepresion({ navigation }) {
           <Text>Reset Tooltip</Text>
         </TouchableOpacity> */}
       </View>
+      <Modal
+  transparent={true}
+  animationType="fade"
+  visible={showConfirmModal}
+  onRequestClose={() => setShowConfirmModal(false)} // Cerrar al presionar fuera
+>
+  <View style={styles.modalOverlay}>
+    <View style={styles.customModal}>
+      {/* Título del modal */}
+      <Text style={styles.modalTitle}>Cerrar alerta</Text>
+
+      {/* Mensaje de confirmación */}
+      <Text style={styles.modalMessage}>
+        ¿Estás seguro de que quieres cerrar esta alerta?
+      </Text>
+
+      {/* Botones */}
+      <View style={styles.modalButtonContainer}>
+        {/* Confirmar cerrar */}
+        <TouchableOpacity
+          style={[styles.modalButton, { backgroundColor: '#E53935' }]}
+          onPress={() => {
+            setShowConfirmModal(false); // Cerrar el modal
+            setGraveCount(0); // Cerrar la alerta
+          }}
+        >
+          <Text style={styles.modalButtonText}>Cerrar alerta</Text>
+        </TouchableOpacity>
+
+        {/* Cancelar */}
+        <TouchableOpacity
+          style={[styles.modalButton, { backgroundColor: '#E0E0E0' }]}
+          onPress={() => setShowConfirmModal(false)}
+        >
+          <Text style={[styles.modalButtonText, { color: '#333' }]}>Cancelar</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  </View>
+</Modal>
+
     </SafeAreaView>
   );
 }
@@ -399,15 +552,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  alertContainer: {
-    padding: 15,
-    backgroundColor: '#fff3e0',
-    borderRadius: 12,
-    marginBottom: 15,
-    borderWidth: 1,
-    borderColor: '#ffd699',
-  },
-
   alertTitle: {
     color: '#e53935',
     fontWeight: 'bold',
@@ -418,7 +562,7 @@ const styles = StyleSheet.create({
 
   alertMessage: {
     color: '#e53935',
-    fontSize: 15,
+    fontSize: 14,
     lineHeight: 22,
     textAlign: 'justify',
     marginTop: 8,
@@ -432,6 +576,98 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
     marginTop: 5,
   },
+  
+  button: {
+    flex: 1,
+    padding: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
+  alignItems: 'center',
+},
+
+buttonText: {
+  color: '#FFF',
+  fontWeight: '600',
+  fontSize: 14, // Texto más compacto
+},
+
+modalOverlay: {
+  flex: 1,
+  backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo oscuro transparente
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+customModal: {
+  width: '85%',
+  backgroundColor: '#fffdf7', // Fondo similar al de las alertas
+  borderRadius: 12,
+  padding: 20,
+  alignItems: 'center',
+  elevation: 10, // Sombra suave
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+},
+modalTitle: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  color: '#e53935', // Rojo de alerta
+  marginBottom: 10,
+},
+modalMessage: {
+  fontSize: 14,
+  textAlign: 'center',
+  color: '#333',
+  marginBottom: 20,
+  lineHeight: 20,
+},
+modalButtonContainer: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  width: '100%',
+},
+modalButton: {
+  flex: 1,
+  paddingVertical: 10,
+  marginHorizontal: 5,
+  borderRadius: 8,
+  alignItems: 'center',
+},
+modalButtonText: {
+  color: '#FFF',
+  fontWeight: '600',
+  fontSize: 14,
+},
+smallButton: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: '#4CAF50',
+  paddingVertical: 6, // Menor padding
+  paddingHorizontal: 10,
+  borderRadius: 8,
+  marginHorizontal: 2, // Espacio entre botones
+  elevation: 3,
+},
+
+smallButtonText: {
+  color: 'white',
+  fontSize: 12, // Texto más pequeño
+  fontWeight: '500',
+},
+
+alertContainer: {
+  padding: 10,
+  backgroundColor: '#fff3e0',
+  borderRadius: 10,
+  borderWidth: 1,
+  borderColor: '#ffd699',
+  paddingVertical: 10, // Ajusta la altura interna
+  paddingHorizontal: 25, // Reduce el margen lateral
+},
+
+
+
 });
 
 export default TestDeDepresion;
