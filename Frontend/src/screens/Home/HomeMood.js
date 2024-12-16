@@ -362,59 +362,66 @@ const HomeMood = ({ navigation }) => {
        * *********************
        */}
       {/* Espacio hasta la frase del día */}
-      <View style={{ height: 290 }}>
-        <Text style={GlobalStyle.welcomeText}>Hola, {name} !</Text>
+      <View style={{ marginBottom: 10 }}>
+  {/* Saludo */}
+  <Text style={[GlobalStyle.welcomeText, { marginBottom: -10 }]}>
+    Hola, {name || 'Usuario'}!
+  </Text>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={[GlobalStyle.subtitle, { textAlign: 'left', fontFamily: 'CustomFontForQuestion', marginRight: 0, paddingRight: 0 }]}>
-            ¿
-          </Text>
-          <Text style={[GlobalStyle.subtitle, { textAlign: 'left', marginLeft: 0, paddingLeft: 0 }]}>
-            Cómo te sientes ahora mismo?
-          </Text>
-        </View>
+  {/* Pregunta */}
+  <View style={{ flexDirection: 'row', alignItems: 'flex-end', marginBottom: 8 }}>
+    <Text
+      style={[
+        GlobalStyle.subtitle,
+        {
+          textAlign: 'left',
+          fontFamily: 'CustomFontForQuestion', // Estilo específico para el signo de pregunta
+        },
+      ]}
+    >
+      ¿
+    </Text>
+    <Text
+      style={[
+        GlobalStyle.subtitle, // Manteniendo el estilo original
+        {
+          textAlign: 'left',
+          marginLeft: -60, // Ajuste fino para eliminar el espacio grande
+        },
+      ]}
+    >
+      Cómo te sientes ahora mismo?
+    </Text>
+  </View>
 
-        <View style={GlobalStyle.moodsContainer}>
-          <PickMoodButton
-            onPress={() => startTracking('Mal', 1)}
-            emoji="😞"
-            text="Mal"
-          />
-          <PickMoodButton
-            onPress={() => startTracking('Regular', 2)}
-            emoji="🙂"
-            text="Regular"
-          />
-          <PickMoodButton
-            onPress={() => startTracking('Bien', 3)}
-            emoji="😊"
-            text="Bien"
-          />
-          <PickMoodButton
-            onPress={() => startTracking('Excelente', 4)}
-            emoji="😃"
-            text="Excelente"
-          />
-          {/* Sección de Frase Motivacional */}
-        </View>
-        <View
-          style={{
-            marginTop: -10,
-            alignItems: 'flex-start',
-            paddingHorizontal: 20,
-          }}
-        >
-          <Text style={GlobalStyle.subtitle}>Frase del día:</Text>
-          <Text
-            style={[
-              GlobalStyle.quoteText,
-              { textAlign: 'left', marginTop: 10 },
-            ]}
-          >
-            {motivationalQuote}
-          </Text>
-        </View>
-      </View>
+  {/* Botones de estados de ánimo */}
+  <View style={GlobalStyle.moodsContainer}>
+    <PickMoodButton onPress={() => startTracking('Mal', 1)} emoji="😞" text="Mal" />
+    <PickMoodButton onPress={() => startTracking('Regular', 2)} emoji="🙂" text="Regular" />
+    <PickMoodButton onPress={() => startTracking('Bien', 3)} emoji="😊" text="Bien" />
+    <PickMoodButton onPress={() => startTracking('Excelente', 4)} emoji="😃" text="Excelente" />
+  </View>
+
+  {/* Frase del día */}
+  <View style={{ marginTop: -10, paddingHorizontal: 20 }}>
+    <Text style={[GlobalStyle.subtitle, { marginBottom: 6 }]}>Frase del día:</Text>
+    <Text
+      style={[
+        GlobalStyle.quoteText || {
+          fontSize: 14,
+          color: '#FFFFFF',
+          lineHeight: 20,
+          textAlign: 'justify',
+        },
+      ]}
+      numberOfLines={3}
+      ellipsizeMode="tail"
+    >
+      {motivationalQuote || "Aquí va una frase motivacional por defecto."}
+    </Text>
+  </View>
+</View>
+
 
       {/*
        * *********************

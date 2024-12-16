@@ -45,7 +45,7 @@ function SaludMentalMenu({ navigation }) {
             width: '100%',
             height: height * 0.2, // Ajustar la altura de la imagen al 20% de la pantalla
             resizeMode: 'contain', // Cambiar a 'contain' para evitar recortes
-            marginTop: 15
+            marginTop: 22
           }}
         />
       </View>

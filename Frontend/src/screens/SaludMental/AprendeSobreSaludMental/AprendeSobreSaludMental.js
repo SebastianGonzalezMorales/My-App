@@ -26,13 +26,24 @@ function AprendeSobreSaludMental({ navigation }) {
       <View style={{ height: height * 0.48, padding: 15 }}>
         {/* Altura ajustada al 50% del tamaño de la pantalla */}
         <BackButton onPress={() => navigation.goBack()} />
-        <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF' }]}>Salud Mental</Text>
-        <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF', marginTop:-15 }]}>
+
+        {
+          <Text
+            style={[
+              GlobalStyle.welcomeText,
+              { color: '#FFFFFF', marginTop: -10 } // Ajusta el margen superior
+            ]}
+          >
+            Salud Mental
+          </Text>
+        }
+        
+        <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF', marginTop: -15 }]}>
           Aprende sobre Salud Mental
         </Text>
 
-        <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF', marginTop:-10 }]}>
-        Encuentra herramientas y recursos destinados a fortalecer tu salud mental y emocional como estudiante.
+        <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF', marginTop: -10 }]}>
+          Encuentra herramientas y recursos destinados a fortalecer tu salud mental y emocional como estudiante.
         </Text>
 
         {/* Imagen con altura ajustada */}
@@ -42,7 +53,7 @@ function AprendeSobreSaludMental({ navigation }) {
             width: '100%',
             height: height * 0.18, // Ajustar la altura de la imagen al 20% de la pantalla
             resizeMode: 'contain', // Cambiar a 'contain' para evitar recortes
-            marginTop: 0
+            marginTop: 3
           }}
         />
 
@@ -53,9 +64,9 @@ function AprendeSobreSaludMental({ navigation }) {
       </View>
 
       {/* Sección de Botones de Navegación */}
-      <View style={GlobalStyle.rowTwo}>
+      <View style={[GlobalStyle.rowTwo, { marginTop: -10 }]}>
         <ScrollView contentContainerStyle>
-          <View style={{ marginTop: 5 }}>
+          <View style={{ marginTop: 2 }}>
             <SettingsButton
               text="Información"
               onPress={() => navigation.navigate('Informacion')}
