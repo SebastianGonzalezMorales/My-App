@@ -5,9 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// firebase
-/* import { firebase } from '../../../firebase'; */
-
 // Import the API URL from environment variables
 import { API_URL } from '@env';
 
