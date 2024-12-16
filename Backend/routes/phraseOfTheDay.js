@@ -8,6 +8,6 @@ const { isAdmin } = require('../middlewares/authorization');
 // Rutas asociadas a cada controlador
 router.get('/get-phraseOfTheDay', authJwt, getPhraseOfTheDay);
 router.post('/post-phraseOfTheDay', authJwt, isAdmin, postPhraseOfTheDay);
-router.get('/get-random-phraseOfTheDay', getRandomPhraseOfTheDay);
+router.get('/get-random-phraseOfTheDay', authJwt, getRandomPhraseOfTheDay);
 
 module.exports = router;
