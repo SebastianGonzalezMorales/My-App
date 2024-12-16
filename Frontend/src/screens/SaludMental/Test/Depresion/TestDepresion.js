@@ -161,8 +161,8 @@ const TestDepresion = ({ navigation }) => {
 
         <View style={FormStyle.tableContainer}>
           <View style={[FormStyle.tableRowOdd, FormStyle.tableRowEnd]}>
-            <Text style={[FormStyle.tableText, { color: '#5c6169' }]}>Fecha del test</Text>
-            <Text style={[FormStyle.tableText, { color: '#5c6169' }]}>{date}</Text>
+            <Text style={[FormStyle.tableText]}>Fecha del test</Text>
+            <Text style={[FormStyle.tableText]}>{date}</Text>
           </View>
 
           <View style={FormStyle.tableSubContainer}>

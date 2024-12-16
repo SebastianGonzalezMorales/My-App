@@ -4,7 +4,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
-import { Ionicons } from '@expo/vector-icons'; 
+import { Ionicons } from '@expo/vector-icons';
 import { API_URL } from '@env';
 
 import CustomButton from '../../../../components/buttons/CustomButton';
@@ -27,9 +27,9 @@ function TestDeDepresion({ navigation }) {
   const [seeAllModalVisible, setSeeAllModalVisible] = useState(false);
   const [selectedId, setSelectedId] = useState('');
   const [graveCount, setGraveCount] = useState(0);
-  const [userName, setUserName] = useState(''); 
-  const [userCareer, setUserCareer] = useState(''); 
-  const [userPhone, setUserPhone] = useState(''); 
+  const [userName, setUserName] = useState('');
+  const [userCareer, setUserCareer] = useState('');
+  const [userPhone, setUserPhone] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
 
@@ -41,6 +41,16 @@ function TestDeDepresion({ navigation }) {
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
+
+  const handleCloseAlert = async () => {
+    try {
+      await AsyncStorage.setItem('alertClosed', 'true'); // Guarda el estado de cierre como cadena "true"
+      setGraveCount(0); // Oculta la alerta en el estado local
+    } catch (error) {
+      console.error('Error al guardar el estado de la alerta:', error);
+    }
+  };
+  
 
   const initializeTooltip = async () => {
     try {
@@ -95,7 +105,7 @@ function TestDeDepresion({ navigation }) {
   };
 
   const whatsappNumber = '56968301655'
-  
+
   const openWhatsApp = () => {
     const message = `Hola, mi nombre es ${userName}, estudiante de ${userCareer}. Acabo de completar el test PHQ-9 en la app de acompañamiento UV y los resultados reflejan lo que estoy sintiendo actualmente. Me gustaría recibir orientación emocional o apoyo. Muchas gracias.`;
     const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
@@ -105,109 +115,127 @@ function TestDeDepresion({ navigation }) {
   };
 
   // Función para obtener datos del usuario desde la base de datos
-const fetchUserData = async () => {
-  try {
-    const token = await AsyncStorage.getItem('token'); // Obtener el token
-    if (!token) {
-      console.error('No se encontró el token');
-      return;
-    }
-
-    // Consulta a la base de datos para obtener el usuario
-    const response = await axios.post(
-      `${API_URL}/user-management/userdata`,
-      { token }, // Envía el token en el cuerpo de la solicitud
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // Autorización con Bearer Token
-        },
+  const fetchUserData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token'); // Obtener el token
+      if (!token) {
+        console.error('No se encontró el token');
+        return;
       }
-    );
 
-    const userData = response.data.data; // Extraer los datos del usuario
- 
-    setUserName(userData.name);          // Guardar el nombre del usuario
-    setUserCareer(userData.carrera);     // Guardar la carrera del usuario
-    setUserPhone(userData.phoneNumber);
+      // Consulta a la base de datos para obtener el usuario
+      const response = await axios.post(
+        `${API_URL}/user-management/userdata`,
+        { token }, // Envía el token en el cuerpo de la solicitud
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Autorización con Bearer Token
+          },
+        }
+      );
 
-  } catch (error) {
-    console.error('Error al obtener datos del usuario:', error);
-  }
-};
+      const userData = response.data.data; // Extraer los datos del usuario
+
+      setUserName(userData.name);          // Guardar el nombre del usuario
+      setUserCareer(userData.carrera);     // Guardar la carrera del usuario
+      setUserPhone(userData.phoneNumber);
+
+    } catch (error) {
+      console.error('Error al obtener datos del usuario:', error);
+    }
+  };
 
 
   useFocusEffect(
     React.useCallback(() => {
+      const checkAlertStatus = async () => {
+        try {
+          const alertClosed = await AsyncStorage.getItem('alertClosed');
+          console.log('Estado de alertClosed desde AsyncStorage:', alertClosed);
+          return alertClosed === 'true';
+        } catch (error) {
+          console.error('Error al verificar el estado de la alerta:', error);
+          return false;
+        }
+      };
+  
       const fetchData = async () => {
         try {
           setIsLoading(true);
-
+  
           // Obtener los datos del usuario
           await fetchUserData();
-
+  
           // Inicializar tooltip solo una vez al entrar a la vista
           await initializeTooltip();
-
-          // Simulación de retraso para mostrar "Cargando..." por más tiempo
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-
+  
           const token = await AsyncStorage.getItem('token');
           if (!token) {
             console.error('No se encontró el token');
             return;
           }
-          
-          const userResponse = await axios.post(
+  
+          // Obtener userId
+          const { data: userResponse } = await axios.post(
             `${API_URL}/tokens/userid`,
-            { token: `${token}` },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
+            { token },
+            { headers: { Authorization: `Bearer ${token}` } }
           );
-
-          // Consulta de resultados de tests
-          const userId = userResponse.data.userId;
+  
+          const userId = userResponse.userId;
           if (!userId) {
             console.error('No se encontró userId');
             return;
           }
-
-          const response = await axios.post(
+  
+          // Obtener resultados del test
+          const { data: resultsResponse } = await axios.post(
             `${API_URL}/resultsTests/get-resultsTestUser/${userId}`,
-            { token: `${token}` },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
+            { token },
+            { headers: { Authorization: `Bearer ${token}` } }
           );
-
-          const responseData = response.data.results || [];
-          responseData.sort((a, b) => new Date(b.created) - new Date(a.created));
-
-          const fetchedResults = responseData.map((doc) => {
-            const { severity, created, total } = doc;
-            return {
-              id: doc._id,
+  
+          const results = resultsResponse.results || [];
+  
+          // Ordenar resultados por fecha
+          const formattedResults = results
+            .sort((a, b) => new Date(b.created) - new Date(a.created))
+            .map(({ _id, severity, created, total }) => ({
+              id: _id,
               severity,
               dateData: formatDate(created),
               totalScore: `${total}/27`,
-            };
-          });
-
-          const graveResults = fetchedResults.filter(
+            }));
+  
+          const graveResults = formattedResults.filter(
             (result) => result.severity === 'Grave'
           );
-          setGraveCount(graveResults.length);
-          setResults(fetchedResults);
-
-          if (fetchedResults.length > 0) {
-            setLastTest(fetchedResults[0].dateData);
+  
+          const previousGraveCount = parseInt(await AsyncStorage.getItem('graveCount'), 10) || 0;
+          const currentGraveCount = graveResults.length;
+  
+          const isAlertClosed = await checkAlertStatus();
+  
+          if (currentGraveCount > 0) {
+            if (currentGraveCount > previousGraveCount) {
+              console.log('Nuevos resultados graves detectados. Reiniciando alerta.');
+              await AsyncStorage.removeItem('alertClosed');
+              setGraveCount(currentGraveCount); // Mostrar alerta de inmediato
+            } else if (!isAlertClosed) {
+              setGraveCount(currentGraveCount); // Mostrar alerta si no está cerrada
+            } else {
+              setGraveCount(0); // Ocultar alerta si está cerrada
+            }
           } else {
-            setLastTest('Sin resultados previos');
+            setGraveCount(0); // No hay resultados graves
           }
+  
+          // Guardar el conteo actual de resultados graves
+          await AsyncStorage.setItem('graveCount', currentGraveCount.toString());
+  
+          // Actualizar resultados y última prueba realizada
+          setResults(formattedResults);
+          setLastTest(formattedResults.length > 0 ? formattedResults[0].dateData : 'Sin resultados previos');
         } catch (error) {
           console.error(
             'Error al obtener los resultados:',
@@ -217,128 +245,130 @@ const fetchUserData = async () => {
           setIsLoading(false);
         }
       };
-      fetchData();
+  
+      fetchData(); // Siempre llama a fetchData al regresar a la vista
     }, [])
   );
-
+  
+  
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       <BackButton onPress={() => navigation.goBack()} />
 
       {graveCount >= 1 && (
         <View style={styles.alertContainer}>
-  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
-    <MaterialCommunityIcons
-      name="alert-circle-outline"
-      size={18} // Ícono más pequeño
-      color="#e53935"
-      style={{ marginRight: 5 }}
-    />
-    <Text style={styles.alertTitle}>Atención</Text>
-    <TouchableOpacity
-      onPress={() => setShowConfirmModal(true)}
-      style={{
-        backgroundColor: 'white',
-        borderRadius: 8, // Más circular
-        width: 20,
-        height: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        elevation: 2,
-      }}
-    >
-      <MaterialCommunityIcons name="close" size={12} color="#e53935" />
-    </TouchableOpacity>
-  </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
+            <MaterialCommunityIcons
+              name="alert-circle-outline"
+              size={18} // Ícono más pequeño
+              color="#e53935"
+              style={{ marginRight: 5 }}
+            />
+            <Text style={styles.alertTitle}>Atención</Text>
+            <TouchableOpacity
+              onPress={() => setShowConfirmModal(true)}
+              style={{
+                backgroundColor: 'white',
+                borderRadius: 8, // Más circular
+                width: 20,
+                height: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                elevation: 2,
+              }}
+            >
+              <MaterialCommunityIcons name="close" size={12} color="#e53935" />
+            </TouchableOpacity>
+          </View>
 
-  <Text style={[styles.alertMessage, { marginBottom: 5, lineHeight: 18 }]}>
-    Hemos detectado que podrías estar atravesando una situación difícil.
-  </Text>
+          <Text style={[styles.alertMessage, { marginBottom: 5, lineHeight: 18 }]}>
+            Hemos detectado que podrías estar atravesando una situación difícil.
+          </Text>
 
-  <Text style={[styles.alertSubMessage, { marginBottom: 10, lineHeight: 16 }]}>
-    Por favor, contáctanos a través de una de las siguientes opciones:
-  </Text>
+          <Text style={[styles.alertSubMessage, { marginBottom: 10, lineHeight: 16 }]}>
+            Por favor, contáctanos a través de una de las siguientes opciones:
+          </Text>
 
-  {/* Botones en una sola fila */}
-  <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-    <TouchableOpacity
-      onPress={handleCallPress}
-      style={styles.smallButton}
-    >
-      <Icon name="phone" size={14} color="white" style={{ marginRight: 3 }} />
-      <Text style={styles.smallButtonText}>Llamar</Text>
-    </TouchableOpacity>
+          {/* Botones en una sola fila */}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+            <TouchableOpacity
+              onPress={handleCallPress}
+              style={styles.smallButton}
+            >
+              <Icon name="phone" size={14} color="white" style={{ marginRight: 3 }} />
+              <Text style={styles.smallButtonText}>Llamar</Text>
+            </TouchableOpacity>
 
-    <TouchableOpacity
-      onPress={openWhatsApp}
-      style={styles.smallButton}
-    >
-      <FontAwesome name="whatsapp" size={14} color="white" style={{ marginRight: 3 }} />
-      <Text style={styles.smallButtonText}>Mensaje</Text>
-    </TouchableOpacity>
+            <TouchableOpacity
+              onPress={openWhatsApp}
+              style={styles.smallButton}
+            >
+              <FontAwesome name="whatsapp" size={14} color="white" style={{ marginRight: 3 }} />
+              <Text style={styles.smallButtonText}>Mensaje</Text>
+            </TouchableOpacity>
 
-    <TouchableOpacity
-      onPress={sendEmail}
-      style={[styles.smallButton, { backgroundColor: '#2196F3' }]}
-    >
-      <Icon name="email" size={14} color="white" style={{ marginRight: 3 }} />
-      <Text style={styles.smallButtonText}>Correo</Text>
-    </TouchableOpacity>
-  </View>
-</View>
+            <TouchableOpacity
+              onPress={sendEmail}
+              style={[styles.smallButton, { backgroundColor: '#2196F3' }]}
+            >
+              <Icon name="email" size={14} color="white" style={{ marginRight: 3 }} />
+              <Text style={styles.smallButtonText}>Correo</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
       )}
 
-<View style={{ height: 320 }}>
-  <Text style={GlobalStyle.welcomeText}>Test PHQ-9</Text>
-  <Text 
-  style={[GlobalStyle.subtitle, { marginTop: -10 }]}>
-  Test de depresión
-</Text>
+      <View style={{ height: 320 }}>
+        <Text style={GlobalStyle.welcomeText}>Test PHQ-9</Text>
+        <Text
+          style={[GlobalStyle.subtitle, { marginTop: -10 }]}>
+          Test de depresión
+        </Text>
 
-  
-  <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>
-  El cuestionario PHQ-9 es una herramienta que se utiliza para medir la gravedad de la depresión a través de nueve preguntas. Ayuda a identificar a las personas que pueden requerir una evaluación o tratamiento adicional para la depresión.
-  </Text>
-  
-  {/* Contenedor del botón con margen izquierdo igual al del texto */}
-  <View style={{ 
-    marginTop: 5, 
-    paddingLeft: GlobalStyle.text.paddingLeft || 16, // Asegúrate de que coincida con el padding del texto
-    // Si `GlobalStyle.text` no tiene `paddingLeft`, ajusta el valor según corresponda
-  }}>
-    <TouchableOpacity
-      onPress={handleLinkPress}
-      style={{
-        backgroundColor: '#E6F0FF',
-        paddingVertical: 4, // Aumenté el padding para mejor apariencia
-        paddingHorizontal: 12,
-        borderRadius: 4,
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: '#B0C4DE',
-        alignSelf: 'flex-start', // Alinea el botón al inicio del contenedor
-      }}
-    >
-      <Ionicons name="link" size={14} color="#1E90FF" />
-      <Text style={{ 
-        color: '#1E90FF', 
-        fontSize: 12, 
-        marginLeft: 4, 
-        fontWeight: '500' 
-      }}>
-        Fuente
-      </Text>
-    </TouchableOpacity>
-  </View>
-  
-  <View style={GlobalStyle.line} />
-  
-  <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>
-    Última prueba realizada: {isLoading ? 'Cargando...' : lastTest}
-  </Text>
-</View>
+
+        <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>
+          El cuestionario PHQ-9 es una herramienta que se utiliza para medir la gravedad de la depresión a través de nueve preguntas. Ayuda a identificar a las personas que pueden requerir una evaluación o tratamiento adicional para la depresión.
+        </Text>
+
+        {/* Contenedor del botón con margen izquierdo igual al del texto */}
+        <View style={{
+          marginTop: 5,
+          paddingLeft: GlobalStyle.text.paddingLeft || 16, // Asegúrate de que coincida con el padding del texto
+          // Si `GlobalStyle.text` no tiene `paddingLeft`, ajusta el valor según corresponda
+        }}>
+          <TouchableOpacity
+            onPress={handleLinkPress}
+            style={{
+              backgroundColor: '#E6F0FF',
+              paddingVertical: 4, // Aumenté el padding para mejor apariencia
+              paddingHorizontal: 12,
+              borderRadius: 4,
+              flexDirection: 'row',
+              alignItems: 'center',
+              borderWidth: 1,
+              borderColor: '#B0C4DE',
+              alignSelf: 'flex-start', // Alinea el botón al inicio del contenedor
+            }}
+          >
+            <Ionicons name="link" size={14} color="#1E90FF" />
+            <Text style={{
+              color: '#1E90FF',
+              fontSize: 12,
+              marginLeft: 4,
+              fontWeight: '500'
+            }}>
+              Fuente
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={GlobalStyle.line} />
+
+        <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>
+          Última prueba realizada: {isLoading ? 'Cargando...' : lastTest}
+        </Text>
+      </View>
 
 
       <View style={GlobalStyle.rowTwo}>
@@ -441,53 +471,55 @@ const fetchUserData = async () => {
       </Animatable.View>
 
       <View style={{ position: 'absolute', top: 100, right: 20 }}>
+
         {/*         <TouchableOpacity
           onPress={resetTooltip}
           style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 5 }}
         >
           <Text>Reset Tooltip</Text>
         </TouchableOpacity> */}
+     
       </View>
       <Modal
-  transparent={true}
-  animationType="fade"
-  visible={showConfirmModal}
-  onRequestClose={() => setShowConfirmModal(false)} // Cerrar al presionar fuera
->
-  <View style={styles.modalOverlay}>
-    <View style={styles.customModal}>
-      {/* Título del modal */}
-      <Text style={styles.modalTitle}>Cerrar alerta</Text>
+        transparent={true}
+        animationType="fade"
+        visible={showConfirmModal}
+        onRequestClose={() => setShowConfirmModal(false)} // Cerrar al presionar fuera
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.customModal}>
+            {/* Título del modal */}
+            <Text style={styles.modalTitle}>Cerrar alerta</Text>
 
-      {/* Mensaje de confirmación */}
-      <Text style={styles.modalMessage}>
-        ¿Estás seguro de que quieres cerrar esta alerta?
-      </Text>
+            {/* Mensaje de confirmación */}
+            <Text style={styles.modalMessage}>
+              ¿Estás seguro de que quieres cerrar esta alerta?
+            </Text>
 
-      {/* Botones */}
-      <View style={styles.modalButtonContainer}>
-        {/* Confirmar cerrar */}
-        <TouchableOpacity
-          style={[styles.modalButton, { backgroundColor: '#E53935' }]}
-          onPress={() => {
-            setShowConfirmModal(false); // Cerrar el modal
-            setGraveCount(0); // Cerrar la alerta
-          }}
-        >
-          <Text style={styles.modalButtonText}>Cerrar alerta</Text>
-        </TouchableOpacity>
+            {/* Botones */}
+            <View style={styles.modalButtonContainer}>
+              {/* Confirmar cerrar */}
+              <TouchableOpacity
+                style={[styles.modalButton, { backgroundColor: '#E53935' }]}
+                onPress={() => {
+                  setShowConfirmModal(false); // Cerrar el modal
+                  handleCloseAlert(); // Cierra la alerta y guarda el estado
+                }}
+              >
+                <Text style={styles.modalButtonText}>Cerrar alerta</Text>
+              </TouchableOpacity>
 
-        {/* Cancelar */}
-        <TouchableOpacity
-          style={[styles.modalButton, { backgroundColor: '#E0E0E0' }]}
-          onPress={() => setShowConfirmModal(false)}
-        >
-          <Text style={[styles.modalButtonText, { color: '#333' }]}>Cancelar</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  </View>
-</Modal>
+              {/* Cancelar */}
+              <TouchableOpacity
+                style={[styles.modalButton, { backgroundColor: '#E0E0E0' }]}
+                onPress={() => setShowConfirmModal(false)}
+              >
+                <Text style={[styles.modalButtonText, { color: '#333' }]}>Cancelar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
     </SafeAreaView>
   );
@@ -576,95 +608,95 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
     marginTop: 5,
   },
-  
+
   button: {
     flex: 1,
     padding: 10,
     marginHorizontal: 5,
     borderRadius: 5,
-  alignItems: 'center',
-},
+    alignItems: 'center',
+  },
 
-buttonText: {
-  color: '#FFF',
-  fontWeight: '600',
-  fontSize: 14, // Texto más compacto
-},
+  buttonText: {
+    color: '#FFF',
+    fontWeight: '600',
+    fontSize: 14, // Texto más compacto
+  },
 
-modalOverlay: {
-  flex: 1,
-  backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo oscuro transparente
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-customModal: {
-  width: '85%',
-  backgroundColor: '#fffdf7', // Fondo similar al de las alertas
-  borderRadius: 12,
-  padding: 20,
-  alignItems: 'center',
-  elevation: 10, // Sombra suave
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.25,
-  shadowRadius: 3.84,
-},
-modalTitle: {
-  fontSize: 18,
-  fontWeight: 'bold',
-  color: '#e53935', // Rojo de alerta
-  marginBottom: 10,
-},
-modalMessage: {
-  fontSize: 14,
-  textAlign: 'center',
-  color: '#333',
-  marginBottom: 20,
-  lineHeight: 20,
-},
-modalButtonContainer: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  width: '100%',
-},
-modalButton: {
-  flex: 1,
-  paddingVertical: 10,
-  marginHorizontal: 5,
-  borderRadius: 8,
-  alignItems: 'center',
-},
-modalButtonText: {
-  color: '#FFF',
-  fontWeight: '600',
-  fontSize: 14,
-},
-smallButton: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  backgroundColor: '#4CAF50',
-  paddingVertical: 6, // Menor padding
-  paddingHorizontal: 10,
-  borderRadius: 8,
-  marginHorizontal: 2, // Espacio entre botones
-  elevation: 3,
-},
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo oscuro transparente
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  customModal: {
+    width: '85%',
+    backgroundColor: '#fffdf7', // Fondo similar al de las alertas
+    borderRadius: 12,
+    padding: 20,
+    alignItems: 'center',
+    elevation: 10, // Sombra suave
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#e53935', // Rojo de alerta
+    marginBottom: 10,
+  },
+  modalMessage: {
+    fontSize: 14,
+    textAlign: 'center',
+    color: '#333',
+    marginBottom: 20,
+    lineHeight: 20,
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 10,
+    marginHorizontal: 5,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    color: '#FFF',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  smallButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#4CAF50',
+    paddingVertical: 6, // Menor padding
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    marginHorizontal: 2, // Espacio entre botones
+    elevation: 3,
+  },
 
-smallButtonText: {
-  color: 'white',
-  fontSize: 12, // Texto más pequeño
-  fontWeight: '500',
-},
+  smallButtonText: {
+    color: 'white',
+    fontSize: 12, // Texto más pequeño
+    fontWeight: '500',
+  },
 
-alertContainer: {
-  padding: 10,
-  backgroundColor: '#fff3e0',
-  borderRadius: 10,
-  borderWidth: 1,
-  borderColor: '#ffd699',
-  paddingVertical: 10, // Ajusta la altura interna
-  paddingHorizontal: 25, // Reduce el margen lateral
-},
+  alertContainer: {
+    padding: 10,
+    backgroundColor: '#fff3e0',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#ffd699',
+    paddingVertical: 10, // Ajusta la altura interna
+    paddingHorizontal: 25, // Reduce el margen lateral
+  },
 
 
 
