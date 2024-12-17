@@ -75,7 +75,7 @@ import {
             /> 
             <SettingsButton
               text="Ansiedad"
-              onPress={() => navigation.navigate('TestDeAnsiedad')}
+              onPress={() => navigation.navigate('AnsiedadTestMain')}
             />
             {/* <SettingsButton text="Notifications" onPress={() => navigation.navigate('Counselling')} /> */}
            {/*  <SettingsButton

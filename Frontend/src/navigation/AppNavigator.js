@@ -23,7 +23,7 @@ import HomeTabs from './HomeTabs';
 // Importa otras pantallas que no están en los tabs
 import Tests from '../screens/SaludMental/Test/Tests';
 import DepressionTestForm from '../screens/SaludMental/Test/Depresion/DepressionTestForm';
-import TestDeAnsiedad from '../screens/SaludMental/Test/Ansiedad/TestDeAnsiedad';
+import AnsiedadTestMain from '../screens/SaludMental/Test/Ansiedad/AnsiedadTestMain';
 import DepressionTestMain from '../screens/SaludMental/Test/Depresion/DepressionTestMain';
 import TestDepresionHistorial from '../screens/SaludMental/Test/Depresion/TestDepresionHistorial';
 import TestAnsiedadEstadisticas from '../screens/SaludMental/Test/Ansiedad/TestAnsiedadEstadisticas';
@@ -106,7 +106,7 @@ const AppNavigator = () => {
             <Stack.Screen name="Home" component={HomeTabs} />
             <Stack.Screen name="Tests" component={Tests} />
             <Stack.Screen name="DepressionTestForm" component={DepressionTestForm} />
-            <Stack.Screen name="TestDeAnsiedad" component={TestDeAnsiedad} />
+            <Stack.Screen name="AnsiedadTestMain" component={AnsiedadTestMain} />
             <Stack.Screen name="DepressionTestMain" component={DepressionTestMain} />
             <Stack.Screen name="TestDepresionHistorial" component={TestDepresionHistorial} />
             <Stack.Screen name="TestAnsiedadEstadisticas" component={TestAnsiedadEstadisticas} />

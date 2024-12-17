@@ -24,7 +24,7 @@ import BackButton from '../../../../components/buttons/BackButton';
 // Estilos globales
 import GlobalStyle from '../../../../assets/styles/GlobalStyle';
 
-function TestDeAnsiedad({ navigation }) {
+function AnsiedadTestMain({ navigation }) {
   const [results, setResults] = useState([]);
   const [lastTest, setLastTest] = useState('Cargando...');
   const [graveCount, setGraveCount] = useState(0);
@@ -385,4 +385,5 @@ const styles = StyleSheet.create({
   },
 
  });
-export default TestDeAnsiedad;
+
+export default AnsiedadTestMain;
