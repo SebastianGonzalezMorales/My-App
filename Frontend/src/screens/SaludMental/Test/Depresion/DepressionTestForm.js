@@ -5,6 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale'; // Importar el idioma español
+
 // Import the API URL from environment variables
 import { API_URL } from '@env';
 
@@ -18,7 +21,7 @@ import SmallFormButton from '../../../../components/buttons/SmallFormButton';
 import FormStyle from '../../../../assets/styles/FormStyle';
 import GlobalStyle from '../../../../assets/styles/GlobalStyle';
 
-const TestDepresion = ({ navigation }) => {
+const DepressionTestForm = ({ navigation }) => {
   // states
   const [questions, setQuestions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState({});
@@ -94,7 +97,8 @@ const TestDepresion = ({ navigation }) => {
     setScore(total);
     setShowResults(true);
 
-    const date = new Date().toDateString().slice(4, 15);
+    // Generar la fecha en español
+    const date = format(new Date(), "dd 'de' MMMM", { locale: es });
     setDate(date);
 
     try {
@@ -199,7 +203,7 @@ const TestDepresion = ({ navigation }) => {
 
         <View style={[FormStyle.buttonContainer, FormStyle.buttonPosition]}>
           <FormButton
-            onPress={() => navigation.navigate('TestDeDepresion')}
+            onPress={() => navigation.navigate('DepressionTestMain')}
             text="Volver atrás"
             buttonStyle={{ backgroundColor: '#f2f2f2' }}
             textStyle={{ color: '#5da5a9' }}
@@ -292,4 +296,4 @@ const TestDepresion = ({ navigation }) => {
   );
 };
 
-export default TestDepresion;
+export default DepressionTestForm;

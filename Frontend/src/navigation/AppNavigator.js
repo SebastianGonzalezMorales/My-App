@@ -22,12 +22,13 @@ import HomeTabs from './HomeTabs';
 
 // Importa otras pantallas que no están en los tabs
 import Tests from '../screens/SaludMental/Test/Tests';
-import TestDepresion from '../screens/SaludMental/Test/Depresion/TestDepresion';
+import DepressionTestForm from '../screens/SaludMental/Test/Depresion/DepressionTestForm';
 import TestDeAnsiedad from '../screens/SaludMental/Test/Ansiedad/TestDeAnsiedad';
-import TestDeDepresion from '../screens/SaludMental/Test/Depresion/TestDeDepresion';
+import DepressionTestMain from '../screens/SaludMental/Test/Depresion/DepressionTestMain';
 import TestDepresionHistorial from '../screens/SaludMental/Test/Depresion/TestDepresionHistorial';
 import TestAnsiedadEstadisticas from '../screens/SaludMental/Test/Ansiedad/TestAnsiedadEstadisticas';
 import TestDepresionEstadisticas from '../screens/SaludMental/Test/Depresion/TestDepresionEstadisticas';
+import ResultView from '../screens/SaludMental/Test/Depresion/ResultView';
 import MoodTrack from '../screens/Home/Moods/MoodTrack';
 import MoodStats from '../screens/Home/Moods/MoodStats';
 import MoodHistory from '../screens/Home/Moods/MoodHistory';
@@ -104,12 +105,13 @@ const AppNavigator = () => {
           <>
             <Stack.Screen name="Home" component={HomeTabs} />
             <Stack.Screen name="Tests" component={Tests} />
-            <Stack.Screen name="TestDepresion" component={TestDepresion} />
+            <Stack.Screen name="DepressionTestForm" component={DepressionTestForm} />
             <Stack.Screen name="TestDeAnsiedad" component={TestDeAnsiedad} />
-            <Stack.Screen name="TestDeDepresion" component={TestDeDepresion} />
+            <Stack.Screen name="DepressionTestMain" component={DepressionTestMain} />
             <Stack.Screen name="TestDepresionHistorial" component={TestDepresionHistorial} />
             <Stack.Screen name="TestAnsiedadEstadisticas" component={TestAnsiedadEstadisticas} />
             <Stack.Screen name="TestDepresionEstadisticas" component={TestDepresionEstadisticas} />
+            <Stack.Screen name="ResultView" component={ResultView} />
             <Stack.Screen name="MoodTrack" component={MoodTrack} />
             <Stack.Screen name="MoodStats" component={MoodStats} />
             <Stack.Screen name="MoodHistory" component={MoodHistory} />

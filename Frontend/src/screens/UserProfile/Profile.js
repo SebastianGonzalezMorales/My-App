@@ -1,7 +1,7 @@
 import {
  SafeAreaView, Text, View,
 } from 'react-native';
-import React, { useEffect, useState, useContext, useCallback } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native'; // Importar useFocusEffect
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ProgressBar } from 'react-native-paper'; // Asegúrate de instalar react-native-paper

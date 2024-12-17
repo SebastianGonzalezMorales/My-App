@@ -303,10 +303,10 @@ const styles = StyleSheet.create({
 
   floatingButtonContainer: {
     position: 'absolute',
-    bottom: 30,
+    bottom: 22,
     right: 30,
     backgroundColor: '#FFF',
-    padding: 10,
+    padding: 5,
     borderRadius: 50,
     elevation: 5,
     shadowColor: '#000',
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
   },
   tooltipContainer: {
     position: 'absolute',
-    bottom: '15%',
+    bottom: '12%',
     right: '10%',
     width: '40%',
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
   },
   arrowContainer: {
     position: 'absolute',
-    bottom: 115,
+    bottom: 109,
     right: 50,
     alignItems: 'center',
     justifyContent: 'center',

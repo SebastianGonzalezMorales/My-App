@@ -365,7 +365,7 @@ const HomeMood = ({ navigation }) => {
       <View style={{ marginBottom: 10 }}>
   {/* Saludo */}
   <Text style={[GlobalStyle.welcomeText, { marginBottom: -10 }]}>
-    Hola, {name || 'Usuario'}!
+    Hola, {name || ' '}!
   </Text>
 
   {/* Pregunta */}
@@ -417,7 +417,7 @@ const HomeMood = ({ navigation }) => {
       numberOfLines={3}
       ellipsizeMode="tail"
     >
-      {motivationalQuote || "Aquí va una frase motivacional por defecto."}
+      {motivationalQuote || "Cargando ..."}
     </Text>
   </View>
 </View>

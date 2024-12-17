@@ -18,7 +18,7 @@ import GlobalStyle from '../../../../assets/styles/GlobalStyle';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Íconos de llamada y correo
 import FontAwesome from 'react-native-vector-icons/FontAwesome'; // Ícono de WhatsApp
 
-function TestDeDepresion({ navigation }) {
+function DepressionTestMain({ navigation }) {
   const [showTooltip, setShowTooltip] = useState(false);
   const [results, setResults] = useState([]);
   const [lastTest, setLastTest] = useState('Cargando...');
@@ -464,7 +464,7 @@ function TestDeDepresion({ navigation }) {
           onPress={async () => {
             setShowTooltip(false);
             await storeTooltipShown();
-            navigation.navigate('TestDepresion');
+            navigation.navigate('DepressionTestForm');
           }}
           setVisble={false}
         />
@@ -528,10 +528,10 @@ function TestDeDepresion({ navigation }) {
 const styles = StyleSheet.create({
   floatingButtonContainer: {
     position: 'absolute',
-    bottom: 30,
+    bottom: 22,
     right: 30,
     backgroundColor: '#FFF',
-    padding: 10,
+    padding: 5,
     borderRadius: 50,
     elevation: 5,
     shadowColor: '#000',
@@ -542,7 +542,7 @@ const styles = StyleSheet.create({
 
   tooltipContainer: {
     position: 'absolute',
-    bottom: '15%',
+    bottom: '12%',
     right: '10%',
     width: '40%',
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
@@ -578,7 +578,7 @@ const styles = StyleSheet.create({
 
   arrowContainer: {
     position: 'absolute',
-    bottom: 115,
+    bottom: 109,
     right: 50,
     alignItems: 'center',
     justifyContent: 'center',
@@ -702,4 +702,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default TestDeDepresion;
+export default DepressionTestMain;
