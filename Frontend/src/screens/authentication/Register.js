@@ -405,21 +405,23 @@ const Register = ({ navigation }) => {
       }
     } catch (error) {
       if (error.response) {
-        // La solicitud se realizó y el servidor respondió con un estado de error
+        // Extraer la propiedad "message" del objeto devuelto por el backend
+        const errorMessage = error.response.data.message || "Ha ocurrido un error inesperado.";
+    
         Alert.alert(
           "Error en el registro",
-          error.response.data || "Ha ocurrido un error inesperado. Por favor, intenta nuevamente.",
+          errorMessage,
           [{ text: "OK" }]
         );
       } else if (error.request) {
-        // La solicitud se realizó pero no se recibió respuesta
+        // Error de conexión
         Alert.alert(
           "Error de conexión",
           "No se recibió respuesta del servidor. Por favor, verifica tu conexión a Internet e intenta nuevamente.",
           [{ text: "OK" }]
         );
       } else {
-        // Algo salió mal al configurar la solicitud
+        // Error al configurar la solicitud
         Alert.alert(
           "Error",
           `Ocurrió un error inesperado: ${error.message}`,
@@ -427,7 +429,7 @@ const Register = ({ navigation }) => {
         );
       }
     }
-
+    
   };
 
 
