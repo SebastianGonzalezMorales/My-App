@@ -76,7 +76,7 @@ const Activity = [
   },
   {
     id: 16,
-    activity: 'Otra cosa',
+    activity: 'Realizando otra actividad',
     selected: false,
   },
 ];

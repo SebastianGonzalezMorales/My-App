@@ -9,7 +9,8 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback,
     View,
-    Alert
+    Alert,
+    ScrollView
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Activity from '../Activities';
@@ -37,7 +38,7 @@ const MoodTrack = ({ route, navigation }) => {
     const { mood, value, consejo } = route.params;
     // references
 
-       // states */
+    // states
     const [title, setTitle] = useState('');
     const [quickNote, setQuickNote] = useState('');
     const [activities, setActivities] = useState(Activity); // select activity handler
@@ -144,149 +145,151 @@ const MoodTrack = ({ route, navigation }) => {
                 keyboardVerticalOffset={keyboardVerticalOffset}
                 style={{ flex: 1 }}
             >
-                <View style={FormStyle.formContainer}>
-                    {/* activities */}
-                    <Text style={FormStyle.subtitle}> Qué has estado haciendo?</Text>
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                    <View style={FormStyle.formContainer}>
+                        {/* activities */}
+                        <Text style={FormStyle.subtitle}> Qué has estado haciendo?</Text>
 
-                    <View style={FormStyle.flatListContainer}>
-                        <FlatList
-                            data={activities}
-                            scrollEnabled={true}
-                            numColumns={4}
-                            keyExtractor={(item) => item.id}
-                            renderItem={({ item }) => {
-                                let iconName = '';
+                        <View style={FormStyle.flatListContainer}>
+                            <FlatList
+                                data={activities}
+                                scrollEnabled={false}
+                                numColumns={4}
+                                keyExtractor={(item) => item.id}
+                                renderItem={({ item }) => {
+                                    let iconName = '';
 
-                                // set icons based on activity id
-                                switch (item.id) {
-                                    case 1:
-                                        iconName = 'thought-bubble';
-                                        break;
-                                    case 2:
-                                        iconName = 'emoticon-confused';
-                                        break;
-                                    case 3:
-                                        iconName = 'account-group';
-                                        break;
-                                    case 4:
-                                        iconName = 'emoticon-sad';
-                                        break;
-                                    case 5:
-                                        iconName = 'book-check';
-                                        break;
-                                    case 6:
-                                        iconName = 'tea';
-                                        break;
-                                    case 7:
-                                        iconName = 'school';
-                                        break;
-                                    case 8:
-                                        iconName = 'run';
-                                        break;
-                                    case 9:
-                                        iconName = 'briefcase-check';
-                                        break;
-                                    case 10:
-                                        iconName = 'calendar-clock';
-                                        break;
-                                    case 11:
-                                        iconName = 'lightbulb-on';
-                                        break;
-                                    case 12:
-                                        iconName = 'home-heart';
-                                        break;
-                                    case 13:
-                                        iconName = 'emoticon-happy';
-                                        break;
-                                    case 14:
-                                        iconName = 'arm-flex';
-                                        break;
-                                    case 15:
-                                        iconName = 'heart';
-                                        break;
-                                    case 16:
-                                        iconName = 'dots-horizontal';
-                                        break;
-                                }
+                                    // set icons based on activity id
+                                    switch (item.id) {
+                                        case 1:
+                                            iconName = 'thought-bubble';
+                                            break;
+                                        case 2:
+                                            iconName = 'emoticon-confused';
+                                            break;
+                                        case 3:
+                                            iconName = 'account-group';
+                                            break;
+                                        case 4:
+                                            iconName = 'emoticon-sad';
+                                            break;
+                                        case 5:
+                                            iconName = 'book-check';
+                                            break;
+                                        case 6:
+                                            iconName = 'tea';
+                                            break;
+                                        case 7:
+                                            iconName = 'school';
+                                            break;
+                                        case 8:
+                                            iconName = 'run';
+                                            break;
+                                        case 9:
+                                            iconName = 'briefcase-check';
+                                            break;
+                                        case 10:
+                                            iconName = 'calendar-clock';
+                                            break;
+                                        case 11:
+                                            iconName = 'lightbulb-on';
+                                            break;
+                                        case 12:
+                                            iconName = 'home-heart';
+                                            break;
+                                        case 13:
+                                            iconName = 'emoticon-happy';
+                                            break;
+                                        case 14:
+                                            iconName = 'arm-flex';
+                                            break;
+                                        case 15:
+                                            iconName = 'heart';
+                                            break;
+                                        case 16:
+                                            iconName = 'dots-horizontal';
+                                            break;
+                                    }
 
 
-                                return (
-                                    <View style={FormStyle.activitiesContainer}>
-                                        <TouchableOpacity onPress={() => selectHandler(item)}>
-                                            <View
-                                                style={[
-                                                    FormStyle.activityContainer,
-                                                    {
-                                                        backgroundColor: item.selected
-                                                            ? 'white'
-                                                            : 'transparent',
-                                                    },
-                                                ]}
-                                            >
-                                                <MaterialCommunityIcons
-                                                    name={iconName}
-                                                    size={24}
-                                                    color="#f2f2f2"
+                                    return (
+                                        <View style={FormStyle.activitiesContainer}>
+                                            <TouchableOpacity onPress={() => selectHandler(item)}>
+                                                <View
                                                     style={[
-                                                        FormStyle.activityIcon,
+                                                        FormStyle.activityContainer,
                                                         {
-                                                            color: item.selected ? '#5da5a9' : '#f2f2f2',
-                                                        },
-                                                    ]}
-                                                />
-                                                <Text
-                                                    style={[
-                                                        FormStyle.activityText,
-                                                        {
-                                                            color: item.selected ? '#5da5a9' : '#f2f2f2',
+                                                            backgroundColor: item.selected
+                                                                ? 'white'
+                                                                : 'transparent',
                                                         },
                                                     ]}
                                                 >
-                                                    {item.activity}
-                                                </Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </View>
-                                );
-                            }}
-                        />
-                    </View>
-                    <Text style={FormStyle.seeMoreText}>Desliza para ver más</Text>
-                    {/* inputs */}
-                    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-                        <View style={FormStyle.inputContainer}>
-                            <Text style={FormStyle.text}>Titulo</Text>
-                            <InputButton
-                                placeholder="Escribe un título... (Opcional)"
-                                onChangeText={(title) => {
-                                    setTitle(title);
+                                                    <MaterialCommunityIcons
+                                                        name={iconName}
+                                                        size={24}
+                                                        color="#f2f2f2"
+                                                        style={[
+                                                            FormStyle.activityIcon,
+                                                            {
+                                                                color: item.selected ? '#5da5a9' : '#f2f2f2',
+                                                            },
+                                                        ]}
+                                                    />
+                                                    <Text
+                                                        style={[
+                                                            FormStyle.activityText,
+                                                            {
+                                                                color: item.selected ? '#5da5a9' : '#f2f2f2',
+                                                            },
+                                                        ]}
+                                                    >
+                                                        {item.activity}
+                                                    </Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    );
                                 }}
-                                autoCorrect={false}
-                            />
-
-                            <Text style={FormStyle.text}>Nota</Text>
-                            <InputButton
-                                placeholder="Escribe una nota... (Opcional)"
-                                onChangeText={(text) => {
-                                    setQuickNote(text);
-                                }}
-                                autoCorrect={false}
                             />
                         </View>
-                    </TouchableWithoutFeedback>
-                </View>
+                        {/*    <Text style={FormStyle.seeMoreText}>Desliza para ver más</Text> */}
+                        {/* inputs */}
+                        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                            <View style={FormStyle.inputContainer}>
+                                <Text style={FormStyle.text}>Mi día hasta ahora</Text>
+                                <InputButton
+                                    placeholder="Describe cómo ha sido tu día hasta este momento... (Opcional)"
+                                    onChangeText={(title) => {
+                                        setTitle(title);
+                                    }}
+                                    autoCorrect={false}
+                                    />
 
-                {/* button */}
-                <View style={[FormStyle.buttonContainer, { marginTop: 20 }]}>
-                    <FormButton
-                        onPress={saveMoodTrack}
-                        text="Guardar"
-                        buttonStyle={{
-                            backgroundColor: '#f2f2f2',
-                        }}
-                        textStyle={{ color: '#5da5a9' }}
-                    />
-                </View>
+                                <Text style={FormStyle.text}>Detalles importantes</Text>
+                                <InputButton
+                                    placeholder="Agrega información adicional o reflexiones sobre tu día... (Opcional)"
+                                    onChangeText={(text) => {
+                                        setQuickNote(text);
+                                    }}
+                                    autoCorrect={false}
+                                />
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </View>
+
+                    {/* button */}
+                    <View style={[FormStyle.buttonContainer, { marginTop: 20 }]}>
+                        <FormButton
+                            onPress={saveMoodTrack}
+                            text="Guardar"
+                            buttonStyle={{
+                                backgroundColor: '#f2f2f2',
+                            }}
+                            textStyle={{ color: '#5da5a9' }}
+                        />
+                    </View>
+                </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>
     );

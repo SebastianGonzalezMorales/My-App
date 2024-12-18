@@ -9,9 +9,11 @@ export default function InputButton(props) {
         onChangeText={props.onChangeText}
         value={props.value}
         placeholder={props.placeholder}
-        placeholderTextColor="#abced5"
+        placeholderTextColor="#E0E0E0"
         selectionColor="#5da5a9"
         style={styles.input}
+        multiline={true}          // Permite que el texto placeholder se ajuste
+        textAlignVertical="top"         // Alinea el texto al inicio del input
       />
     </View>
   );
@@ -21,15 +23,18 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#7db7ba',
     borderRadius: 10,
-    flexDirection: 'row',
-    height: 60,
     marginTop: 10,
+    paddingHorizontal: 5,  // Espacio horizontal
+    paddingVertical: 5,    // Espacio vertical
   },
   input: {
     color: '#f2f2f2',
     fontFamily: 'DoppioOne',
     fontSize: 14,
-    marginLeft: 20,
-    width: '80%',
+    lineHeight: 20,
+    padding: 10,
+    minHeight: 90,        // Altura mínima
+    maxHeight: 200,       // Altura máxima
+    textAlignVertical: 'top',
   },
 });

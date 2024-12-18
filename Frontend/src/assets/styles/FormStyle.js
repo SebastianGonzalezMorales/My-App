@@ -32,17 +32,18 @@ export default StyleSheet.create({
   subtitle: {
     color: '#f2f2f2',
     fontFamily: 'DoppioOne',
-    fontSize: 16,
+    fontSize: 18,
     marginTop: 30,
   },
   flatListContainer: {
-    height: 250,
-    paddingVertical: 20,
+    height: 400,
+    paddingVertical: 0,
+    marginTop: 0
   },
   activitiesContainer: {
     marginLeft: 6,
     marginRight: 6,
-    marginTop: 30,
+    marginTop: 4,
   },
   activityContainer: {
     alignItems: 'center',
@@ -76,7 +77,7 @@ export default StyleSheet.create({
     color: '#f2f2f2',
     fontFamily: 'DoppioOne',
     fontSize: 13,
-    marginTop: 20,
+    marginTop: 5,
   },
 
   // buttons
