@@ -63,7 +63,7 @@ const MoodDetails = ({ route, navigation }) => {
 
         // Establecer los datos obtenidos
         setMood(data.mood_state || 'Estado no definido');
-        setTitle(data.title || 'Sin título');
+        setTitle(data.title || 'No registraste información sobre tu día.');
 
         // Verificar campo de comentarios
         if (data.comentarios) {
@@ -71,7 +71,7 @@ const MoodDetails = ({ route, navigation }) => {
         } else if (data.commentarios) {
           setComentarios(data.commentarios);
         } else {
-          setComentarios('Sin nota');
+          setComentarios('No se agregaron detalles importantes.');
         }
 
         // Actualizar las actividades seleccionadas
@@ -137,9 +137,29 @@ const MoodDetails = ({ route, navigation }) => {
           <View style={FormStyle.formContainer}>
             {/* Activities */}
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={[FormStyle.subtitle, { fontFamily: 'Arial' }]}>¿</Text>
-              <Text style={FormStyle.subtitle}>Qué has estado haciendo?</Text>
-            </View>
+    <Text
+      style={[
+        GlobalStyle.subtitle,
+        {
+          textAlign: 'left',
+          fontFamily: 'CustomFontForQuestion', // Estilo específico para el signo de pregunta
+        },
+      ]}
+    >
+      ¿ 
+    </Text>
+    <Text
+      style={[
+        GlobalStyle.subtitle, // Manteniendo el estilo original
+        {
+          textAlign: 'left',
+          marginLeft: -60, // Ajuste fino para eliminar el espacio grande
+        },
+      ]}
+    >
+          Qué has estado haciendo?
+    </Text>
+</View>
 
             <View style={FormStyle.flatListContainer}>
               <FlatList

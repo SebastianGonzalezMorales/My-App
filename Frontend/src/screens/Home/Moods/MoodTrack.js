@@ -74,55 +74,55 @@ const MoodTrack = ({ route, navigation }) => {
     // Guardar el estado de ánimo en MongoDB a través del backend
     const saveMoodTrack = async () => {
         try {
-          const token = await AsyncStorage.getItem('token');
-      
-          if (token) {
-            // Crear array con actividades seleccionadas
-            const selectedActivities = activities
-              .filter((activity) => activity.selected)
-              .map((activity) => activity.activity); // Solo los nombres de actividades
-      
-            // Construir parámetros para la solicitud del consejo
-            const params = {
-              estado: mood, // Estado de ánimo
-              actividades: selectedActivities.length > 0 ? selectedActivities.join(',') : null // Solo si hay actividades seleccionadas
-            };
-      
-            // Obtener el consejo del backend
-            const response = await axios.get(`${API_URL}/tips/get-tips`, {
-              headers: { 'Authorization': `Bearer ${token}` },
-              params
-            });
-      
-            const consejo = response.data.consejo;
-      
-            // Guardar el estado de ánimo en la base de datos
-            await axios.post(
-              `${API_URL}/moodState/post-moodState`,
-              {
-                mood_state: mood,
-                intensidad: value,
-                comentarios: quickNote,
-                Activities: selectedActivities,
-                title: title,
-              },
-              {
-                headers: { 'Authorization': `Bearer ${token}` },
-              }
-            );
-      
-            // Mostrar el consejo al usuario con una alerta
-            Alert.alert('Consejo para ti', consejo, [
-              { text: 'OK', onPress: () => navigation.navigate('HomeMood') },
-            ]);
-          } else {
-            console.log('No se encontró el token. Por favor, inicia sesión.');
-          }
+            const token = await AsyncStorage.getItem('token');
+
+            if (token) {
+                // Crear array con actividades seleccionadas
+                const selectedActivities = activities
+                    .filter((activity) => activity.selected)
+                    .map((activity) => activity.activity); // Solo los nombres de actividades
+
+                // Construir parámetros para la solicitud del consejo
+                const params = {
+                    estado: mood, // Estado de ánimo
+                    actividades: selectedActivities.length > 0 ? selectedActivities.join(',') : null // Solo si hay actividades seleccionadas
+                };
+
+                // Obtener el consejo del backend
+                const response = await axios.get(`${API_URL}/tips/get-tips`, {
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    params
+                });
+
+                const consejo = response.data.consejo;
+
+                // Guardar el estado de ánimo en la base de datos
+                await axios.post(
+                    `${API_URL}/moodState/post-moodState`,
+                    {
+                        mood_state: mood,
+                        intensidad: value,
+                        comentarios: quickNote,
+                        Activities: selectedActivities,
+                        title: title,
+                    },
+                    {
+                        headers: { 'Authorization': `Bearer ${token}` },
+                    }
+                );
+
+                // Mostrar el consejo al usuario con una alerta
+                Alert.alert('Consejo para ti', consejo, [
+                    { text: 'OK', onPress: () => navigation.navigate('HomeMood') },
+                ]);
+            } else {
+                console.log('No se encontró el token. Por favor, inicia sesión.');
+            }
         } catch (error) {
-          console.error('Error al guardar el estado de ánimo:', error);
+            console.error('Error al guardar el estado de ánimo:', error);
         }
-      };
-      
+    };
+
     // keyboard offset
     const keyboardVerticalOffset = Platform.OS === 'ios' ? 80 : 0;
 
@@ -131,7 +131,7 @@ const MoodTrack = ({ route, navigation }) => {
      * **** Screen ****
      * ****************
      */
-    
+
     return (
         <SafeAreaView style={[FormStyle.container, GlobalStyle.androidSafeArea]}>
             {/* header */}
@@ -148,7 +148,13 @@ const MoodTrack = ({ route, navigation }) => {
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={FormStyle.formContainer}>
                         {/* activities */}
-                        <Text style={FormStyle.subtitle}> Qué has estado haciendo?</Text>
+                        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={[GlobalStyle.subtitle, { textAlign: 'center', fontSize: 18 }]}>
+                                <Text style={{ fontFamily: 'Arial', fontSize: 18 }}>¿</Text>
+                                Cómo te sientes ahora mismo?
+                            </Text>
+                        </View>
+
 
                         <View style={FormStyle.flatListContainer}>
                             <FlatList
@@ -259,16 +265,16 @@ const MoodTrack = ({ route, navigation }) => {
                             <View style={FormStyle.inputContainer}>
                                 <Text style={FormStyle.text}>Mi día hasta ahora</Text>
                                 <InputButton
-                                    placeholder="Describe cómo ha sido tu día hasta este momento... (Opcional)"
+                                    placeholder="Describe cómo ha sido tu día hasta este momento... (Opcional)."
                                     onChangeText={(title) => {
                                         setTitle(title);
                                     }}
                                     autoCorrect={false}
-                                    />
+                                />
 
                                 <Text style={FormStyle.text}>Detalles importantes</Text>
                                 <InputButton
-                                    placeholder="Agrega información adicional o reflexiones sobre tu día... (Opcional)"
+                                    placeholder="Agrega información adicional o reflexiones sobre tu día... (Opcional)."
                                     onChangeText={(text) => {
                                         setQuickNote(text);
                                     }}
