@@ -17,140 +17,85 @@ const MoodStats = ({ navigation }) => {
   const [regularCounter, setRegularCount] = useState(0);
   const [bienCounter, setBienCount] = useState(0);
   const [excelenteCounter, setExcelenteCount] = useState(0);
-  const [selectedMonth, setSelectedMonth] = useState('');
   const [monthChart, setMonthChart] = useState('');
+  const [moodData, setMoodData] = useState([]);
 
-  const pieChartData = [
-    { name: 'Mal', count: malCounter, color: '#d85a77', legendFontColor: '#7F7F7F', legendFontSize: 14 },
-    { name: 'Regular', count: regularCounter, color: '#238bdf', legendFontColor: '#7F7F7F', legendFontSize: 14 },
-    { name: 'Bien', count: bienCounter, color: '#109f5c', legendFontColor: '#7F7F7F', legendFontSize: 14 },
-    { name: 'Excelente', count: excelenteCounter, color: '#cc8e62', legendFontColor: '#7F7F7F', legendFontSize: 14 },
-  ];
+  const currentMonth = getMonth();  
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
 
-  const currentMonth = getMonth();
   const months = getMonths();
 
+  const pieChartData = [
+    { name: 'Mal', count: malCounter, color: '#F20C0C', legendFontColor: '#7F7F7F', legendFontSize: 14 },
+    { name: 'Regular', count: regularCounter, color: '#F4D63D', legendFontColor: '#7F7F7F', legendFontSize: 14 },
+    { name: 'Bien', count: bienCounter, color: '#2626D8', legendFontColor: '#7F7F7F', legendFontSize: 14 },
+    { name: 'Excelente', count: excelenteCounter, color: '#32CD32', legendFontColor: '#7F7F7F', legendFontSize: 14 },
+  ];
+
+  // Obtenemos los datos solo una vez
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const moodData = await fetchWithToken('/moodState/get-MoodStatesByUserId');
-
-        const x = [];
-        const y = [];
-
-        let mal = 0;
-        let regular = 0;
-        let bien = 0;
-        let excelente = 0;
-
-        const currentMonthAbbr = currentMonth.slice(0, 3);
-        moodData.data.forEach((moodEntry) => {
-          const { mood_state, intensidad, date } = moodEntry;
-
-          // Asegúrate de que mood_state e intensidad sean valores primitivos
-          const moodStateValue = typeof mood_state === 'object' ? mood_state.value || mood_state.label : mood_state;
-          const intensidadValue = typeof intensidad === 'object' ? intensidad.value || intensidad.label : intensidad;
-
-          const month = new Date(date).toLocaleString('default', { month: 'short' });
-          if (month === currentMonthAbbr) {
-            x.push('');
-            y.push(Number(intensidadValue));
-
-            switch (moodStateValue) {
-              case 'Mal':
-                mal++;
-                break;
-              case 'Regular':
-                regular++;
-                break;
-              case 'Bien':
-                bien++;
-                break;
-              case 'Excelente':
-                excelente++;
-                break;
-              default:
-                break;
-            }
-          }
-        });
-
-        y.unshift(0);
-        setX(x);
-        setY(y);
-
-        setMalCount(mal);
-        setRegularCount(regular);
-        setBienCount(bien);
-        setExcelenteCount(excelente);
-        setMonthChart(currentMonth);
+        const response = await fetchWithToken('/moodState/get-MoodStatesByUserId');
+        setMoodData(response.data);
       } catch (error) {
         console.error('Error al obtener los estados de ánimo:', error);
       }
     };
-
     fetchData();
   }, []);
 
-  const handleMonthSelected = async (label) => {
-    setSelectedMonth(label);
-  
-    try {
-      const moodData = await fetchWithToken('/moodState/get-MoodStatesByUserId');
-      const x = [];
-      const y = [];
-  
-      let mal = 0;
-      let regular = 0;
-      let bien = 0;
-      let excelente = 0;
-  
-      moodData.data.forEach((moodEntry) => {
-        const { mood_state, intensidad, date } = moodEntry;
-  
-        // Asegúrate de que mood_state e intensidad sean valores primitivos
-        const moodStateValue = typeof mood_state === 'object' ? mood_state.value || mood_state.label : mood_state;
-        const intensidadValue = typeof intensidad === 'object' ? intensidad.value || intensidad.label : intensidad;
-  
-        const month = getMonthName(new Date(date).getMonth());
-  
-        if (label === month) {
-          x.push('');
-          y.push(Number(intensidadValue));
-          setMonthChart(month);
-  
-          switch (moodStateValue) {
-            case 'Mal':
-              mal++;
-              break;
-            case 'Regular':
-              regular++;
-              break;
-            case 'Bien':
-              bien++;
-              break;
-            case 'Excelente':
-              excelente++;
-              break;
-            default:
-              break;
-          }
-        }
-      });
-  
-      y.unshift(0);
-      setX(x);
-      setY(y);
-  
-      setMalCount(mal);
-      setRegularCount(regular);
-      setBienCount(bien);
-      setExcelenteCount(excelente);
-    } catch (error) {
-      console.error('Error al obtener los estados de ánimo:', error);
+  // Cada vez que cambia el mes seleccionado o se cargan los datos, filtramos
+  useEffect(() => {
+    if (moodData.length > 0) {
+      filterDataByMonth(selectedMonth);
     }
+  }, [selectedMonth, moodData]);
+
+  const filterDataByMonth = (monthLabel) => {
+    const x = [];
+    const y = [];
+    let mal = 0;
+    let regular = 0;
+    let bien = 0;
+    let excelente = 0;
+
+    moodData.forEach((moodEntry) => {
+      const { mood_state, intensidad, date } = moodEntry;
+      const moodStateValue = typeof mood_state === 'object' ? (mood_state.value || mood_state.label) : mood_state;
+      const intensidadValue = typeof intensidad === 'object' ? (intensidad.value || intensidad.label) : intensidad;
+      const month = getMonthName(new Date(date).getMonth());
+
+      if (monthLabel === month) {
+        x.push('');
+        y.push(Number(intensidadValue));
+        setMonthChart(monthLabel);
+
+        switch (moodStateValue) {
+          case 'Mal':
+            mal++;
+            break;
+          case 'Regular':
+            regular++;
+            break;
+          case 'Bien':
+            bien++;
+            break;
+          case 'Excelente':
+            excelente++;
+            break;
+        }
+      }
+    });
+
+    y.unshift(0);
+    setX(x);
+    setY(y);
+    setMalCount(mal);
+    setRegularCount(regular);
+    setBienCount(bien);
+    setExcelenteCount(excelente);
   };
-  
 
   return (
     <SafeAreaView style={[FormStyle.container, GlobalStyle.androidSafeArea]}>
@@ -167,13 +112,12 @@ const MoodStats = ({ navigation }) => {
           itemTextStyle={{ color: '#666a72', fontFamily: 'DoppioOne' }}
           iconStyle={{ tintColor: '#fff' }}
           placeholder={currentMonth}
-          data={months.map((month) => ({ label: month.label, value: month.label }))} // Asegúrate de que value sea solo el nombre del mes
+          data={months.map((month) => ({ label: month.label, value: month.label }))}
           value={selectedMonth}
-          onChange={(item) => handleMonthSelected(item.label)} // Pasa solo el nombre del mes
+          onChange={(item) => setSelectedMonth(item.label)} 
           labelField="label"
           valueField="value"
         />
-
       </View>
 
       {y.length > 0 ? (
@@ -182,7 +126,6 @@ const MoodStats = ({ navigation }) => {
             data={{ labels: x, datasets: [{ data: y }] }}
             width={Dimensions.get('window').width * 0.85}
             height={200}
-            
             chartConfig={{
               backgroundGradientFrom: '#f2f2f2',
               backgroundGradientTo: '#f2f2f2',
@@ -194,9 +137,8 @@ const MoodStats = ({ navigation }) => {
             style={ChartStyle.chartStyle}
             bezier
             fromNumber={4} 
-            yAxisMax={4} // Fija el valor máximo del eje Y en 4
-            fromZero={true} // Asegura que el eje Y comience desde 0
-            
+            yAxisMax={4}
+            fromZero={true}
           />
           <Text
             style={{
