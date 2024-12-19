@@ -211,7 +211,8 @@ const verifyEmail = async (req, res) => {
             return res.status(400).send(`
                 <html>
                     <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
-                        <h1 style="font-size: 48px; color: #000C7B;">Token de verificación no válido o caducado.</h1>
+                                          <h1 style="font-size: 64px; color: #000C7B; text-align: justify; line-height: 1.3; max-width: 90%; padding: 0 20px;">
+                        Token de verificación no válido o caducado.</h1>
                     </body>
                 </html>
             `);
