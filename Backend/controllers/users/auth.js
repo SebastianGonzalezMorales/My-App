@@ -211,7 +211,7 @@ const verifyEmail = async (req, res) => {
             return res.status(400).send(`
                 <html>
                     <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
-                        <h1 style="font-size: 32px; color: #000C7B;">Token de verificación no válido o caducado.</h1>
+                        <h1 style="font-size: 48px; color: #000C7B;">Token de verificación no válido o caducado.</h1>
                     </body>
                 </html>
             `);
@@ -243,7 +243,7 @@ const verifyEmail = async (req, res) => {
                 return res.status(500).send(`
                     <html>
                         <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
-                            <h1 style="font-size: 32px; color: #000C7B;">Hubo un problema al eliminar el usuario temporal. Por favor, intenta nuevamente.</h1>
+                            <h1 style="font-size: 100px; color: #000C7B;">Hubo un problema al eliminar el usuario temporal. Por favor, intenta nuevamente.</h1>
                         </body>
                     </html>
                 `);
@@ -255,7 +255,7 @@ const verifyEmail = async (req, res) => {
             return res.status(500).send(`
                 <html>
                     <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
-                        <h1 style="font-size: 32px; color: #000C7B;">Error al eliminar el usuario temporal. Intenta nuevamente más tarde.</h1>
+                        <h1 style="font-size: 100px; color: #000C7B;">Error al eliminar el usuario temporal. Intenta nuevamente más tarde.</h1>
                     </body>
                 </html>
             `);
@@ -264,7 +264,7 @@ const verifyEmail = async (req, res) => {
         return res.send(`
             <html>
                 <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
-                    <h1 style="font-size: 32px; color: #000C7B;">El correo electrónico se ha verificado correctamente. Su cuenta ya está activa.</h1>
+                    <h1 style="font-size: 100px; color: #000C7B;">El correo electrónico se ha verificado correctamente. Su cuenta ya está activa.</h1>
                 </body>
             </html>
         `);
@@ -273,7 +273,7 @@ const verifyEmail = async (req, res) => {
         return res.status(400).send(`
             <html>
                 <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
-                    <h1 style="font-size: 32px; color: #000C7B;">Enlace de verificación no válido o vencido.</h1>
+                    <h1 style="font-size: 100px; color: #000C7B;">Enlace de verificación no válido o vencido.</h1>
                 </body>
             </html>
         `);
