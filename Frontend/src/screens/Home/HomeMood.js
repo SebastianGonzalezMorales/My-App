@@ -249,8 +249,8 @@ const HomeMood = ({ navigation }) => {
         const response = await axios.post(
           `${API_URL}/user-management/userdata`,
           {
-            // Token en el cuerpo de la solicitud
-            token: `${token}`,
+      /*       // Token en el cuerpo de la solicitud
+            token: `${token}`, */
           },
           {
             // Token de autorización en el header
