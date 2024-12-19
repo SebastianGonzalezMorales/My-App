@@ -48,7 +48,7 @@ const forgotPassword = async (req, res) => {
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 10px; padding: 20px;">
         <div style="text-align: center; margin-bottom: 20px;">
-          <img src="cid:app_logo" alt="App Acompañamiento UV" style="width: 100px; height: auto;">
+          <img src="cid:app_logo" alt="App Acompañamiento UV" style="width: 70px; height: auto;">
         </div>
         <h2 style="color: #1d72b8; text-align: center;">Restablece tu Contraseña</h2>
         <p>Hola <strong>${firstName}</strong>,</p>
@@ -208,7 +208,7 @@ const verifyResetToken = async (req, res) => {
       return res.status(400).send(`
           <html>
               <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
-                  <h1 style="font-size: 100px; color: #000C7B;">El enlace de restablecimiento es inválido o ha caducado.</h1>
+                  <h1 style="font-size: 70px; color: #000C7B;">El enlace de restablecimiento es inválido o ha caducado.</h1>
               </body>
           </html>
       `);
@@ -223,7 +223,7 @@ const verifyResetToken = async (req, res) => {
     res.status(200).send(`
       <html>
           <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
-              <h1 style="font-size: 100px; color: #000C7B;">El token es válido. Puedes restablecer tu contraseña ahora, volviendo a tu aplicación móvil</h1>
+              <h1 style="font-size: 70px; color: #000C7B;">El token es válido. Puedes restablecer tu contraseña ahora, volviendo a tu aplicación móvil</h1>
           </body>
       </html>
   `);
@@ -232,7 +232,7 @@ const verifyResetToken = async (req, res) => {
     res.status(400).send(`
       <html>
           <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
-              <h1 style="font-size: 100px; color: #000C7B;">El enlace de restablecimiento es inválido o ha caducado.</h1>
+              <h1 style="font-size: 70px; color: #000C7B;">El enlace de restablecimiento es inválido o ha caducado.</h1>
           </body>
       </html>
   `);
