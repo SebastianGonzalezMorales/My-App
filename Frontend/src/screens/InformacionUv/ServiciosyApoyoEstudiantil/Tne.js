@@ -27,7 +27,7 @@ function Tne({ navigation }) {
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       <View style={{ height: 260, padding: 15 }}>
         <BackButton onPress={() => navigation.goBack()} />
-        <Text style={GlobalStyle.welcomeText}>Espacio Uv</Text>
+        <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>Servicios y Apoyo Estudiantil</Text>
         <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
           Preguntas Frecuentes TNE

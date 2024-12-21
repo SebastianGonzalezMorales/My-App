@@ -51,7 +51,7 @@ function AprendeSobreSaludMental({ navigation }) {
           source={require('./../../../assets/images/Menu/salud_Mental.png')}
           style={{
             width: '100%',
-            height: height * 0.18, // Ajustar la altura de la imagen al 20% de la pantalla
+            height: height * 0.10, // Ajustar la altura de la imagen al 20% de la pantalla
             resizeMode: 'contain', // Cambiar a 'contain' para evitar recortes
             marginTop: 3
           }}

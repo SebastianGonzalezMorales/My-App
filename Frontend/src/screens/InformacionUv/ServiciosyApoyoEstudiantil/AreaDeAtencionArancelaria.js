@@ -20,12 +20,12 @@ function AreaDeAtencionArancelaria({ navigation }) {
       [section]: !prev[section],
     }));
   };
-
+  EspacioUv
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       <View style={{ height: 260, padding: 15 }}>
         <BackButton onPress={() => navigation.goBack()} />
-        <Text style={GlobalStyle.welcomeText}>EspacioUv</Text>
+        <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>Servicios y apoyo estudiantil</Text>
         <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
           Áreas de la Unidad de Atención Arancelaria
