@@ -20,7 +20,7 @@ function AreaDeAtencionArancelaria({ navigation }) {
       [section]: !prev[section],
     }));
   };
-  EspacioUv
+  
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       <View style={{ height: 260, padding: 15 }}>
