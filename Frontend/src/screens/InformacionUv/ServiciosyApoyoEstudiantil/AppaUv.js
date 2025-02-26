@@ -36,7 +36,7 @@ function AppaUv({ navigation }) {
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
-          Servicios y Apoyo Estudiantil
+          Servicios y apoyo estudiantil
         </Text>
         <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
           Appa UV - Programa de Atención Preferencial a los Primeros Años

@@ -65,11 +65,11 @@ function SaludMentalMenu({ navigation }) {
         <ScrollView>
           <View style={{ marginTop: 10 }}>
             <SettingsButton
-              text="Aprende sobre Salud Mental"
+              text="Aprende sobre salud mental"
               onPress={() => navigation.navigate('AprendeSobreSaludMental')}
             />
             <SettingsButton
-              text="Tests"
+              text="Realiza un test y evalúa tu bienestar"
               onPress={() => navigation.navigate('Tests')}
             />
           </View>

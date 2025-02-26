@@ -39,7 +39,7 @@ function AprendeSobreSaludMental({ navigation }) {
         }
         
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF', marginTop: -15 }]}>
-          Aprende sobre Salud Mental
+          Aprende sobre salud mental
         </Text>
 
         <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF', marginTop: -10 }]}>
@@ -87,7 +87,7 @@ function AprendeSobreSaludMental({ navigation }) {
               iconColor="#E65100"       // Naranja oscuro para icono
             />
             <SettingsButton
-              text="Contactarse con recursos UV"
+              text="Contactarse con apoyo UV"
               onPress={() => navigation.navigate('ContactarseConApoyoUV')}
               backgroundColor="#fbcdd1" // Un rojo más presente y vibrante en el fondo
               textColor="#F20C0C"       // Un rojo más oscuro para el texto

@@ -144,7 +144,7 @@ function AsistenteSocial({ navigation }) {
           backgroundColor: '#000C7B',
         }}
       >
-        <Text style={GlobalStyle.welcomeText}>Contactarse con Recursos UV</Text>
+        <Text style={GlobalStyle.welcomeText}>Contactarse con apoyo UV</Text>
 
 {/*         <Text
           style={[

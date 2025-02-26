@@ -24,7 +24,7 @@ function Informacion({ navigation }) {
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       <View style={{ height: 260, padding: 15 }}>
         <BackButton onPress={() => navigation.goBack()} />
-        <Text style={GlobalStyle.welcomeText}>Aprende sobre Salud Mental</Text>
+        <Text style={GlobalStyle.welcomeText}>Aprende sobre salud mental</Text>
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>Información</Text>
         <Text style={[GlobalStyle.text,{ textAlign:'justify' }]}>
         A continuación, encuentra información sobre salud mental para estudiantes universitarios. Las imágenes provienen del grupo Conectados de la DAE.

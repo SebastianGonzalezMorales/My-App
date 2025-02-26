@@ -11,12 +11,12 @@ const RedesSociales = ({ navigation }) => {
   return (
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       {/* Sección superior azul con el botón, título y subtítulo */}
-      <View style={{ height: 210 }}>
+      <View style={{ height: 220 }}>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={GlobalStyle.welcomeText}>Espacio UV </Text>
-        <Text style={[GlobalStyle.subtitle, { textAlign: 'left' }]}>Novedades</Text>
-        <Text style={[GlobalStyle.text, { textAlign: 'left' }]}>
-          Mantente informado sobre los eventos de la UV a través de las redes sociales de la Universidad.
+        <Text style={[GlobalStyle.subtitle, { textAlign: 'left' }]}>Explora lo más reciente de la UV</Text>
+        <Text style={[GlobalStyle.text, { textAlign: 'justify' }]}>
+          Entérate de lo que pasa en la UV con un solo clic. Accede a las redes sociales oficiales y mantente al tanto de actividades y novedades.
         </Text>
       </View>
 

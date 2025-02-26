@@ -173,7 +173,7 @@ Quedo atento.`;
       <BackButton onPress={() => navigation.goBack()} />
 
       <View style={{ height: height * 0.33, padding: 10 }}>
-        <Text style={GlobalStyle.welcomeText}>Contactarse con Recursos UV</Text>
+        <Text style={GlobalStyle.welcomeText}>Contactarse con apoyo UV</Text>
         <Text
           style={[
             GlobalStyle.text,

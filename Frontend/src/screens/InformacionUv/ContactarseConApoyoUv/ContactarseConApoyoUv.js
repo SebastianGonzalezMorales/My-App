@@ -28,7 +28,7 @@ function MenuUv({ navigation }) {
       <View style={{ height: height * 0.55, padding: 10 }}>
         <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
 
-        <Text style={GlobalStyle.welcomeText}>Contactarse con Recursos UV</Text>
+        <Text style={GlobalStyle.welcomeText}>Contactarse con apoyo UV</Text>
         <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
         Accede a los servicios de apoyo para estudiantes y conecta con quienes están para ayudarte.
         </Text>

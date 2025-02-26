@@ -52,11 +52,11 @@ function MenuUv({ navigation }) {
         <ScrollView contentContainerStyle={{ padding: 20 }}>
           <View style={{ marginTop: 2 }}>
             <SettingsButton
-              text="Servicios y Apoyo Estudiantil"
+              text="Accede a servicios y apoyo estudiantil"
               onPress={() => navigation.navigate('InformacionUv')}
             />
             <SettingsButton
-              text="Novedades"
+              text="Explora lo más reciente de la UV"
               onPress={() => navigation.navigate('RedesSociales')}
               textStyle={{
                 color: '#d85a77', // Personaliza el color del texto
@@ -65,7 +65,7 @@ function MenuUv({ navigation }) {
               }}
             />
             <SettingsButton
-              text="Contactarse con Apoyo UV"
+              text="Contactarse con apoyo UV"
               onPress={() => navigation.navigate('ContactarseConApoyoUV')}
               backgroundColor="#fbcdd1" // Un rojo más presente y vibrante en el fondo
               textColor="#F20C0C"       // Un rojo más oscuro para el texto

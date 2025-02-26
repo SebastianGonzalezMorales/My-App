@@ -25,7 +25,7 @@ function RedesDeApoyo({ navigation }) {
     <SafeAreaView style={[GlobalStyle.container, GlobalStyle.androidSafeArea]}>
       <View style={{ height: 260, padding: 15 }}>
         <BackButton onPress={() => navigation.goBack()} />
-        <Text style={GlobalStyle.welcomeText}>Aprende sobre Salud Mental</Text>
+        <Text style={GlobalStyle.welcomeText}>Aprende sobre salud mental</Text>
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>Redes de apoyo</Text>
         {/*  <Text style={{ color: '#FFFFFF', marginVertical: 10, paddingHorizontal: 20, textAlign: 'justify' }}> */}
         <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>

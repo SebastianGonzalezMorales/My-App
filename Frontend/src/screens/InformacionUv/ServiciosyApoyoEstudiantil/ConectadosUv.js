@@ -41,7 +41,7 @@ function Conectados({ navigation }) {
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={GlobalStyle.welcomeText}>Espacio UV</Text>
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
-          Servicios y Apoyo Estudiantil
+          Servicios y apoyo estudiantil
         </Text>
         <Text style={[GlobalStyle.text, { textAlign: 'justify', color: '#FFFFFF' }]}>
           Conectados
@@ -125,7 +125,7 @@ function Conectados({ navigation }) {
           onPress={() => navigation.navigate('Conectados')} // Reemplaza 'ApoyoUV' con el nombre de la ruta
         >
           <MaterialCommunityIcons name="arrow-right-circle" size={20} color="#FFF" />
-          <Text style={styles.buttonText}>Ir a Contactarse con Apoyo UV</Text>
+          <Text style={styles.buttonText}>Ir a Contactarse con apoyo UV</Text>
         </TouchableOpacity> 
           </View>
       </View>

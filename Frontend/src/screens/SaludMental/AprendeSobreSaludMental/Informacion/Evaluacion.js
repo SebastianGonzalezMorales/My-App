@@ -41,7 +41,7 @@ function Evaluacion({ navigation }) {
       <View style={{ height: 200, padding: 15 }}>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={[GlobalStyle.welcomeText, { color: '#FFFFFF' }]}>
-          Aprende sobre Salud Mental
+          Aprende sobre salud mental
         </Text>
         <Text style={[GlobalStyle.subtitleMenu, { color: '#FFFFFF' }]}>
           Información
