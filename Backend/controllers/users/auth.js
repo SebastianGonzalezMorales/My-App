@@ -2,11 +2,11 @@ const User = require('../../models/user');
 const { TempUser } = require('../../models/tempUser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer'); // Servicio de correos
+const nodemailer = require('nodemailer');
+const crypto = require('crypto'); // Para calcular los hashes
 
-// Asignar la clave secreta desde las variables de entorno
+// Clave secreta para JWT
 const secret = process.env.SECRET;
-
 if (!secret) {
     throw new Error('La clave secreta (SECRET) no está definida en las variables de entorno.');
 }
@@ -14,70 +14,96 @@ if (!secret) {
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-
-        // Convertir el email a minúsculas antes de buscar en la base de datos
         const normalizedEmail = email.toLowerCase();
 
-        // Busca en la colección temporal primero
+        // Calcular hash determinista del email para buscar
+        const hashedEmail = crypto.createHash('sha256')
+            .update(normalizedEmail)
+            .digest('hex');
+
+        // Verifica si existe un usuario temporal pendiente de verificación
         const tempUser = await TempUser.findOne({ email: normalizedEmail });
         if (tempUser) {
-            return res.status(403).json({ success: false, message: 'Aún no has verificado tu correo electrónico. Por favor, revisa tu bandeja de entrada para completar el registro.' });
+            return res.status(403).json({ 
+                success: false, 
+                message: 'Aún no has verificado tu correo electrónico. Por favor, revisa tu bandeja de entrada para completar el registro.' 
+            });
         }
 
-        // Busca en la colección de usuarios
-        const user = await User.findOne({ email: normalizedEmail });
+        // Buscar usuario usando el hash del email
+        const user = await User.findOne({ emailHash: hashedEmail });
         if (!user) {
-            return res.status(400).json({ success: false, message: 'No pudimos encontrar una cuenta con este correo electrónico. Por favor, revisa que el correo sea correcto o regístrate si aún no tienes una cuenta.' });
+            return res.status(400).json({ 
+                success: false, 
+                message: 'No pudimos encontrar una cuenta con este correo electrónico. Por favor, revisa que el correo sea correcto o regístrate si aún no tienes una cuenta.' 
+            });
         }
 
         if (!user.verified) {
-            return res.status(403).json({ success: false, message: 'Por favor verifica tu correo electrónico antes de iniciar sesión.' });
+            return res.status(403).json({ 
+                success: false, 
+                message: 'Por favor verifica tu correo electrónico antes de iniciar sesión.' 
+            });
         }
 
+        // Validar la contraseña
         if (bcrypt.compareSync(password, user.passwordHash)) {
             const token = jwt.sign(
                 {
                     userId: user.id,
-                    email: user.email,
+                    email: user.email, // Desencriptado automáticamente por mongoose-encryption
                     isAdmin: user.isAdmin
                 },
                 secret,
                 { expiresIn: '4d' }
             );
-            return res.status(200).json({ success: true, name: user.name, user: user.email, token });
+            return res.status(200).json({ 
+                success: true, 
+                name: user.name, 
+                user: user.email, 
+                rut: user.rut,
+                phoneNumber: user.phoneNumber,
+                token, 
+
+            });
         } else {
-            return res.status(400).json({ success: false, message: 'La contraseña es incorrecta.' });
+            return res.status(400).json({ 
+                success: false, 
+                message: 'La contraseña es incorrecta.' 
+            });
         }
     } catch (error) {
         console.error('Error in loginUser:', error);
-        return res.status(500).json({ success: false, message: 'Error interno del servidor.' });
+        return res.status(500).json({ 
+            success: false, 
+            message: 'Error interno del servidor.' 
+        });
     }
 };
 
-
 const registerUser = async (req, res) => {
     try {
+        // Verificar que se reciban todos los campos
         const { name, email, rut, birthdate, facultad, carrera, phoneNumber, password, confirmPassword, policyAccepted } = req.body;
-        // Convertir el email a minúsculas antes de guardarlo
         const normalizedEmail = email.toLowerCase();
+
+        // Debug: Verificar que los datos lleguen correctamente
+        console.log('Datos de registro recibidos:', req.body);
 
         if (!name || !normalizedEmail || !rut || !birthdate || !facultad || !carrera || !phoneNumber || !password || !confirmPassword) {
             return res.status(400).json({ success: false, message: 'Todos los campos son obligatorios.' });
         }
 
-        // Obtener el primer nombre del usuario
-        const firstName = name.split(' ')[0]; // Divide el nombre y toma el primer elemento del arreglo
+        const firstName = name.split(' ')[0];
 
-        // Validar número de celular
-        const phoneRegex = /^\+569\s?\d{8}$/; // Acepta "+569XXXXXXXX" o "+569 XXXXXXXX"
+        // Validar el formato del número de celular
+        const phoneRegex = /^\+569\s?\d{8}$/;
         if (!phoneRegex.test(phoneNumber)) {
             return res.status(400).json({ success: false, message: 'Número de celular inválido. Debe seguir el formato +569 XXXXXXXX.' });
         }
-
         console.log('Número de celular recibido:', phoneNumber);
 
-        // Verificar si la contraseña es fuerte
-  
+        // Validar fortaleza y confirmación de contraseña
         if (!isStrongPassword(password)) {
             return res.status(400).json({ success: false, message: 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un símbolo.' });
         }
@@ -85,11 +111,9 @@ const registerUser = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Las contraseñas no coinciden.' });
         }
 
-        // Convertir DD-MM-YYYY a YYYY-MM-DD
+        // Convertir la fecha de nacimiento a formato YYYY-MM-DD
         const [day, month, year] = birthdate.split('-').map(Number);
         const formattedBirthdate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
-        // Validaciones adicionales de la fecha
         const currentYear = new Date().getFullYear();
         if (year < 1900 || year > currentYear || month < 1 || month > 12 || day < 1 || day > 31) {
             return res.status(400).json({ success: false, message: 'La fecha de nacimiento no es válida.' });
@@ -98,23 +122,34 @@ const registerUser = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Debes aceptar la política de privacidad para registrarte.' });
         }
 
-        const existingUser = await User.findOne({ email: normalizedEmail });
+        // Calcular hash determinista para email y rut
+        const hashedEmail = crypto.createHash('sha256')
+            .update(normalizedEmail)
+            .digest('hex');
+
+        const hashedRut = crypto.createHash('sha256')
+            .update(rut)
+            .digest('hex');
+
+        // Verificar si ya existe un usuario con el mismo email o rut
+        const existingUser = await User.findOne({ emailHash: hashedEmail });
         if (existingUser) {
             return res.status(400).json({ success: false, message: 'El correo electrónico que ingresaste ya está registrado.' });
         }
-
-        const existingRut = await User.findOne({ rut: rut });
+        const existingRut = await User.findOne({ rutHash: hashedRut });
         if (existingRut) {
             return res.status(400).json({ success: false, message: 'El Rut ya se encuentra en uso.' });
         }
 
+        // Crear un token de verificación para el correo
         const verificationToken = jwt.sign({ email: normalizedEmail }, secret, { expiresIn: '1h' });
 
+        // Crear un usuario temporal para verificación
         const tempUser = new TempUser({
             name,
             email: normalizedEmail,
             rut,
-            birthdate,
+            birthdate: formattedBirthdate,
             facultad,
             carrera,
             phoneNumber,
@@ -127,10 +162,9 @@ const registerUser = async (req, res) => {
         const savedTempUser = await tempUser.save();
         if (!savedTempUser) return res.status(400).json({ success: false, message: 'No se pudo crear el usuario temporal.' });
 
-        // Obtener BASE_URL para producción
+        // Configurar el enlace de verificación
         const baseUrl = process.env.BASE_URL;
         const api_url = process.env.API_URL;
-
         const verificationLink = `${baseUrl}${api_url}/auth/verificar?token=${verificationToken}`;
 
         const transporter = nodemailer.createTransport({
@@ -141,7 +175,7 @@ const registerUser = async (req, res) => {
             },
         });
 
-        // Enviar correo con diseño
+        // Enviar correo de verificación
         await transporter.sendMail({
             to: normalizedEmail,
             subject: '[Verifique su correo electrónico - App Acompañamiento UV]',
@@ -183,22 +217,16 @@ const registerUser = async (req, res) => {
 };
 
 const isStrongPassword = (password) => {
-    // Verificar longitud mínima
     if (password.length < 8) return false;
-    // Verificar si contiene al menos una letra mayúscula
     if (!/[A-Z]/.test(password)) return false;
-    // Verificar si contiene al menos una letra minúscula
     if (!/[a-z]/.test(password)) return false;
-    // Verificar si contiene al menos un número
     if (!/[0-9]/.test(password)) return false;
-    // Verificar si contiene al menos un símbolo
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return false;
     return true;
 };
 
 const verifyEmail = async (req, res) => {
     const { token } = req.query;
-
     console.log('Verifying email with token:', token);
 
     try {
@@ -211,7 +239,7 @@ const verifyEmail = async (req, res) => {
             return res.status(400).send(`
                 <html>
                     <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial, sans-serif;">
-                                          <h1 style="font-size: 64px; color: #000C7B; text-align: justify; line-height: 1.3; max-width: 90%; padding: 0 20px;">
+                        <h1 style="font-size: 64px; color: #000C7B; text-align: justify; line-height: 1.3; max-width: 90%; padding: 0 20px;">
                         Token de verificación no válido o caducado.</h1>
                     </body>
                 </html>
@@ -235,10 +263,8 @@ const verifyEmail = async (req, res) => {
         await user.save();
         console.log('New user saved:', user);
 
-        // Envolver la eliminación del usuario temporal en un bloque try-catch
         try {
             const deleteResult = await TempUser.deleteOne({ verificationToken: token });
-
             if (deleteResult.deletedCount === 0) {
                 console.error('Failed to delete temporary user');
                 return res.status(500).send(`
@@ -250,7 +276,6 @@ const verifyEmail = async (req, res) => {
                     </html>
                 `);
             }
-
             console.log('Temporary user deleted successfully');
         } catch (error) {
             console.error('Error during temporary user deletion:', error.message);
@@ -285,11 +310,9 @@ const verifyEmail = async (req, res) => {
     }
 };
 
-// Controlador para el logout
 const logoutUser = (req, res) => {
-    const token = req.headers['authorization'].split(' ')[1]; // Obtener el token del header
-    revokedTokens.push(token); // Añadir el token a la lista de tokens revocados
-
+    const token = req.headers['authorization'].split(' ')[1];
+    revokedTokens.push(token);
     res.status(200).json({ success: true, message: "El usuario cerró sesión exitosamente" });
 };
 
